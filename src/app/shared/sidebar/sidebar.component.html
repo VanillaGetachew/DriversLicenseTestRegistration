@@ -1,0 +1,41 @@
+<div class="sidebar" [class.sidebar-collapsed]="!isOpen">
+  <div class="logo-container">
+    <a [routerLink]="['/dashboard']" class="logo">
+      <span class="logo-icon">DL</span>-Test
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/registration']" class="nav-link">
+          <mat-icon class="nav-icon">app_registration</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">Registration</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/license-upgrade']" class="nav-link">
+          <mat-icon class="nav-icon">upgrade</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">License Upgrade</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/reports']" class="nav-link">
+          <mat-icon class="nav-icon">assessment</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">Reports</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <div class="sidebar-footer">
+    <div class="mobile-app-promo" [class.collapsed]="!isOpen">
+      <div class="promo-icon">
+        <mat-icon>phone_android</mat-icon>
+      </div>
+      <div class="promo-text" *ngIf="isOpen">
+        <p>Get mobile app</p>
+      </div>
+    </div>
+  </div>
+</div>
