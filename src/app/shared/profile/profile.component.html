@@ -1,1 +1,214 @@
-<p>profile works!</p>
+<div class="profile-container">
+  <div class="profile-header" *ngIf="userData">
+    <div class="profile-photo">
+      <img *ngIf="userData.photoUrl" [src]="userData.photoUrl" alt="Profile photo">
+      <div *ngIf="!userData.photoUrl" class="no-photo">
+        <mat-icon>account_circle</mat-icon>
+      </div>
+    </div>
+    <div class="profile-name">
+      <h1>{{ userData.firstName }} {{ userData.fatherName }} {{ userData.grandfatherName }}</h1>
+      <p class="subtitle">Driver's License Applicant</p>
+    </div>
+  </div>
+
+  <div class="profile-content" *ngIf="userData">
+    <!-- Personal Information Card -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Personal Information</mat-card-title>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editSection('personal')">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">First Name (Amharic)</span>
+            <span class="value">{{ userData.firstNameAmharic || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Father's Name (Amharic)</span>
+            <span class="value">{{ userData.fatherNameAmharic || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Grandfather's Name (Amharic)</span>
+            <span class="value">{{ userData.grandfatherNameAmharic || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">First Name</span>
+            <span class="value">{{ userData.firstName || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Father's Name</span>
+            <span class="value">{{ userData.fatherName || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Grandfather's Name</span>
+            <span class="value">{{ userData.grandfatherName || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Sex</span>
+            <span class="value">{{ userData.sex || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Birth Date</span>
+            <span class="value">{{ userData.birthDate ? (userData.birthDate | date:'mediumDate') : 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Birth Place</span>
+            <span class="value">{{ userData.birthPlace || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Blood Type</span>
+            <span class="value">{{ userData.bloodType || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Nationality</span>
+            <span class="value">{{ userData.nationality || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Education</span>
+            <span class="value">{{ userData.education || 'Not provided' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Contact & Address Card -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Contact & Address</mat-card-title>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editSection('contact')">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">Phone Number</span>
+            <span class="value">{{ userData.phoneNumber || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Region</span>
+            <span class="value">{{ userData.region || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Town</span>
+            <span class="value">{{ userData.town || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Woreda</span>
+            <span class="value">{{ userData.woreda || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Kebele</span>
+            <span class="value">{{ userData.kebele || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">House No.</span>
+            <span class="value">{{ userData.houseNo || 'N/A' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- License Information Card -->
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>License Information</mat-card-title>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="editSection('license')">
+            <mat-icon>edit</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="info-grid">
+          <div class="info-item">
+            <span class="label">License Grade</span>
+            <span class="value">{{ userData.licenseGrade || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">National ID</span>
+            <span class="value">{{ userData.nationalId || 'Not provided' }}</span>
+          </div>
+          <div class="info-item">
+            <span class="label">Exam Language</span>
+            <span class="value">{{ userData.englishExam ? 'English' : 'Amharic' }}</span>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+
+    <!-- Exam Appointment Card -->
+    <mat-card class="appointment-card">
+      <mat-card-header>
+        <mat-card-title>Your Exam Appointment</mat-card-title>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="rescheduleExam()">
+            <mat-icon>event</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="!examAppointment" class="no-appointment">
+          <mat-icon>event_busy</mat-icon>
+          <p>You don't have any scheduled exams yet.</p>
+          <button mat-raised-button color="primary" (click)="scheduleExam()">
+            Schedule Exam
+          </button>
+        </div>
+        
+        <div *ngIf="examAppointment" class="appointment-details">
+          <div class="appointment-header">
+            <mat-icon color="primary">event_available</mat-icon>
+            <h3>Your exam is scheduled!</h3>
+          </div>
+          
+          <div class="info-grid appointment-grid">
+            <div class="info-item">
+              <span class="label">Exam Date</span>
+              <span class="value">{{ examAppointment.date | date:'fullDate' }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Exam Time</span>
+              <span class="value">{{ examAppointment.time }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Exam Type</span>
+              <span class="value">{{ examAppointment.examType }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">Location</span>
+              <span class="value">{{ examAppointment.location }}</span>
+            </div>
+          </div>
+          
+          <div class="appointment-actions">
+            <button mat-button color="warn" (click)="cancelExam()">
+              <mat-icon>cancel</mat-icon> Cancel
+            </button>
+            <button mat-button color="primary" (click)="rescheduleExam()">
+              <mat-icon>update</mat-icon> Reschedule
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <!-- No Data Message -->
+  <div class="no-data" *ngIf="!userData">
+    <mat-icon>account_circle</mat-icon>
+    <h2>No Profile Data</h2>
+    <p>You haven't completed your registration yet.</p>
+    <button mat-raised-button color="primary" routerLink="/registration">
+      Go to Registration
+    </button>
+  </div>
+</div> 

@@ -32,6 +32,10 @@ export const routes: Routes = [
         loadChildren: () => import('./features/reports/reports.module').then(m => m.ReportsModule)
       },
       {
+        path: 'profile',
+        loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'
