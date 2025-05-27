@@ -1,7 +1,18 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { LicenseSearchComponent } from './license-search/license-search.component';
+import { LicenseUpgradeFormComponent } from './license-upgrade-form/license-upgrade-form.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  {
+    path: '',
+    component: LicenseSearchComponent
+  },
+  {
+    path: 'form/:id',
+    component: LicenseUpgradeFormComponent
+  }
+];
 
 @NgModule({
   imports: [RouterModule.forChild(routes)],

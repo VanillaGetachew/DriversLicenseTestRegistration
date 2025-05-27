@@ -53,6 +53,18 @@ export class ProfileComponent implements OnInit {
     });
   }
 
+  // Helper method to check if URL is an image
+  isImageURL(url: string): boolean {
+    if (!url) return false;
+    return url.match(/\.(jpeg|jpg|gif|png)$/i) !== null || url.startsWith('data:image/');
+  }
+  
+  // Helper method to check if URL is a PDF
+  isPdfURL(url: string): boolean {
+    if (!url) return false;
+    return url.match(/\.pdf$/i) !== null || url.startsWith('data:application/pdf');
+  }
+
   // Load a mock appointment for demo purposes
   loadMockAppointment(): void {
     // 50% chance of having an appointment for demo
@@ -88,6 +100,11 @@ export class ProfileComponent implements OnInit {
       case 'license':
         this.router.navigate(['/registration'], { 
           queryParams: { edit: true, section: 'license' } 
+        });
+        break;
+      case 'documents':
+        this.router.navigate(['/registration'], { 
+          queryParams: { edit: true, section: 'documents' } 
         });
         break;
       default:

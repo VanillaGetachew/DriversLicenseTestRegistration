@@ -47,4 +47,53 @@ export class UserDataService {
     this.userDataSubject.next(null);
     localStorage.removeItem('user_registration_data');
   }
+  
+  /**
+   * Creates a test user with license data for testing
+   */
+  createTestUser(): void {
+    const testUserData = {
+      // Personal Information
+      firstNameAmharic: 'ሃይሌ',
+      fatherNameAmharic: 'ገብረ',
+      grandfatherNameAmharic: 'ስላሴ',
+      firstName: 'Haile',
+      fatherName: 'Gebre',
+      grandfatherName: 'Selassie',
+      sex: 'Male',
+      birthDate: '1990-05-15',
+      birthPlace: 'Addis Ababa',
+      bloodType: 'O+',
+      nationality: 'ethiopian',
+      education: 'tertiary',
+      
+      // Contact & Address
+      phoneNumber: '0912345678',
+      region: 'addisAbaba',
+      town: 'Bole',
+      woreda: '03',
+      kebele: '07',
+      houseNo: '123',
+      
+      // License Information
+      licenseGrade: 'B',
+      nationalId: 'ETH1234567890',
+      englishExam: true,
+      
+      // Photo URL (placeholder)
+      photoUrl: null,
+      
+      // Document previews (placeholders)
+      documentPreviews: {
+        idCard: null,
+        birthCertificate: null,
+        medicalCertificate: null,
+        educationCertificate: null
+      }
+    };
+    
+    this.setUserData(testUserData);
+    
+    console.log('Test user created:', testUserData);
+  }
 } 

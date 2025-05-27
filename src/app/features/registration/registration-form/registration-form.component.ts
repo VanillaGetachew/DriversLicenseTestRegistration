@@ -270,8 +270,8 @@ export class RegistrationFormComponent implements OnInit {
       
       console.log('Form submitted:', formData);
       
-      // Navigate to dashboard or another page
-      this.router.navigate(['/dashboard']);
+      // Navigate to profile page instead of dashboard
+      this.router.navigate(['/profile']);
     } else {
       // Mark all fields as touched to trigger validation messages
       Object.keys(this.registrationForm.controls).forEach(field => {
