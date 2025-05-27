@@ -8,7 +8,7 @@ import { environment } from '../../../environments/environment';
   providedIn: 'root'
 })
 export class RegistrationService {
-  private apiUrl = `${environment.apiUrl}/registrations`;
+  private apiUrl = `${environment.apiUrl}/applicant`;
 
   constructor(private http: HttpClient) { }
 
@@ -40,7 +40,7 @@ export class RegistrationService {
   }
 
   createRegistration(registration: RegistrationRequest): Observable<Registration> {
-    return this.http.post<Registration>(this.apiUrl, registration);
+    return this.http.post<Registration>(`${this.apiUrl}/create`, registration);
   }
 
   updateRegistration(id: number, registration: RegistrationRequest): Observable<Registration> {

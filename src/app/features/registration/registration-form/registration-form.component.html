@@ -7,187 +7,261 @@
       <h2>Personal Information</h2>
       
       <div class="form-row">
-        <div class="form-field">
-          <label for="firstNameAmharic">First Name (Amharic)<span class="required">*</span></label>
-          <input type="text" id="firstNameAmharic" formControlName="firstNameAmharic">
-        </div>
+
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>ስም</mat-label>
+            <input matInput formControlName="firstNameAmh" required>
+            <mat-error>Required</mat-error>
+          </mat-form-field> 
+          </div>
+
+          <!-- <div class="form-field">
+            <label for="firstNameAmharic">ስም<span class="required">*</span></label>
+            <input type="text" id="firstNameAmharic" formControlName="firstNameAmharic">
+          </div> -->
+
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>የአባት ስም</mat-label>
+            <input matInput formControlName="fatherNameAmh" required>
+            <mat-error>Required</mat-error>
+          </mat-form-field> 
+          </div>
+          
+          <!-- <div class="form-field">
+            <label for="fatherNameAmharic">የአባት ስም<span class="required">*</span></label>
+            <input type="text" id="fatherNameAmharic" formControlName="fatherNameAmharic">
+          </div> -->
+          
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>የአያት ስም</mat-label>
+            <input matInput formControlName="grandNameAmh" required>
+            <mat-error>Required</mat-error>
+          </mat-form-field> 
+          </div>
+
+          
+          <!-- <div class="form-field">
+            <label for="grandfatherNameAmharic">የአያት ስም<span class="required">*</span></label>
+            <input type="text" id="grandfatherNameAmharic" formControlName="grandfatherNameAmharic">
+          </div>
+          </div> -->
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>First Name</mat-label>
+              <input matInput formControlName="firstName" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field> 
+          </div>
+      
+          <!-- <div class="form-row">
+          <div class="form-field">
+            <label for="firstName">First Name<span class="required">*</span></label>
+            <input type="text" id="firstName" formControlName="firstName">
+          </div> -->
         
-        <div class="form-field">
-          <label for="fatherNameAmharic">Father's Name (Amharic)<span class="required">*</span></label>
-          <input type="text" id="fatherNameAmharic" formControlName="fatherNameAmharic">
-        </div>
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Father's Name</mat-label>
+            <input matInput formControlName="fatherName" required>
+            <mat-error>Required</mat-error>
+          </mat-form-field> 
+          </div>
         
-        <div class="form-field">
-          <label for="grandfatherNameAmharic">Grandfather's Name (Amharic)<span class="required">*</span></label>
-          <input type="text" id="grandfatherNameAmharic" formControlName="grandfatherNameAmharic">
+
+          <!-- <div class="form-field">
+            <label for="fatherName">Father's Name<span class="required">*</span></label>
+            <input type="text" id="fatherName" formControlName="fatherName">
+          </div> -->
+        
+
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-label>Grandfather's Name</mat-label>
+            <input matInput formControlName="grandName" required>
+            <mat-error>Required</mat-error>
+          </mat-form-field> 
+          </div>
+
+
+          <!-- <div class="form-field">
+            <label for="grandfatherName">Grandfather's Name<span class="required">*</span></label>
+            <input type="text" id="grandfatherName" formControlName="grandfatherName">
+          </div>
+          </div> -->
+      
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-select placeholder="Sex" formControlName="sex">
+              <mat-option  *ngFor ="let st of sex" [value]="st.id" >{{st.nameAmharic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <label for="birthDate">Birth Date<span class="required">*</span></label>
+            <input type="date" id="birthDate" formControlName="birthDate">
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Birth Place</mat-label>
+              <input matInput formControlName="birthPlace" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field> 
+          </div>
+        
+          <!-- <div class="form-field">
+            <label for="birthPlace">Birth Place<span class="required">*</span></label>
+            <input type="text" id="birthPlace" formControlName="birthPlace">
+          </div> -->
+
+      </div>
+
+      <div class="form-field" >
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Blood Type" formControlName="bloodType">
+          <mat-option  *ngFor ="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+
+
+      <div class="form-field">
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Nationality" formControlName="nationality">
+          <mat-option  *ngFor ="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+
+      <div class="form-field">
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Education" formControlName="education">
+          <mat-option  *ngFor ="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+
+      <div class="form-field">
+      <mat-form-field appearance="outline">
+        <mat-select placeholder="Language" formControlName="isTheoryExamEnglish">
+          <mat-option  *ngFor ="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
+        </mat-select>
+      </mat-form-field>
+      </div>
+
+      <!-- Contact & Address -->
+      <div class="form-section">
+        <h2>Contact & Address</h2>
+        
+        <div class="form-row">
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>Phone Number</mat-label>
+              <input matInput formControlName="tel1" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field> 
+          </div>
+          
+
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-select placeholder="Region" (selectionChange)="onRegionChange($event.value)" formControlName="region">
+              <mat-option  *ngFor ="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-select placeholder="Town" [disabled]="!town.length" (selectionChange)="onTownChange($event.value)" formControlName="town">
+                <mat-option  *ngFor ="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-select placeholder="Woreda" [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
+                <mat-option  *ngFor ="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-select placeholder="kebele" [disabled]="!kebele.length" formControlName="kebele">
+                <mat-option  *ngFor ="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>House No.</mat-label>
+              <input matInput formControlName="houseNo" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field> 
+          </div>
+
+          <!-- <div class="form-field">
+            <label for="houseNo">House No.</label>
+            <input type="text" id="houseNo" formControlName="houseNo">
+          </div> -->
+
         </div>
       </div>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="firstName">First Name<span class="required">*</span></label>
-          <input type="text" id="firstName" formControlName="firstName">
-        </div>
-        
-        <div class="form-field">
-          <label for="fatherName">Father's Name<span class="required">*</span></label>
-          <input type="text" id="fatherName" formControlName="fatherName">
-        </div>
-        
-        <div class="form-field">
-          <label for="grandfatherName">Grandfather's Name<span class="required">*</span></label>
-          <input type="text" id="grandfatherName" formControlName="grandfatherName">
-        </div>
+    
+      <!-- License Information -->
+      <div class="form-section">
+        <h2>License Information</h2>
+
+          <div class="form-field">
+          <mat-form-field appearance="outline">
+            <mat-select placeholder="Licence Category" formControlName="licenceGrade">
+              <mat-option  *ngFor ="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          </div>
+
+          <div class="form-field">
+            <mat-form-field appearance="outline">
+              <mat-label>National ID</mat-label>
+              <input matInput formControlName="nationalId" required>
+              <mat-error>Required</mat-error>
+            </mat-form-field> 
+          </div>
+          
+          <!-- <div class="form-field">
+            <label for="nationalId">National ID<span class="required">*</span></label>
+            <input type="text" id="nationalId" formControlName="nationalId">
+          </div> -->
       </div>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="sex">Sex<span class="required">*</span></label>
-          <select id="sex" formControlName="sex">
-            <option value="">Select</option>
-            <option value="male">Male</option>
-            <option value="female">Female</option>
-          </select>
-        </div>
+    
+      <!-- Photo Upload -->
+      <div class="form-section">
+        <h2>Photo Upload</h2>
         
-        <div class="form-field">
-          <label for="birthDate">Birth Date<span class="required">*</span></label>
-          <input type="date" id="birthDate" formControlName="birthDate">
-        </div>
-        
-        <div class="form-field">
-          <label for="birthPlace">Birth Place<span class="required">*</span></label>
-          <input type="text" id="birthPlace" formControlName="birthPlace">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="bloodType">Blood Type<span class="required">*</span></label>
-          <select id="bloodType" formControlName="bloodType">
-            <option value="">Select</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-        </div>
-        
-        <div class="form-field">
-          <label for="nationality">Nationality<span class="required">*</span></label>
-          <select id="nationality" formControlName="nationality">
-            <option value="">Select</option>
-            <option value="ethiopian">Ethiopian</option>
-            <option value="other">Other</option>
-          </select>
-        </div>
-        
-        <div class="form-field">
-          <label for="education">Education<span class="required">*</span></label>
-          <select id="education" formControlName="education">
-            <option value="">Select</option>
-            <option value="primary">Primary</option>
-            <option value="secondary">Secondary</option>
-            <option value="tertiary">Tertiary</option>
-          </select>
+        <div class="photo-upload-container">
+          <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
+            <span class="camera-icon">📷</span> Upload Photo
+          </button>
+          <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)" >
+          
+          <p class="upload-hint">JPG or PNG, max 5MB</p>
+          <img *ngIf="imagePreview" [src] = "imagePreview" alt="preview">
         </div>
       </div>
     </div>
-    
-    <!-- Contact & Address -->
-    <div class="form-section">
-      <h2>Contact & Address</h2>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="phoneNumber">Phone Number<span class="required">*</span></label>
-          <input type="text" id="phoneNumber" formControlName="phoneNumber">
-        </div>
-        
-        <div class="form-field">
-          <label for="region">Region<span class="required">*</span></label>
-          <select id="region" formControlName="region">
-            <option value="">Select</option>
-            <option value="addisAbaba">Addis Ababa</option>
-            <option value="amhara">Amhara</option>
-            <option value="oromia">Oromia</option>
-            <option value="tigray">Tigray</option>
-          </select>
-        </div>
-        
-        <div class="form-field">
-          <label for="town">Town<span class="required">*</span></label>
-          <input type="text" id="town" formControlName="town">
-        </div>
-      </div>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="woreda">Woreda<span class="required">*</span></label>
-          <input type="text" id="woreda" formControlName="woreda">
-        </div>
-        
-        <div class="form-field">
-          <label for="kebele">Kebele<span class="required">*</span></label>
-          <input type="text" id="kebele" formControlName="kebele">
-        </div>
-        
-        <div class="form-field">
-          <label for="houseNo">House No.</label>
-          <input type="text" id="houseNo" formControlName="houseNo">
-        </div>
-      </div>
-    </div>
-    
-    <!-- License Information -->
-    <div class="form-section">
-      <h2>License Information</h2>
-      
-      <div class="form-row">
-        <div class="form-field">
-          <label for="licenseGrade">License Grade<span class="required">*</span></label>
-          <select id="licenseGrade" formControlName="licenseGrade">
-            <option value="">Select</option>
-            <option value="A">A</option>
-            <option value="B">B</option>
-            <option value="C">C</option>
-            <option value="D">D</option>
-          </select>
-        </div>
-        
-        <div class="form-field">
-          <label for="nationalId">National ID<span class="required">*</span></label>
-          <input type="text" id="nationalId" formControlName="nationalId">
-        </div>
-      </div>
-      
-      <div class="checkbox-field">
-        <input type="checkbox" id="englishExam" formControlName="englishExam">
-        <label for="englishExam">Take theory exam in English (default is Amharic)</label>
-      </div>
-    </div>
-    
-    <!-- Photo Upload -->
-    <div class="form-section">
-      <h2>Photo Upload</h2>
-      
-      <div class="photo-upload-container">
-        <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
-          <span class="camera-icon">📷</span> Upload Photo
-        </button>
-        <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
-        <p class="upload-hint">JPG or PNG, max 5MB</p>
-      </div>
-    </div>
-    
     <!-- Form Actions -->
-    <div class="form-actions">
-      <button type="button" class="btn-reset" (click)="resetForm()">Reset</button>
-      <button type="submit" class="btn-register" [disabled]="registrationForm.invalid">Register</button>
-    </div>
+      <div class="form-actions">
+        <button type="button" class="btn-reset" (click)="resetForm()">Reset</button>
+        <button type="submit" class="btn-register">Register</button>
+      </div>
   </form>
 </div>

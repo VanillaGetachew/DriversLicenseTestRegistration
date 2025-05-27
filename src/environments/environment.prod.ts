@@ -1,4 +1,4 @@
 export const environment = {
-  production: true,
-  apiUrl: 'http://your-production-api-url/api' // Update this with your production API URL
-};
+  production: false,
+  apiUrl: 'http://localhost:7149/api' // Update this with your .NET backend API URL
+}; 
