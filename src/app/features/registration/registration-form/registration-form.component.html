@@ -251,7 +251,7 @@
           <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
             <span class="camera-icon">📷</span> Upload Photo
           </button>
-          <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)" >
+          <input type="file" id="photoUpload" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)" >
           
           <p class="upload-hint">JPG or PNG, max 5MB</p>
           <img *ngIf="imagePreview" [src] = "imagePreview" alt="preview">

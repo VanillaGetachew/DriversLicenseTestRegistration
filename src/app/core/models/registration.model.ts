@@ -33,7 +33,7 @@ nationality: number,
 
 tel1: string,
 
-// photo: string,
+photo: string,
 
 isTheoryExamEnglish: number,
 
