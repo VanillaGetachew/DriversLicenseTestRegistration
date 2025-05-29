@@ -3,6 +3,7 @@
     <button mat-icon-button class="toggle-btn" (click)="toggleSidebar()">
       <mat-icon>menu</mat-icon>
     </button>
+    <img src="/src/assets/images/ReportLogo.png">
     <div class="app-title">Driver's License Test Registration</div>
   </div>
   
@@ -11,6 +12,10 @@
       <mat-icon>account_circle</mat-icon>
     </button>
     <mat-menu #profileMenu="matMenu" xPosition="before">
+      <button mat-menu-item routerLink="/profile">
+        <mat-icon>person</mat-icon>
+        <span>My Profile</span>
+      </button>
       <button mat-menu-item (click)="changePassword()">
         <mat-icon>lock</mat-icon>
         <span>Change Password</span>

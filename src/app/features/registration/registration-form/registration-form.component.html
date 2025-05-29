@@ -258,10 +258,164 @@
         </div>
       </div>
     </div>
+
+    <!-- Documents Upload Button -->
+    <div class="form-section">
+      <h2>Required Documents</h2>
+      <p class="documents-intro">Please upload the following required documents in PDF or image format (JPG, PNG). Each file should not exceed 5MB.</p>
+      
+      <div class="documents-upload-button-container">
+        <button type="button" class="documents-upload-button" (click)="openDocumentsUploadDialog()">
+          <mat-icon>upload_file</mat-icon>
+          <span>Upload Required Documents</span>
+          <div class="upload-status" [ngClass]="getDocumentUploadStatusClass()">
+            <span>{{ getDocumentUploadCount() }}/4</span>
+          </div>
+        </button>
+      </div>
+    </div>
     <!-- Form Actions -->
       <div class="form-actions">
         <button type="button" class="btn-reset" (click)="resetForm()">Reset</button>
         <button type="submit" class="btn-register">Register</button>
       </div>
   </form>
+</div>
+
+<!-- Documents Upload Dialog -->
+<div class="documents-dialog" *ngIf="showDocumentsDialog">
+  <div class="dialog-content" (click)="$event.stopPropagation()">
+    <div class="dialog-header">
+      <h2>Upload Required Documents</h2>
+      <button class="close-button" (click)="closeDocumentsDialog()">&times;</button>
+    </div>
+    
+    <div class="documents-grid">
+      <!-- ID Card Upload -->
+      <div class="document-upload-container">
+        <div class="document-label">
+          <h3>National ID Card<span class="required">*</span></h3>
+          <p>Front and back of your National ID</p>
+        </div>
+        
+        <div class="upload-area" [class.has-file]="idCardPreviewUrl" (click)="triggerDocumentUpload('idCard')">
+          <div class="upload-placeholder" *ngIf="!idCardPreviewUrl">
+            <mat-icon>upload_file</mat-icon>
+            <p>Click to upload</p>
+          </div>
+          
+          <div class="document-preview" *ngIf="idCardPreviewUrl">
+            <div class="preview-container">
+              <img *ngIf="isImageFile(documentFiles['idCard'])" [src]="idCardPreviewUrl" alt="ID Card Preview">
+              <div *ngIf="isPdfFile(documentFiles['idCard'])" class="pdf-preview">
+                <mat-icon>picture_as_pdf</mat-icon>
+                <p>{{ documentFiles['idCard']?.name }}</p>
+              </div>
+            </div>
+            <button type="button" class="remove-file" (click)="removeDocument('idCard', $event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <input type="file" id="idCardUpload" accept="image/jpeg,image/png,application/pdf" hidden (change)="onDocumentSelected($event, 'idCard')">
+      </div>
+      
+      <!-- Birth Certificate Upload -->
+      <div class="document-upload-container">
+        <div class="document-label">
+          <h3>Birth Certificate<span class="required">*</span></h3>
+          <p>Official birth certificate document</p>
+        </div>
+        
+        <div class="upload-area" [class.has-file]="birthCertificatePreviewUrl" (click)="triggerDocumentUpload('birthCertificate')">
+          <div class="upload-placeholder" *ngIf="!birthCertificatePreviewUrl">
+            <mat-icon>upload_file</mat-icon>
+            <p>Click to upload</p>
+          </div>
+          
+          <div class="document-preview" *ngIf="birthCertificatePreviewUrl">
+            <div class="preview-container">
+              <img *ngIf="isImageFile(documentFiles['birthCertificate'])" [src]="birthCertificatePreviewUrl" alt="Birth Certificate Preview">
+              <div *ngIf="isPdfFile(documentFiles['birthCertificate'])" class="pdf-preview">
+                <mat-icon>picture_as_pdf</mat-icon>
+                <p>{{ documentFiles['birthCertificate']?.name }}</p>
+              </div>
+            </div>
+            <button type="button" class="remove-file" (click)="removeDocument('birthCertificate', $event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <input type="file" id="birthCertificateUpload" accept="image/jpeg,image/png,application/pdf" hidden (change)="onDocumentSelected($event, 'birthCertificate')">
+      </div>
+      
+      <!-- Medical Certificate Upload -->
+      <div class="document-upload-container">
+        <div class="document-label">
+          <h3>Medical Certificate<span class="required">*</span></h3>
+          <p>Medical fitness certificate for driving</p>
+        </div>
+        
+        <div class="upload-area" [class.has-file]="medicalCertificatePreviewUrl" (click)="triggerDocumentUpload('medicalCertificate')">
+          <div class="upload-placeholder" *ngIf="!medicalCertificatePreviewUrl">
+            <mat-icon>upload_file</mat-icon>
+            <p>Click to upload</p>
+          </div>
+          
+          <div class="document-preview" *ngIf="medicalCertificatePreviewUrl">
+            <div class="preview-container">
+              <img *ngIf="isImageFile(documentFiles['medicalCertificate'])" [src]="medicalCertificatePreviewUrl" alt="Medical Certificate Preview">
+              <div *ngIf="isPdfFile(documentFiles['medicalCertificate'])" class="pdf-preview">
+                <mat-icon>picture_as_pdf</mat-icon>
+                <p>{{ documentFiles['medicalCertificate']?.name }}</p>
+              </div>
+            </div>
+            <button type="button" class="remove-file" (click)="removeDocument('medicalCertificate', $event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <input type="file" id="medicalCertificateUpload" accept="image/jpeg,image/png,application/pdf" hidden (change)="onDocumentSelected($event, 'medicalCertificate')">
+      </div>
+      
+      <!-- Educational Certificate Upload -->
+      <div class="document-upload-container">
+        <div class="document-label">
+          <h3>Educational Certificate<span class="required">*</span></h3>
+          <p>Highest level of education certificate</p>
+        </div>
+        
+        <div class="upload-area" [class.has-file]="educationCertificatePreviewUrl" (click)="triggerDocumentUpload('educationCertificate')">
+          <div class="upload-placeholder" *ngIf="!educationCertificatePreviewUrl">
+            <mat-icon>upload_file</mat-icon>
+            <p>Click to upload</p>
+          </div>
+          
+          <div class="document-preview" *ngIf="educationCertificatePreviewUrl">
+            <div class="preview-container">
+              <img *ngIf="isImageFile(documentFiles['educationCertificate'])" [src]="educationCertificatePreviewUrl" alt="Educational Certificate Preview">
+              <div *ngIf="isPdfFile(documentFiles['educationCertificate'])" class="pdf-preview">
+                <mat-icon>picture_as_pdf</mat-icon>
+                <p>{{ documentFiles['educationCertificate']?.name }}</p>
+              </div>
+            </div>
+            <button type="button" class="remove-file" (click)="removeDocument('educationCertificate', $event)">
+              <mat-icon>close</mat-icon>
+            </button>
+          </div>
+        </div>
+        
+        <input type="file" id="educationCertificateUpload" accept="image/jpeg,image/png,application/pdf" hidden (change)="onDocumentSelected($event, 'educationCertificate')">
+      </div>
+    </div>
+    
+    <div class="dialog-footer">
+      <button type="button" class="btn-done" (click)="closeDocumentsDialog()">
+        Done ({{ getDocumentUploadCount() }}/4)
+      </button>
+    </div>
+  </div>
 </div>
