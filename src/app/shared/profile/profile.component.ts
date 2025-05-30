@@ -31,6 +31,12 @@ interface ExamAppointment {
 export class ProfileComponent implements OnInit {
   userData: any = null;
   examAppointment: ExamAppointment | null = null;
+  searchId: string = '';
+  searchFirstName: string = '';
+  searchFatherName: string = '';
+  searchGrandfatherName: string = '';
+  searchResult: any = null; // Holds the result after search
+  showProfileSection: boolean = false; // Controls when to show the full profile section
 
   constructor(
     private userDataService: UserDataService,
@@ -165,4 +171,54 @@ export class ProfileComponent implements OnInit {
       duration: 3000
     });
   }
-} 
+
+  searchProfile(): void {
+    this.showProfileSection = false;
+    this.userData = null;
+    this.searchResult = null;
+    if (!this.searchId && !this.searchFirstName && !this.searchFatherName && !this.searchGrandfatherName) {
+      this.snackBar.open('Please enter at least one search field.', 'Close', { duration: 3000 });
+      return;
+    }
+    // For demo: only search by National ID (extend as needed)
+    if (this.searchId) {
+      this.userDataService.getUserDataByNationalId(this.searchId).subscribe(data => {
+        if (data) {
+          this.searchResult = data;
+        } else {
+          this.snackBar.open('No profile found for this National ID.', 'Close', { duration: 3000 });
+        }
+      });
+    } else {
+      // For demo: fallback to localStorage and match by names
+      const storedData = localStorage.getItem('user_registration_data');
+      if (storedData) {
+        const userData = JSON.parse(storedData);
+        if (
+          (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
+          (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
+          (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
+        ) {
+          this.searchResult = userData;
+        } else {
+          this.snackBar.open('No profile found for the provided names.', 'Close', { duration: 3000 });
+        }
+      } else {
+        this.snackBar.open('No profile found.', 'Close', { duration: 3000 });
+      }
+    }
+  }
+
+  goToProfileSection(): void {
+    this.userData = this.searchResult;
+    this.showProfileSection = true;
+    this.loadMockAppointment();
+  }
+
+  backToSearch(): void {
+    this.showProfileSection = false;
+    this.userData = null;
+    this.examAppointment = null;
+    // Optionally, keep search fields and last search result, or clear them as needed
+  }
+}

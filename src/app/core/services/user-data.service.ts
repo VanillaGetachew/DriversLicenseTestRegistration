@@ -7,10 +7,12 @@ import { BehaviorSubject, Observable } from 'rxjs';
 export class UserDataService {
   private userDataSubject = new BehaviorSubject<any>(null);
   
+  // Add a test user profile on service initialization if none exists
   constructor() {
-    // Check if user data exists in localStorage on initialization
     const storedData = localStorage.getItem('user_registration_data');
-    if (storedData) {
+    if (!storedData) {
+      this.createTestUser();
+    } else {
       this.userDataSubject.next(JSON.parse(storedData));
     }
   }
@@ -96,4 +98,20 @@ export class UserDataService {
     
     console.log('Test user created:', testUserData);
   }
-} 
+
+  /**
+   * Gets user data by national ID (mock implementation: checks localStorage for matching ID)
+   */
+  getUserDataByNationalId(nationalId: string): Observable<any> {
+    // Try to get user data from localStorage
+    const storedData = localStorage.getItem('user_registration_data');
+    if (storedData) {
+      const userData = JSON.parse(storedData);
+      if (userData.nationalId && userData.nationalId === nationalId) {
+        return new BehaviorSubject(userData).asObservable();
+      }
+    }
+    // Not found
+    return new BehaviorSubject(null).asObservable();
+  }
+}

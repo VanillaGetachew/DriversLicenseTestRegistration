@@ -1,20 +1,47 @@
 export interface Registration {
-  id: number;
-  firstName: string;
-  lastName: string;
-  dateOfBirth: Date;
-  nationalId: string;
-  phoneNumber: string;
-  email: string;
-  address: string;
-  city: string;
-  state: string;
-  zipCode: string;
-  licenseType: string;
-  examDate: Date;
-  status: string;
-  createdAt: Date;
-  updatedAt: Date;
+firstNameAmh: string,
+
+fatherNameAmh: string,
+
+grandNameAmh: string,
+
+firstName: string,
+
+fatherName: string,
+
+grandName: string,
+
+sex: number,
+
+birthDate: string,
+
+birthPlace: string,
+
+bloodType: number,
+
+region: string,
+
+town: string,
+
+woreda: string,
+
+kebele: string,
+
+houseNo: string,
+
+nationality: number,
+
+tel1: string,
+
+// photo: string,
+
+isTheoryExamEnglish: number,
+
+licenceGrade: string,
+
+education: number,
+
+nationalId: string,
 }
 
 export interface RegistrationRequest {
