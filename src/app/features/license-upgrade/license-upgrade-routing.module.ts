@@ -9,7 +9,7 @@ const routes: Routes = [
     component: LicenseSearchComponent
   },
   {
-    path: 'form/:id',
+    path: 'form/:licenceGrade/:licenceNo',
     component: LicenseUpgradeFormComponent
   }
 ];

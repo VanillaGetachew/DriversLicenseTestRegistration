@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../../environments/environment';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Driver } from '../models/driver.model';
+import { Driver, DriverUpgrade } from '../models/driver.model';
 
 @Injectable({
   providedIn: 'root'
@@ -16,13 +16,20 @@ export class UpgradeService {
   //   return this.http.get<Driver[]>(`${this.apiUrl}/driver/LicenseNo?licenseNo=${licence}&licenseCategory=${grade}`);
   // }
 
-  getDriver(grade: string, licence: string): Observable<Driver[]> {
+  getDriver(grade: string, licence: string): Observable<Driver> {
   const params = new HttpParams()
     .set('licenseNo', licence)
     .set('licenseCategory', grade);
 
-  return this.http.get<Driver[]>(`${this.apiUrl}/driver/LicenseNo`, { params });
+  return this.http.get<Driver>(`${this.apiUrl}/driver/LicenseNo`, { params });
 }
+upgradeDriver(grade: string, licence: string, nationalId: string, driver: DriverUpgrade): Observable<Driver> {
+  const params = new HttpParams()
+    .set('licenceGrade', grade)
+    .set('licenceNumber', licence)
+    .set('nationalId', nationalId);
+    return this.http.post<Driver>(`${this.apiUrl}/driver/Create`, driver, {params});
+  }
   
   // getRegistrations(
   //   page = 0, 

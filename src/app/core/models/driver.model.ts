@@ -17,7 +17,12 @@ export interface Driver {
   woreda?: string;
   kebele?: string;
   bloodType?: number;
-  issuanceDate?: Date;
+  issuanceDate?: string | Date; 
   licenceGrade?: string;
   licenceNo?: string;
+}
+export interface DriverUpgrade{
+  licenceGrade?: string;
+  eductaion?: string;
+  nationalId?: string
 }

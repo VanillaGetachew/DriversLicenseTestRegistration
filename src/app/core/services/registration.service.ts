@@ -39,7 +39,7 @@ export class RegistrationService {
     return this.http.get<Registration>(`${this.apiUrl}/${id}`);
   }
 
-  createRegistration(registration: RegistrationRequest): Observable<Registration> {
+  createRegistration(registration: Registration): Observable<Registration> {
     return this.http.post<Registration>(`${this.apiUrl}/create`, registration);
   }
 

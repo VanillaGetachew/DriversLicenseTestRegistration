@@ -7,6 +7,10 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { MaterialModule } from '../../../material/material.module';
 import { LicenseService } from '../../../core/services/license.service';
 import { License, LicenseUpgradeRequest } from '../../../core/models/license.model';
+import { UpgradeService } from '../../../core/services/upgrade.service';
+import { Driver } from '../../../core/models/driver.model';
+import { DropdownService } from '../../../core/services/dropdown.service';
+import { education, language, licenceCategory } from '../../../core/models/dropdown.model';
 
 @Component({
   selector: 'app-license-upgrade-form',
@@ -18,42 +22,51 @@ import { License, LicenseUpgradeRequest } from '../../../core/models/license.mod
 export class LicenseUpgradeFormComponent implements OnInit {
   upgradeForm!: FormGroup;
   license: License | null = null;
+  driver: Driver| null = null;
   licenseTypes: string[] = [];
+  education: education[] = [];
+  licenceCategory: licenceCategory[] =[];
+  licenceGrade: any;
   isLoading = false;
   isSubmitting = false;
-  licenseId!: number;
+  licenseId!: any;
 
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
     private router: Router,
     private licenseService: LicenseService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private upgrade: UpgradeService,
+    private dropdown: DropdownService
   ) { }
 
   ngOnInit(): void {
     this.upgradeForm = this.fb.group({
-      newLicenseType: ['', Validators.required],
-      reason: ['', [Validators.required, Validators.minLength(10)]]
+      licenceGrade: ['', Validators.required],
+      education: ['', Validators.required],
+      nationalId: ['', Validators.required]
     });
 
     this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.licenseId = +params['id'];
+      if (params['licenceGrade'] && params['licenceNo']) {
+        this.licenceGrade = +params['licenceGrade'];
+        this.licenseId = +params['licenceNo'];
         this.loadLicenseData();
-        this.loadLicenseTypes();
       } else {
         this.snackBar.open('No license ID provided', 'Close', { duration: 3000 });
         this.router.navigate(['/license-upgrade']);
       }
     });
+    this.getLicenceCategory();
+    this.getEducation();
   }
 
   loadLicenseData(): void {
     this.isLoading = true;
-    this.licenseService.getLicenseById(this.licenseId).subscribe({
-      next: (license) => {
-        this.license = license;
+    this.upgrade.getDriver(this.licenceGrade, this.licenseId).subscribe({
+      next: (res: any) => {
+        this.driver = res;
         this.isLoading = false;
       },
       error: (error) => {
@@ -64,55 +77,87 @@ export class LicenseUpgradeFormComponent implements OnInit {
       }
     });
   }
-
-  loadLicenseTypes(): void {
-    this.licenseService.getLicenseTypes().subscribe({
-      next: (types) => {
-        this.licenseTypes = types;
-      },
-      error: (error) => {
-        console.error('Error loading license types:', error);
-      }
-    });
+onSubmit(): void {
+    if (this.upgradeForm.valid) {
+      const formData = {
+        ...this.upgradeForm.value
+        }
+      this.upgrade.upgradeDriver(this.licenceGrade, this.licenseId, this.upgradeForm.value.nationalId, formData).subscribe({
+        next:(res) => {
+          alert("Success");
+        }
+      })
+      
+      // Save the user data to the service
+      // this.userDataService.setUserData(formData);
+      
+      console.log('Form submitted:', formData);
+      
+      // Navigate to profile page instead of dashboard
+      this.router.navigate(['/profile']);
+    } else {
+      // Mark all fields as touched to trigger validation messages
+      Object.keys(this.upgradeForm.controls).forEach(field => {
+        const control = this.upgradeForm.get(field);
+        control?.markAsTouched({ onlySelf: true });
+      });
+    }
   }
 
-  submitUpgradeRequest(): void {
-    if (this.upgradeForm.invalid || !this.license) {
-      return;
-    }
 
-    const formValue = this.upgradeForm.value;
+
+  // submitUpgradeRequest(): void {
+  //   if (this.upgradeForm.invalid || !this.license) {
+  //     return;
+  //   }
+
+  //   const formValue = this.upgradeForm.value;
     
-    // Don't allow selecting the same license type
-    if (formValue.newLicenseType === this.license.licenseType) {
-      this.snackBar.open('Please select a different license type', 'Close', { duration: 3000 });
-      return;
-    }
+  //   // Don't allow selecting the same license type
+  //   if (formValue.newLicenseType === this.license.licenseType) {
+  //     this.snackBar.open('Please select a different license type', 'Close', { duration: 3000 });
+  //     return;
+  //   }
 
-    const upgradeRequest: LicenseUpgradeRequest = {
-      currentLicenseNumber: this.license.licenseNumber,
-      newLicenseType: formValue.newLicenseType,
-      requestDate: new Date(),
-      reason: formValue.reason
-    };
+  //   const upgradeRequest: LicenseUpgradeRequest = {
+  //     currentLicenseNumber: this.license.licenseNumber,
+  //     newLicenseType: formValue.newLicenseType,
+  //     requestDate: new Date(),
+  //     reason: formValue.reason
+  //   };
 
-    this.isSubmitting = true;
+  //   this.isSubmitting = true;
 
-    this.licenseService.requestLicenseUpgrade(upgradeRequest).subscribe({
-      next: () => {
-        this.snackBar.open('License upgrade request submitted successfully', 'Close', { duration: 3000 });
-        this.isSubmitting = false;
-        this.router.navigate(['/license-upgrade']);
-      },
-      error: (error) => {
-        this.snackBar.open('Error submitting upgrade request', 'Close', { duration: 3000 });
-        this.isSubmitting = false;
-        console.error('Submission error:', error);
-      }
-    });
-  }
+  //   this.licenseService.requestLicenseUpgrade(upgradeRequest).subscribe({
+  //     next: () => {
+  //       this.snackBar.open('License upgrade request submitted successfully', 'Close', { duration: 3000 });
+  //       this.isSubmitting = false;
+  //       this.router.navigate(['/license-upgrade']);
+  //     },
+  //     error: (error) => {
+  //       this.snackBar.open('Error submitting upgrade request', 'Close', { duration: 3000 });
+  //       this.isSubmitting = false;
+  //       console.error('Submission error:', error);
+  //     }
+  //   });
+  // }
 
   cancel(): void {
     this.router.navigate(['/license-upgrade']);
   }
+  getEducation(): void {
+      this.dropdown.getEducation().subscribe({
+        next: (res: education[]) => {
+          this.education = res;
+        }
+      });
+    }
+  
+    getLicenceCategory(): void {
+      this.dropdown.getLicenceCategory().subscribe({
+        next: (res: licenceCategory[]) => {
+          this.licenceCategory = res;
+        }
+      });
+    }
 }
