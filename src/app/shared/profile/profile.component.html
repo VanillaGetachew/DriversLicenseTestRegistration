@@ -202,6 +202,10 @@
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
+              <div class="upload-section">
+                <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'idCard')" id="idCardUpload" hidden>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('idCardUpload')">Upload/Replace</button>
+              </div>
             </div>
 
             <!-- Birth Certificate -->
@@ -217,6 +221,10 @@
               <div class="document-status" *ngIf="!userData.documentPreviews.birthCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
+              </div>
+              <div class="upload-section">
+                <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'birthCertificate')" id="birthCertificateUpload" hidden>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('birthCertificateUpload')">Upload/Replace</button>
               </div>
             </div>
 
@@ -234,6 +242,10 @@
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
+              <div class="upload-section">
+                <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'medicalCertificate')" id="medicalCertificateUpload" hidden>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('medicalCertificateUpload')">Upload/Replace</button>
+              </div>
             </div>
 
             <!-- Education Certificate -->
@@ -249,6 +261,10 @@
               <div class="document-status" *ngIf="!userData.documentPreviews.educationCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
+              </div>
+              <div class="upload-section">
+                <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'educationCertificate')" id="educationCertificateUpload" hidden>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('educationCertificateUpload')">Upload/Replace</button>
               </div>
             </div>
           </div>
@@ -319,14 +335,14 @@
   </div>
   
   <!-- No Data Message -->
-  <!-- <div class="no-data" *ngIf="!userData">
+  <div class="no-data" *ngIf="!userData">
     <mat-icon>account_circle</mat-icon>
     <h2>No Profile Data</h2>
     <p>You haven't completed your registration yet.</p>
     <button mat-raised-button color="primary" routerLink="/registration">
       Go to Registration
     </button>
-  </div> -->
+  </div>
 
 
 </div>

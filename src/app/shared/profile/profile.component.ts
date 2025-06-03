@@ -221,4 +221,37 @@ export class ProfileComponent implements OnInit {
     this.examAppointment = null;
     // Optionally, keep search fields and last search result, or clear them as needed
   }
+
+  // --- File Upload Logic for Documents ---
+
+  triggerFileInput(inputId: string): void {
+    const fileInput = document.getElementById(inputId) as HTMLInputElement;
+    if (fileInput) {
+      fileInput.click();
+    }
+  }
+
+  onFileSelected(event: Event, docType: string): void {
+    const input = event.target as HTMLInputElement;
+    if (!input.files || input.files.length === 0) return;
+    const file = input.files[0];
+
+    // Simulate upload (replace with real upload logic)
+    const reader = new FileReader();
+    reader.onload = () => {
+      // Save the file as a data URL (for demo)
+      if (!this.userData.documentPreviews) {
+        this.userData.documentPreviews = {};
+      }
+      this.userData.documentPreviews[docType] = reader.result;
+      // Persist the change (simulate API call)
+      this.userDataService.setUserData(this.userData);
+      this.snackBar.open(docType + ' uploaded successfully!', 'Close', { duration: 2000 });
+    };
+    if (file.type.startsWith('image/') || file.type === 'application/pdf') {
+      reader.readAsDataURL(file);
+    } else {
+      this.snackBar.open('Unsupported file type', 'Close', { duration: 2000 });
+    }
+  }
 }
