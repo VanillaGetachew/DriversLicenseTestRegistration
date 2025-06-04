@@ -2,6 +2,32 @@
   <h1 class="dashboard-title">Dashboard Overview</h1>
   
   <!-- Stats Cards -->
+  <!-- <div class="selector">
+  <mat-form-field>
+    <mat-select placeholder="Select a site" (selectionChange)="onSiteChange($event.value)">
+      <mat-option value="" disabled></mat-option>
+      <mat-option  *ngFor ="let st of site" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="selector">
+  <mat-form-field>
+    <mat-select placeholder="Select a school" [disabled]="!site2.length">
+      <mat-option value="" disabled></mat-option>
+      <mat-option  *ngFor ="let st of site2" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div> -->
+
+<div class="selector">
+  <mat-form-field appearance="outline">
+    <mat-select placeholder="Select a site" [(value)]="selectedId" (selectionChange)="onSelectedIdChange()">
+      <mat-option  *ngFor ="let st of school" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
   <div class="stats-grid">
     <div class="stat-card">
       <div class="stat-icon">
@@ -9,7 +35,7 @@
       </div>
       <div class="stat-details">
         <h3>Total Applicants</h3>
-        <div class="stat-value">{{ applicantsCount }}</div>
+        <div class="stat-value" *ngFor ="let gnd of gend">{{ gnd.value }}</div>
         <div class="stat-trend positive">
           <mat-icon>arrow_upward</mat-icon> 12% from last month
         </div>
@@ -22,7 +48,7 @@
       </div>
       <div class="stat-details">
         <h3>Pass Rate</h3>
-        <div class="stat-value">{{ passRate }}%</div>
+        <div class="stat-value" *ngFor ="let gnd of gend1">{{ gnd.value }}</div>
         <div class="stat-trend negative">
           <mat-icon>arrow_downward</mat-icon> 4% from last month
         </div>
@@ -35,7 +61,7 @@
       </div>
       <div class="stat-details">
         <h3>Upcoming Tests</h3>
-        <div class="stat-value">{{ upcomingTests }}</div>
+        <div class="stat-value" *ngFor ="let gnd of gend2">{{ gnd.value }}</div>
         <div class="stat-trend positive">
           <mat-icon>arrow_upward</mat-icon> 8% from last week
         </div>
@@ -48,7 +74,7 @@
       </div>
       <div class="stat-details">
         <h3>Available Vehicles</h3>
-        <div class="stat-value">{{ availableVehicles }}</div>
+        <div class="stat-value" *ngFor ="let gnd of gend3">{{ gnd.value }}</div>
         <div class="stat-trend neutral">
           No change
         </div>
@@ -59,7 +85,7 @@
   <!-- Charts Section -->
   <div class="charts-grid">
     <!-- Registration Distribution Chart -->
-    <div class="chart-card">
+    <!-- <div class="chart-card">
       <div class="chart-header">
         <h3>Registration Distribution</h3>
       </div>
@@ -76,7 +102,28 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+<div class="chart-card">
+      <div class="chart-header">
+        <h3>Number of Students by Licence Grade</h3>
+    <div class="LicenceGrade">
+  <ngx-charts-bar-vertical
+    [view]="[450, 300]"
+    [scheme]="colorScheme"
+    [results]="barChartData"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    xAxisLabel="License Grade"
+    yAxisLabel="Count">
+  </ngx-charts-bar-vertical>
+</div>
+</div>
+</div>
+
     
     <!-- Test Centers Map -->
     <div class="chart-card map-card">
@@ -85,7 +132,8 @@
       </div>
       <div class="chart-body map-container">
         <div class="map-placeholder">
-          <img src="assets/images/map-placeholder.png" alt="Test Centers Map" onerror="this.src='https://via.placeholder.com/500x300?text=Map+of+Test+Centers'">
+          <!-- <img src="assets/images/map-placeholder.png" alt="Test Centers Map" onerror="this.src='https://via.placeholder.com/500x300?text=Map+of+Test+Centers'"> -->
+                    <img src="assets/images/map-placeholder.png" alt="Test Centers Map">
         </div>
         <div class="map-legend">
           <div class="legend-item">
@@ -101,7 +149,7 @@
     </div>
     
     <!-- Monthly Performance Chart -->
-    <div class="chart-card">
+    <!-- <div class="chart-card">
       <div class="chart-header">
         <h3>Monthly Performance</h3>
       </div>
@@ -132,10 +180,27 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+
+ <div class="chart-card">
+      <div class="chart-header">
+        <h3>Number of Students by Gender</h3>
+    <div class="GenderSummary">
+  <ngx-charts-pie-chart
+    [view]="[400, 300]"
+    [scheme]="colorScheme"
+    [results]="genderChartData"
+    [legend]="true"
+    [doughnut]="false"
+    [labels]="true">
+  </ngx-charts-pie-chart>
+</div>
+</div>
+</div>
     
     <!-- License Types Chart -->
-    <div class="chart-card">
+    <!-- <div class="chart-card">
       <div class="chart-header">
         <h3>License Type Distribution</h3>
       </div>
@@ -157,6 +222,24 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
+
+     <div class="chart-card">
+      <div class="chart-header">
+        <h3>Pass-Fail Summary</h3>
+<div class="PassFail">
+  <ngx-charts-pie-chart
+    [view]="[400, 300]"
+    [scheme]="colorScheme"
+    [results]="passfailChartData"
+    [legend]="true"
+    [doughnut]="false"
+    [labels]="true">
+  </ngx-charts-pie-chart>
+</div>
+</div>
+</div>
+
+
   </div>
 </div>
