@@ -9,6 +9,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { RegistrationService } from '../../../core/services/registration.service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-registration-form',
@@ -22,7 +23,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatSelectModule,
     MatInputModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -150,7 +152,12 @@ export class RegistrationFormComponent implements OnInit {
     }
   }
 
-getNationality(): void {
+  removePhoto(): void {
+    this.imagePreview = null;
+    this.registrationForm.get('photo')?.setValue(null);
+  }
+
+  getNationality(): void {
     this.dropdown.getNationality().subscribe({
       next: (res: nationality[]) => {
         this.nationality = res;

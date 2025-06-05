@@ -199,12 +199,24 @@
       <h2>Photo Upload</h2>
       
       <div class="photo-upload-container">
-        <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
-          <span class="camera-icon">📷</span> Upload Photo
-        </button>
-        <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
+        <div class="photo-preview">
+          <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile photo">
+          <div *ngIf="!imagePreview" class="no-photo">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+        </div>
+        <div class="photo-actions">
+          <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
+          <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
+            <mat-icon>photo_camera</mat-icon>
+            {{ imagePreview ? 'Change Photo' : 'Upload Photo' }}
+          </button>
+          <button *ngIf="imagePreview" type="button" class="upload-button" (click)="removePhoto()">
+            <mat-icon>delete</mat-icon>
+            Remove
+          </button>
+        </div>
         <p class="upload-hint">JPG or PNG, max 5MB</p>
-        <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview">
       </div>
     </div>
 
