@@ -7,68 +7,63 @@
       <h2>Personal Information</h2>
       
       <div class="form-row">
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>ስም</mat-label>
             <input matInput formControlName="firstNameAmh" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
-
-        <div class="form-field">
+           
           <mat-form-field appearance="outline">
             <mat-label>የአባት ስም</mat-label>
             <input matInput formControlName="fatherNameAmh" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
         
-        <div class="form-field">
           <mat-form-field appearance="outline">
             <mat-label>የአያት ስም</mat-label>
             <input matInput formControlName="grandNameAmh" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+        
       </div>
 
       <div class="form-row">
-        <div class="form-field">
+      
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
             <input matInput formControlName="firstName" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
       
-        <div class="form-field">
+
           <mat-form-field appearance="outline">
             <mat-label>Father's Name</mat-label>
             <input matInput formControlName="fatherName" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+      
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Grandfather's Name</mat-label>
             <input matInput formControlName="grandName" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+        
       </div>
 
       <div class="form-row">
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Sex</mat-label>
             <mat-select formControlName="sex">
               <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+          
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Birth Date</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="birthDate" required>
@@ -76,47 +71,45 @@
             <mat-datepicker #picker></mat-datepicker>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+        
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Birth Place</mat-label>
             <input matInput formControlName="birthPlace" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+        
       </div>
 
       <div class="form-row">
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Blood Type</mat-label>
             <mat-select formControlName="bloodType">
               <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+       
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Nationality</mat-label>
             <mat-select formControlName="nationality">
               <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+       
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Education</mat-label>
             <mat-select formControlName="education">
               <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        
       </div>
-
-      
     </div>
 
     <!-- Contact & Address -->
@@ -124,59 +117,53 @@
       <h2>Contact & Address</h2>
       
       <div class="form-row">
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Phone Number</mat-label>
             <input matInput formControlName="tel1" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
+        
 
-        <div class="form-field">
+       
           <mat-form-field appearance="outline">
             <mat-label>Region</mat-label>
             <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
               <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+     
 
-        <div class="form-field">
+        
           <mat-form-field appearance="outline">
             <mat-label>Town</mat-label>
             <mat-select [disabled]="!town.length" (selectionChange)="onTownChange($event.value)" formControlName="town">
               <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
+        
       </div>
 
       <div class="form-row">
-        <div class="form-field">
           <mat-form-field appearance="outline">
             <mat-label>Woreda</mat-label>
             <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
               <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
 
-        <div class="form-field">
           <mat-form-field appearance="outline">
             <mat-label>Kebele</mat-label>
             <mat-select [disabled]="!kebele.length" formControlName="kebele">
               <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
 
-        <div class="form-field">
           <mat-form-field appearance="outline">
             <mat-label>House No.</mat-label>
             <input matInput formControlName="houseNo" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
       </div>
     </div>
 
@@ -185,16 +172,13 @@
       <h2>License Information</h2>
 
       <div class="form-row">
-        <div class="form-field">
           <mat-form-field appearance="outline">
             <mat-label>License Category</mat-label>
             <mat-select formControlName="licenceGrade">
               <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
             </mat-select>
           </mat-form-field>
-        </div>
 
-        <div class="form-row">
           <div class="form-field">
             <mat-form-field appearance="outline">
               <mat-label>Language</mat-label>
@@ -203,7 +187,6 @@
               </mat-select>
             </mat-form-field>
           </div>
-          </div>
 
         <div class="form-field">
           <mat-form-field appearance="outline">
@@ -211,8 +194,15 @@
             <input matInput formControlName="nationalId" required>
             <mat-error>Required</mat-error>
           </mat-form-field>
-        </div>
-         </div>
+
+          <!-- <mat-form-field appearance="outline">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="isTheoryExamEnglish">
+              <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
+            </mat-select>
+          </mat-form-field> -->
+      </div>
+    </div>
     </div>
 
     <!-- Photo Upload -->
@@ -220,12 +210,24 @@
       <h2>Photo Upload</h2>
       
       <div class="photo-upload-container">
-        <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
-          <span class="camera-icon">📷</span> Upload Photo
-        </button>
-        <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
+        <div class="photo-preview">
+          <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile photo">
+          <div *ngIf="!imagePreview" class="no-photo">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+        </div>
+        <div class="photo-actions">
+          <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
+          <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
+            <mat-icon>photo_camera</mat-icon>
+            {{ imagePreview ? 'Change Photo' : 'Upload Photo' }}
+          </button>
+          <button *ngIf="imagePreview" type="button" class="upload-button" (click)="removePhoto()">
+            <mat-icon>delete</mat-icon>
+            Remove
+          </button>
+        </div>
         <p class="upload-hint">JPG or PNG, max 5MB</p>
-        <img *ngIf="imagePreview" [src]="imagePreview" alt="Preview">
       </div>
     </div>
 

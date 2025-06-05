@@ -26,7 +26,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatInputModule,
     MatIconModule,
     MatDatepickerModule,
-    MatNativeDateModule
+    MatNativeDateModule,
+    MatIconModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -154,7 +155,12 @@ export class RegistrationFormComponent implements OnInit {
     }
   }
 
-getNationality(): void {
+  removePhoto(): void {
+    this.imagePreview = null;
+    this.registrationForm.get('photo')?.setValue(null);
+  }
+
+  getNationality(): void {
     this.dropdown.getNationality().subscribe({
       next: (res: nationality[]) => {
         this.nationality = res;
