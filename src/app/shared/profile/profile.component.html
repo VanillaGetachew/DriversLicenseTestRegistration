@@ -182,18 +182,18 @@
           <mat-card-title>Required Documents</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <div class="documents-grid" *ngIf="userData.documentPreviews">
+          <div class="documents-grid">
             <!-- ID Card -->
             <div class="document-item">
               <div class="document-label">National ID Card</div>
-              <div class="document-preview" *ngIf="userData.documentPreviews.idCard">
+              <div class="document-preview" *ngIf="userData?.documentPreviews?.idCard">
                 <img *ngIf="isImageURL(userData.documentPreviews.idCard)" [src]="userData.documentPreviews.idCard" alt="ID Card">
                 <div *ngIf="isPdfURL(userData.documentPreviews.idCard)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
                   <p>PDF Document</p>
                 </div>
               </div>
-              <div class="document-status" *ngIf="!userData.documentPreviews.idCard">
+              <div class="document-status" *ngIf="!userData?.documentPreviews?.idCard">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
@@ -206,14 +206,14 @@
             <!-- Birth Certificate -->
             <div class="document-item">
               <div class="document-label">Birth Certificate</div>
-              <div class="document-preview" *ngIf="userData.documentPreviews.birthCertificate">
+              <div class="document-preview" *ngIf="userData?.documentPreviews?.birthCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.birthCertificate)" [src]="userData.documentPreviews.birthCertificate" alt="Birth Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.birthCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
                   <p>PDF Document</p>
                 </div>
               </div>
-              <div class="document-status" *ngIf="!userData.documentPreviews.birthCertificate">
+              <div class="document-status" *ngIf="!userData?.documentPreviews?.birthCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
@@ -226,14 +226,14 @@
             <!-- Medical Certificate -->
             <div class="document-item">
               <div class="document-label">Medical Certificate</div>
-              <div class="document-preview" *ngIf="userData.documentPreviews.medicalCertificate">
+              <div class="document-preview" *ngIf="userData?.documentPreviews?.medicalCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.medicalCertificate)" [src]="userData.documentPreviews.medicalCertificate" alt="Medical Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.medicalCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
                   <p>PDF Document</p>
                 </div>
               </div>
-              <div class="document-status" *ngIf="!userData.documentPreviews.medicalCertificate">
+              <div class="document-status" *ngIf="!userData?.documentPreviews?.medicalCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
@@ -246,14 +246,14 @@
             <!-- Education Certificate -->
             <div class="document-item">
               <div class="document-label">Educational Certificate</div>
-              <div class="document-preview" *ngIf="userData.documentPreviews.educationCertificate">
+              <div class="document-preview" *ngIf="userData?.documentPreviews?.educationCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.educationCertificate)" [src]="userData.documentPreviews.educationCertificate" alt="Education Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.educationCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
                   <p>PDF Document</p>
                 </div>
               </div>
-              <div class="document-status" *ngIf="!userData.documentPreviews.educationCertificate">
+              <div class="document-status" *ngIf="!userData?.documentPreviews?.educationCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
                 <span>Not uploaded</span>
               </div>
@@ -262,11 +262,6 @@
                 <button mat-stroked-button color="primary" (click)="triggerFileInput('educationCertificateUpload')">Upload/Replace</button>
               </div>
             </div>
-          </div>
-          
-          <div class="no-documents" *ngIf="!userData.documentPreviews">
-            <mat-icon color="warn">folder_off</mat-icon>
-            <p>No documents have been uploaded yet.</p>
           </div>
         </mat-card-content>
       </mat-card>

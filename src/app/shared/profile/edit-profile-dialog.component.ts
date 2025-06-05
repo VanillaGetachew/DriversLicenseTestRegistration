@@ -12,6 +12,27 @@ import { MaterialModule } from '../../material/material.module';
     <h2 mat-dialog-title>Edit Profile Information</h2>
     <mat-dialog-content>
       <form [formGroup]="editForm" class="edit-form">
+        <!-- Photo Upload Section -->
+        <div class="photo-section" *ngIf="data.section === 'all' || data.section === 'personal'">
+          <div class="photo-preview">
+            <img *ngIf="photoPreview" [src]="photoPreview" alt="Profile photo">
+            <div *ngIf="!photoPreview" class="no-photo">
+              <mat-icon>account_circle</mat-icon>
+            </div>
+          </div>
+          <div class="photo-actions">
+            <input type="file" accept="image/*" (change)="onPhotoSelected($event)" id="photoUpload" hidden>
+            <button mat-stroked-button color="primary" (click)="triggerPhotoUpload()">
+              <mat-icon>photo_camera</mat-icon>
+              {{ photoPreview ? 'Change Photo' : 'Upload Photo' }}
+            </button>
+            <button *ngIf="photoPreview" mat-stroked-button color="warn" (click)="removePhoto()">
+              <mat-icon>delete</mat-icon>
+              Remove
+            </button>
+          </div>
+        </div>
+
         <div class="form-grid">
           <!-- Personal Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
@@ -166,10 +187,56 @@ import { MaterialModule } from '../../material/material.module';
       max-height: 70vh;
       overflow-y: auto;
     }
+    .photo-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 24px;
+      padding: 16px;
+      background: #f5f5f5;
+      border-radius: 8px;
+    }
+    .photo-preview {
+      width: 150px;
+      height: 180px;
+      border-radius: 8px;
+      overflow: hidden;
+      margin-bottom: 16px;
+      background: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    .photo-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    .no-photo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+      background: #f0f0f0;
+    }
+    .no-photo mat-icon {
+      font-size: 64px;
+      width: 64px;
+      height: 64px;
+      color: #bdbdbd;
+    }
+    .photo-actions {
+      display: flex;
+      gap: 8px;
+    }
   `]
 })
 export class EditProfileDialogComponent implements OnInit {
   editForm: FormGroup;
+  photoPreview: string | null = null;
+  selectedPhoto: File | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -208,12 +275,43 @@ export class EditProfileDialogComponent implements OnInit {
   ngOnInit(): void {
     if (this.data.userData) {
       this.editForm.patchValue(this.data.userData);
+      if (this.data.userData.photoUrl) {
+        this.photoPreview = this.data.userData.photoUrl;
+      }
     }
+  }
+
+  triggerPhotoUpload(): void {
+    document.getElementById('photoUpload')?.click();
+  }
+
+  onPhotoSelected(event: Event): void {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      this.selectedPhoto = file;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.photoPreview = reader.result as string;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  removePhoto(): void {
+    this.photoPreview = null;
+    this.selectedPhoto = null;
   }
 
   onSave(): void {
     if (this.editForm.valid) {
-      this.dialogRef.close(this.editForm.value);
+      const formData = this.editForm.value;
+      if (this.selectedPhoto) {
+        formData.photo = this.selectedPhoto;
+      }
+      if (this.photoPreview === null) {
+        formData.removePhoto = true;
+      }
+      this.dialogRef.close(formData);
     }
   }
 
