@@ -6,6 +6,8 @@ import { MaterialModule } from '../../material/material.module';
 import { UserDataService } from '../../core/services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { MatDialog } from '@angular/material/dialog';
+import { EditProfileDialogComponent } from './edit-profile-dialog.component';
 
 // Define an interface for exam appointments
 interface ExamAppointment {
@@ -41,7 +43,8 @@ export class ProfileComponent implements OnInit {
   constructor(
     private userDataService: UserDataService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private dialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -91,33 +94,33 @@ export class ProfileComponent implements OnInit {
   editSection(section: string): void {
     console.log(`Editing section: ${section}`);
     
-    // In a real application, this would open a dialog or navigate to an edit form
-    switch (section) {
-      case 'personal':
-        this.router.navigate(['/registration'], { 
-          queryParams: { edit: true, section: 'personal' } 
-        });
-        break;
-      case 'contact':
-        this.router.navigate(['/registration'], { 
-          queryParams: { edit: true, section: 'contact' } 
-        });
-        break;
-      case 'license':
-        this.router.navigate(['/registration'], { 
-          queryParams: { edit: true, section: 'license' } 
-        });
-        break;
-      case 'documents':
-        this.router.navigate(['/registration'], { 
-          queryParams: { edit: true, section: 'documents' } 
-        });
-        break;
-      default:
-        this.snackBar.open('Edit functionality not available yet', 'Close', {
-          duration: 3000
-        });
-    }
+    const dialogRef = this.dialog.open(EditProfileDialogComponent, {
+      width: '800px',
+      data: {
+        userData: this.userData,
+        section: section
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        try {
+          // Update the user data with the edited values
+          this.userData = { ...this.userData, ...result };
+          
+          // Save the updated data
+          this.userDataService.setUserData(this.userData);
+          this.snackBar.open('Profile updated successfully', 'Close', {
+            duration: 3000
+          });
+        } catch (error) {
+          console.error('Error updating profile:', error);
+          this.snackBar.open('Error updating profile', 'Close', {
+            duration: 3000
+          });
+        }
+      }
+    });
   }
 
   // Schedule a new exam appointment

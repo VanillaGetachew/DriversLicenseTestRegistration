@@ -180,11 +180,6 @@
       <mat-card>
         <mat-card-header>
           <mat-card-title>Required Documents</mat-card-title>
-          <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="editSection('documents')">
-              <mat-icon>edit</mat-icon>
-            </button>
-          </div>
         </mat-card-header>
         <mat-card-content>
           <div class="documents-grid" *ngIf="userData.documentPreviews">
@@ -335,14 +330,14 @@
   </div>
   
   <!-- No Data Message -->
-  <div class="no-data" *ngIf="!userData">
+  <!-- <div class="no-data" *ngIf="!userData">
     <mat-icon>account_circle</mat-icon>
     <h2>No Profile Data</h2>
     <p>You haven't completed your registration yet.</p>
     <button mat-raised-button color="primary" routerLink="/registration">
       Go to Registration
     </button>
-  </div>
+  </div> -->
 
 
 </div>
