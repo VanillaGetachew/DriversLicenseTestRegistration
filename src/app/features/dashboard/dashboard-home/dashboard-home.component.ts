@@ -24,7 +24,7 @@ export class DashboardHomeComponent implements OnInit {
   avgTreatmentCost = 2536;
   availableCars = 38;
 
-  selectedId: number = 0;
+  selectedId: number = -5;
   parentCode: number = -1;
   schoolParentCode: number = -1;
 

@@ -35,8 +35,10 @@ export class RegistrationService {
     );
   }
 
-  getRegistrationById(id: number): Observable<Registration> {
-    return this.http.get<Registration>(`${this.apiUrl}/${id}`);
+  getRegistrationById(id: string): Observable<Registration> {
+    return this.http.get<Registration>(`${this.apiUrl}/NationalID`, {
+      params: { nationalId: id.toString() }
+    });
   }
 
   createRegistration(registration: Registration): Observable<Registration> {
