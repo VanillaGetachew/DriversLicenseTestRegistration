@@ -1,0 +1,211 @@
+{
+  "common": {
+    "save": "አስቀምጥ",
+    "cancel": "ሰርዝ",
+    "edit": "አርትዕ",
+    "delete": "ሰርዝ",
+    "remove": "አስወግድ",
+    "upload": "ጫን",
+    "change": "ቀይር",
+    "required": "አስገዳጅ",
+    "reset": "ዳግም አስጀምር",
+    "register": "ይመዝገቡ",
+    "close": "ዝጋ",
+    "notProvided": "አልተሰጠም",
+    "notApplicable": "የለም",
+    "nationalId": "ብሔራዊ መታወቂያ",
+    "clear": "አጽዳ",
+    "search": "ፈልግ",
+    "actions": "ድርጊቶች"
+  },
+  "profile": {
+    "title": "የመገለጫ መረጃ አርትዕ",
+    "updateSuccess": "መገለጫው በተሳካ ሁኔታ ተዘምኗል",
+    "updateError": "መገለጫውን በማዘመን ላይ ስህተት ተፈጥሯል",
+    "examScheduled": "ፈተናው በተሳካ ሁኔታ ቀጠሮ ተይዞለታል!",
+    "examRescheduled": "ፈተናው በተሳካ ሁኔታ ቀጠሮ ተለውጧል!",
+    "examCanceled": "ፈተናው ተሰርዟል",
+    "searchError": "እባክዎ ቢያንስ አንድ የፍለጋ መስክ ያስገቡ።",
+    "noProfileFoundId": "በዚህ ብሔራዊ መታወቂያ ምንም መገለጫ አልተገኘም።",
+    "noProfileFoundNames": "ለተሰጡት ስሞች ምንም መገለጫ አልተገኘም።",
+    "noProfileFound": "ምንም መገለጫ አልተገኘም።",
+    "photo": {
+      "upload": "ፎቶ ጫን",
+      "change": "ፎቶ ቀይር",
+      "remove": "ፎቶ አስወግድ"
+    },
+    "search": {
+      "nationalId": "ብሔራዊ መታወቂያ",
+      "enterNationalId": "ብሔራዊ መታወቂያ ያስገቡ",
+      "searchProfile": "መገለጫ ፈልግ",
+      "name": "ስም"
+    },
+    "backToSearch": "ወደ ፍለጋ ተመለስ",
+    "subtitle": "የመንጃ ፈቃድ አመልካች",
+    "profileInfo": {
+      "title": "የመገለጫ መረጃ"
+    },
+    "personal": {
+      "firstName": "የመጀመሪያ ስም",
+      "firstNameAmharic": "የመጀመሪያ ስም (አማርኛ)",
+      "fatherName": "የአባት ስም",
+      "fatherNameAmharic": "የአባት ስም (አማርኛ)",
+      "grandfatherName": "የአያት ስም",
+      "grandfatherNameAmharic": "የአያት ስም (አማርኛ)",
+      "sex": "ጾታ",
+      "birthDate": "የትውልድ ቀን",
+      "birthPlace": "የትውልድ ቦታ",
+      "bloodType": "የደም አይነት",
+      "nationality": "ዜግነት",
+      "education": "ትምህርት"
+    },
+    "contact": {
+      "phoneNumber": "ስልክ ቁጥር",
+      "region": "ክልል",
+      "town": "ከተማ",
+      "woreda": "ወረዳ",
+      "kebele": "ቀበሌ",
+      "houseNo": "የቤት ቁጥር"
+    },
+    "license": {
+      "grade": "የፍቃድ ደረጃ",
+      "examLanguage": "የፈተና ቋንቋ"
+    },
+    "education": {
+      "none": "የለም",
+      "primary": "የመጀመሪያ ደረጃ",
+      "secondary": "የሁለተኛ ደረጃ",
+      "diploma": "ዲፕሎማ",
+      "degree": "የመጀመሪያ ዲግሪ",
+      "masters": "ማስተርስ",
+      "phd": "የዶክትሬት ዲግሪ"
+    },
+    "sex": {
+      "male": "ወንድ",
+      "female": "ሴት"
+    },
+    "language": {
+      "english": "እንግሊዝኛ",
+      "amharic": "አማርኛ"
+    },
+    "documents": {
+      "title": "የሚያስፈልጉ ሰነዶች",
+      "nationalIdCard": "ብሔራዊ መታወቂያ ካርድ",
+      "pdfDocument": "PDF ሰነድ",
+      "notUploaded": "አልተጫነም",
+      "uploadReplace": "ጫን/ቀይር",
+      "birthCertificate": "የትውልድ የምስክር ወረቀት",
+      "medicalCertificate": "የህክምና የምስክር ወረቀት",
+      "educationCertificate": "የትምህርት ማስረጃ",
+      "supportingDocuments": "ደጋፊ ሰነዶች",
+      "noDocumentsUploaded": "ምንም ሰነዶች አልተጫኑም።"
+    },
+    "exam": {
+      "title": "የፈተና ቀጠሮ",
+      "upcomingAppointment": "የሚመጣው ቀጠሮ ዝርዝሮች:",
+      "date": "ቀን",
+      "time": "ሰዓት",
+      "examType": "የፈተና አይነት",
+      "location": "ቦታ",
+      "reschedule": "ቀጠሮ ቀይር",
+      "cancelExam": "ፈተና ሰርዝ",
+      "noUpcomingAppointment": "የሚመጣ የፈተና ቀጠሮ የለም።",
+      "scheduleExam": "አዲስ ፈተና ቀጥር"
+    },
+    "footer": {
+      "contactUs": {
+        "title": "አግኙን"
+      },
+      "quickLinks": {
+        "title": "ፈጣን አገናኞች",
+        "aboutUs": "ስለ እኛ",
+        "faqs": "ተደጋጋሚ ጥያቄዎች",
+        "privacyPolicy": "የግላዊነት ፖሊሲ",
+        "termsOfService": "የአገልግሎት ውሎች"
+      },
+      "openingHours": {
+        "title": "የስራ ሰዓት",
+        "monFri": "ሰኞ - አርብ: 8:00 ጥዋት - 5:00 ከሰዓት",
+        "sat": "ቅዳሜ: 9:00 ጥዋት - 1:00 ከሰዓት",
+        "sun": "እሁድ: ዝግ ነው"
+      },
+      "copyright": "© 2025 ኩስቶር የመንጃ ፈቃድ የፈተና ምዝገባ። ሁሉም መብቶች የተጠበቁ ናቸው።"
+    }
+  },
+  "registration": {
+    "title": "የመንጃ ፈቃድ ፈተና ምዝገባ",
+    "personalInfo": {
+      "title": "የግል መረጃ",
+      "firstNameAmh": "ስም",
+      "fatherNameAmh": "የአባት ስም",
+      "grandNameAmh": "የአያት ስም"
+    },
+    "contactAddress": {
+      "title": "እውቂያ እና አድራሻ"
+    },
+    "licenseInfo": {
+      "title": "የፍቃድ መረጃ",
+      "category": "የፍቃድ ምድብ",
+      "examLanguage": "ቋንቋ"
+    },
+    "photoUpload": {
+      "title": "ፎቶ መስቀል",
+      "hint": "JPG ወይም PNG, ቢበዛ 5 ሜባ"
+    }
+  },
+  "sidebar": {
+    "logo": "ዳሽ",
+    "registration": "ምዝገባ",
+    "licenseUpgrade": "ፈቃድ ማሻሻያ",
+    "reports": "ሪፖርቶች"
+  },
+  "dashboard": {
+    "title": "ዳሽቦርድ አጠቃላይ እይታ",
+    "stats": {
+      "totalApplicants": "ጠቅላላ ማመልከቻዎች",
+      "passRate": "የማለፍ መጠን",
+      "upcomingTests": "የሚመጡ ፈተናዎች",
+      "availableVehicles": "የሚገኙ ተሽከርካሪዎች",
+      "fromLastMonth": "ከባለፈው ወር {{value}}%",
+      "fromLastWeek": "ከባለፈው ሳምንት {{value}}%",
+      "noChange": "ለውጥ የለም"
+    },
+    "charts": {
+      "registrationDistribution": "የምዝገባ ስርጭት",
+      "testCentersMap": "የፈተና ማዕከሎች ካርታ",
+      "monthlyPerformance": "ወርሃዊ አፈጻጸም",
+      "licenseTypeDistribution": "የፈቃድ አይነት ስርጭት",
+      "activeCenters": "ንቁ ማዕከሎች",
+      "inactiveCenters": "ያልተሰሩ ማዕከሎች",
+      "months": {
+        "jan": "ጃን",
+        "feb": "ፌብ",
+        "mar": "ማር",
+        "apr": "ኤፕሪ",
+        "may": "ሜይ",
+        "jun": "ጁን"
+      }
+    }
+  },
+  "header": {
+    "appTitle": "የመንጃ ፈቃድ የፈተና ምዝገባ",
+    "myProfile": "የእኔ መገለጫ",
+    "changePassword": "የይለፍ ቃል ቀይር",
+    "logout": "ውጣ"
+  },
+  "licenseUpgrade": {
+    "search": {
+      "title": "ለማሳደግ ፈቃድ ፈልግ",
+      "licenseGrade": "የፈቃድ ደረጃ",
+      "licenseNumber": "የፈቃድ ቁጥር",
+      "enterLicenseNumber": "የፈቃድ ቁጥር ያስገቡ",
+      "all": "ሁሉም",
+      "foundResults": "{{count}} {{count === 1 ? 'ውጤት' : 'ውጤቶች'}} ተገኝተዋል",
+      "noResults": "ከፍለጋዎ ጋር የሚጣጣሙ ፈቃዶች አልተገኙም",
+      "licenseType": "የፈቃድ አይነት",
+      "issueDate": "የተሰጠበት ቀን",
+      "expiryDate": "የሚያልቅበት ቀን",
+      "upgrade": "አሳድግ"
+    }
+  }
+} 

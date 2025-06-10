@@ -1,29 +1,29 @@
 <div class="registration-container">
-  <h1>Driver License Exam Registration</h1>
+  <h1>{{ 'registration.title' | translate }}</h1>
 
   <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
     <!-- Personal Information -->
     <div class="form-section">
-      <h2>Personal Information</h2>
+      <h2>{{ 'registration.personalInfo.title' | translate }}</h2>
       
       <div class="form-row">
         
           <mat-form-field appearance="outline">
-            <mat-label>ስም</mat-label>
+            <mat-label>{{ 'registration.personalInfo.firstNameAmh' | translate }}</mat-label>
             <input matInput formControlName="firstNameAmh" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
            
           <mat-form-field appearance="outline">
-            <mat-label>የአባት ስም</mat-label>
+            <mat-label>{{ 'registration.personalInfo.fatherNameAmh' | translate }}</mat-label>
             <input matInput formControlName="fatherNameAmh" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
           <mat-form-field appearance="outline">
-            <mat-label>የአያት ስም</mat-label>
+            <mat-label>{{ 'registration.personalInfo.grandNameAmh' | translate }}</mat-label>
             <input matInput formControlName="grandNameAmh" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
       </div>
@@ -31,24 +31,24 @@
       <div class="form-row">
       
           <mat-form-field appearance="outline">
-            <mat-label>First Name</mat-label>
+            <mat-label>{{ 'profile.personal.firstName' | translate }}</mat-label>
             <input matInput formControlName="firstName" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
       
 
           <mat-form-field appearance="outline">
-            <mat-label>Father's Name</mat-label>
+            <mat-label>{{ 'profile.personal.fatherName' | translate }}</mat-label>
             <input matInput formControlName="fatherName" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
       
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Grandfather's Name</mat-label>
+            <mat-label>{{ 'profile.personal.grandfatherName' | translate }}</mat-label>
             <input matInput formControlName="grandName" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
       </div>
@@ -56,7 +56,7 @@
       <div class="form-row">
         
           <mat-form-field appearance="outline">
-            <mat-label>Sex</mat-label>
+            <mat-label>{{ 'profile.personal.sex' | translate }}</mat-label>
             <mat-select formControlName="sex">
               <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
@@ -65,19 +65,19 @@
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Birth Date</mat-label>
+            <mat-label>{{ 'profile.personal.birthDate' | translate }}</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="birthDate" required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Birth Place</mat-label>
+            <mat-label>{{ 'profile.personal.birthPlace' | translate }}</mat-label>
             <input matInput formControlName="birthPlace" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
       </div>
@@ -85,7 +85,7 @@
       <div class="form-row">
         
           <mat-form-field appearance="outline">
-            <mat-label>Blood Type</mat-label>
+            <mat-label>{{ 'profile.personal.bloodType' | translate }}</mat-label>
             <mat-select formControlName="bloodType">
               <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
@@ -94,7 +94,7 @@
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Nationality</mat-label>
+            <mat-label>{{ 'profile.personal.nationality' | translate }}</mat-label>
             <mat-select formControlName="nationality">
               <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
@@ -103,7 +103,7 @@
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Education</mat-label>
+            <mat-label>{{ 'profile.personal.education' | translate }}</mat-label>
             <mat-select formControlName="education">
               <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
@@ -114,20 +114,20 @@
 
     <!-- Contact & Address -->
     <div class="form-section">
-      <h2>Contact & Address</h2>
+      <h2>{{ 'registration.contactAddress.title' | translate }}</h2>
       
       <div class="form-row">
         
           <mat-form-field appearance="outline">
-            <mat-label>Phone Number</mat-label>
+            <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
             <input matInput formControlName="tel1" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         
 
        
           <mat-form-field appearance="outline">
-            <mat-label>Region</mat-label>
+            <mat-label>{{ 'profile.contact.region' | translate }}</mat-label>
             <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
               <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
@@ -136,7 +136,7 @@
 
         
           <mat-form-field appearance="outline">
-            <mat-label>Town</mat-label>
+            <mat-label>{{ 'profile.contact.town' | translate }}</mat-label>
             <mat-select [disabled]="!town.length" (selectionChange)="onTownChange($event.value)" formControlName="town">
               <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
@@ -146,47 +146,47 @@
 
       <div class="form-row">
           <mat-form-field appearance="outline">
-            <mat-label>Woreda</mat-label>
+            <mat-label>{{ 'profile.contact.woreda' | translate }}</mat-label>
             <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
               <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Kebele</mat-label>
+            <mat-label>{{ 'profile.contact.kebele' | translate }}</mat-label>
             <mat-select [disabled]="!kebele.length" formControlName="kebele">
               <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>House No.</mat-label>
+            <mat-label>{{ 'profile.contact.houseNo' | translate }}</mat-label>
             <input matInput formControlName="houseNo" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
       </div>
     </div>
 
     <!-- License Information -->
     <div class="form-section">
-      <h2>License Information</h2>
+      <h2>{{ 'registration.licenseInfo.title' | translate }}</h2>
 
       <div class="form-row">
           <mat-form-field appearance="outline">
-            <mat-label>License Category</mat-label>
+            <mat-label>{{ 'registration.licenseInfo.category' | translate }}</mat-label>
             <mat-select formControlName="licenceGrade">
               <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>National ID</mat-label>
+            <mat-label>{{ 'registration.licenseInfo.nationalId' | translate }}</mat-label>
             <input matInput formControlName="nationalId" required>
-            <mat-error>Required</mat-error>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
-            <mat-label>Language</mat-label>
+            <mat-label>{{ 'registration.licenseInfo.examLanguage' | translate }}</mat-label>
             <mat-select formControlName="isTheoryExamEnglish">
               <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
@@ -196,7 +196,7 @@
 
     <!-- Photo Upload -->
     <div class="form-section">
-      <h2>Photo Upload</h2>
+      <h2>{{ 'registration.photoUpload.title' | translate }}</h2>
       
       <div class="photo-upload-container">
         <div class="photo-preview">
@@ -209,21 +209,21 @@
           <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
           <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
             <mat-icon>photo_camera</mat-icon>
-            {{ imagePreview ? 'Change Photo' : 'Upload Photo' }}
+            {{ imagePreview ? ('common.change' | translate) : ('common.upload' | translate) }}
           </button>
           <button *ngIf="imagePreview" type="button" class="upload-button" (click)="removePhoto()">
             <mat-icon>delete</mat-icon>
-            Remove
+            {{ 'common.remove' | translate }}
           </button>
         </div>
-        <p class="upload-hint">JPG or PNG, max 5MB</p>
+        <p class="upload-hint">{{ 'registration.photoUpload.hint' | translate }}</p>
       </div>
     </div>
 
     <!-- Form Actions -->
     <div class="form-actions">
-      <button type="button" class="btn-reset" (click)="resetForm()">Reset</button>
-      <button type="submit" class="btn-register">Register</button>
+      <button type="button" class="btn-reset" (click)="resetForm()">{{ 'common.reset' | translate }}</button>
+      <button type="submit" class="btn-register">{{ 'common.register' | translate }}</button>
     </div>
   </form>
 </div>

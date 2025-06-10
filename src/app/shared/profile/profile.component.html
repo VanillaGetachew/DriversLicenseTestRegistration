@@ -5,25 +5,25 @@
       <form (ngSubmit)="searchProfile()" style="display: flex; flex-direction: column; gap: 16px; align-items: center;">
         <div style="display: flex; flex-wrap: wrap; gap: 16px; width: 100%; justify-content: center;">
           <mat-form-field appearance="outline" style="flex: 1 1 180px; min-width: 180px;">
-            <mat-label>National ID</mat-label>
-            <input matInput [(ngModel)]="searchId" name="searchId" placeholder="Enter National ID">
+            <mat-label>{{ 'profile.search.nationalId' | translate }}</mat-label>
+            <input matInput [(ngModel)]="searchId" name="searchId" placeholder="{{ 'profile.search.enterNationalId' | translate }}">
           </mat-form-field>
           <mat-form-field appearance="outline" style="flex: 1 1 140px; min-width: 140px;">
-            <mat-label>First Name</mat-label>
-            <input matInput [(ngModel)]="searchFirstName" name="searchFirstName" placeholder="First Name">
+            <mat-label>{{ 'profile.personal.firstName' | translate }}</mat-label>
+            <input matInput [(ngModel)]="searchFirstName" name="searchFirstName" placeholder="{{ 'profile.personal.firstName' | translate }}">
           </mat-form-field>
           <mat-form-field appearance="outline" style="flex: 1 1 140px; min-width: 140px;">
-            <mat-label>Father's Name</mat-label>
-            <input matInput [(ngModel)]="searchFatherName" name="searchFatherName" placeholder="Father's Name">
+            <mat-label>{{ 'profile.personal.fatherName' | translate }}</mat-label>
+            <input matInput [(ngModel)]="searchFatherName" name="searchFatherName" placeholder="{{ 'profile.personal.fatherName' | translate }}">
           </mat-form-field>
           <mat-form-field appearance="outline" style="flex: 1 1 140px; min-width: 140px;">
-            <mat-label>Grandfather's Name</mat-label>
-            <input matInput [(ngModel)]="searchGrandfatherName" name="searchGrandfatherName" placeholder="Grandfather's Name">
+            <mat-label>{{ 'profile.personal.grandfatherName' | translate }}</mat-label>
+            <input matInput [(ngModel)]="searchGrandfatherName" name="searchGrandfatherName" placeholder="{{ 'profile.personal.grandfatherName' | translate }}">
           </mat-form-field>
         </div>
         <button mat-raised-button color="primary" type="submit" style="margin-top: 8px; min-width: 120px;">
           <mat-icon>search</mat-icon>
-          Search Profile
+          {{ 'profile.search.searchProfile' | translate }}
         </button>
       </form>
     </mat-card>
@@ -40,11 +40,11 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th mat-header-cell *matHeaderCellDef>Name</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'profile.search.name' | translate }}</th>
           <td mat-cell *matCellDef="let element">{{ element.firstName }} {{ element.fatherName }} {{ element.grandfatherName }}</td>
         </ng-container>
         <ng-container matColumnDef="nationalId">
-          <th mat-header-cell *matHeaderCellDef>National ID</th>
+          <th mat-header-cell *matHeaderCellDef>{{ 'profile.search.nationalId' | translate }}</th>
           <td mat-cell *matCellDef="let element">{{ element.nationalId }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="['icon', 'name', 'nationalId']"></tr>
@@ -57,7 +57,7 @@
   <div *ngIf="showProfileSection">
     <button mat-stroked-button color="primary" (click)="backToSearch()" style="margin-bottom: 16px;">
       <mat-icon>arrow_back</mat-icon>
-      Back to Search
+      {{ 'profile.backToSearch' | translate }}
     </button>
     <div class="profile-header" *ngIf="userData">
       <div class="profile-photo">
@@ -68,7 +68,7 @@
       </div>
       <div class="profile-name">
         <h1>{{ userData.firstName }} {{ userData.fatherName }} {{ userData.grandfatherName }}</h1>
-        <p class="subtitle">Driver's License Applicant</p>
+        <p class="subtitle">{{ 'profile.subtitle' | translate }}</p>
       </div>
     </div>
 
@@ -76,7 +76,7 @@
       <!-- Profile Information Card -->
       <mat-card *ngIf="userData">
         <mat-card-header>
-          <mat-card-title>Profile Information</mat-card-title>
+          <mat-card-title>{{ 'profile.profileInfo.title' | translate }}</mat-card-title>
           <div class="card-actions">
             <button mat-icon-button color="primary" (click)="editSection('all')">
               <mat-icon>edit</mat-icon>
@@ -87,90 +87,90 @@
           <div class="info-grid">
             <!-- Personal Info -->
             <div class="info-item">
-              <span class="label">First Name (Amharic)</span>
-              <span class="value">{{ userData.firstNameAmharic || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.firstNameAmharic' | translate }}</span>
+              <span class="value">{{ userData.firstNameAmharic || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Father's Name (Amharic)</span>
-              <span class="value">{{ userData.fatherNameAmharic || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.fatherNameAmharic' | translate }}</span>
+              <span class="value">{{ userData.fatherNameAmharic || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Grandfather's Name (Amharic)</span>
-              <span class="value">{{ userData.grandfatherNameAmharic || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.grandfatherNameAmharic' | translate }}</span>
+              <span class="value">{{ userData.grandfatherNameAmharic || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">First Name</span>
-              <span class="value">{{ userData.firstName || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.firstName' | translate }}</span>
+              <span class="value">{{ userData.firstName || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Father's Name</span>
-              <span class="value">{{ userData.fatherName || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.fatherName' | translate }}</span>
+              <span class="value">{{ userData.fatherName || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Grandfather's Name</span>
-              <span class="value">{{ userData.grandfatherName || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.grandfatherName' | translate }}</span>
+              <span class="value">{{ userData.grandfatherName || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Sex</span>
-              <span class="value">{{ userData.sex || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.sex' | translate }}</span>
+              <span class="value">{{ userData.sex || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Birth Date</span>
-              <span class="value">{{ userData.birthDate ? (userData.birthDate | date:'mediumDate') : 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.birthDate' | translate }}</span>
+              <span class="value">{{ userData.birthDate ? (userData.birthDate | date:'mediumDate') : ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Birth Place</span>
-              <span class="value">{{ userData.birthPlace || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.birthPlace' | translate }}</span>
+              <span class="value">{{ userData.birthPlace || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Blood Type</span>
-              <span class="value">{{ userData.bloodType || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.bloodType' | translate }}</span>
+              <span class="value">{{ userData.bloodType || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Nationality</span>
-              <span class="value">{{ userData.nationality || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.nationality' | translate }}</span>
+              <span class="value">{{ userData.nationality || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Education</span>
-              <span class="value">{{ userData.education || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.personal.education' | translate }}</span>
+              <span class="value">{{ userData.education || ('common.notProvided' | translate) }}</span>
             </div>
             <!-- Contact & Address -->
             <div class="info-item">
-              <span class="label">Phone Number</span>
-              <span class="value">{{ userData.phoneNumber || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.contact.phoneNumber' | translate }}</span>
+              <span class="value">{{ userData.phoneNumber || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Region</span>
-              <span class="value">{{ userData.region || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.contact.region' | translate }}</span>
+              <span class="value">{{ userData.region || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Town</span>
-              <span class="value">{{ userData.town || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.contact.town' | translate }}</span>
+              <span class="value">{{ userData.town || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Woreda</span>
-              <span class="value">{{ userData.woreda || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.contact.woreda' | translate }}</span>
+              <span class="value">{{ userData.woreda || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Kebele</span>
-              <span class="value">{{ userData.kebele || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.contact.kebele' | translate }}</span>
+              <span class="value">{{ userData.kebele || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">House No.</span>
-              <span class="value">{{ userData.houseNo || 'N/A' }}</span>
+              <span class="label">{{ 'profile.contact.houseNo' | translate }}</span>
+              <span class="value">{{ userData.houseNo || ('common.notApplicable' | translate) }}</span>
             </div>
             <!-- License Info -->
             <div class="info-item">
-              <span class="label">License Grade</span>
-              <span class="value">{{ userData.licenseGrade || 'Not provided' }}</span>
+              <span class="label">{{ 'profile.license.grade' | translate }}</span>
+              <span class="value">{{ userData.licenseGrade || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">National ID</span>
-              <span class="value">{{ userData.nationalId || 'Not provided' }}</span>
+              <span class="label">{{ 'registration.licenseInfo.nationalId' | translate }}</span>
+              <span class="value">{{ userData.nationalId || ('common.notProvided' | translate) }}</span>
             </div>
             <div class="info-item">
-              <span class="label">Exam Language</span>
-              <span class="value">{{ userData.englishExam ? 'English' : 'Amharic' }}</span>
+              <span class="label">{{ 'profile.license.examLanguage' | translate }}</span>
+              <span class="value">{{ userData.englishExam ? ('profile.language.english' | translate) : ('profile.language.amharic' | translate) }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -179,160 +179,153 @@
       <!-- Documents Card -->
       <mat-card>
         <mat-card-header>
-          <mat-card-title>Required Documents</mat-card-title>
+          <mat-card-title>{{ 'profile.documents.title' | translate }}</mat-card-title>
         </mat-card-header>
         <mat-card-content>
           <div class="documents-grid">
             <!-- ID Card -->
             <div class="document-item">
-              <div class="document-label">National ID Card</div>
+              <div class="document-label">{{ 'profile.documents.nationalIdCard' | translate }}</div>
               <div class="document-preview" *ngIf="userData?.documentPreviews?.idCard">
                 <img *ngIf="isImageURL(userData.documentPreviews.idCard)" [src]="userData.documentPreviews.idCard" alt="ID Card">
                 <div *ngIf="isPdfURL(userData.documentPreviews.idCard)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{ 'profile.documents.pdfDocument' | translate }}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.idCard">
                 <mat-icon color="warn">highlight_off</mat-icon>
-                <span>Not uploaded</span>
+                <span>{{ 'profile.documents.notUploaded' | translate }}</span>
               </div>
               <div class="upload-section">
                 <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'idCard')" id="idCardUpload" hidden>
-                <button mat-stroked-button color="primary" (click)="triggerFileInput('idCardUpload')">Upload/Replace</button>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('idCardUpload')">{{ 'profile.documents.uploadReplace' | translate }}</button>
               </div>
             </div>
 
             <!-- Birth Certificate -->
             <div class="document-item">
-              <div class="document-label">Birth Certificate</div>
+              <div class="document-label">{{ 'profile.documents.birthCertificate' | translate }}</div>
               <div class="document-preview" *ngIf="userData?.documentPreviews?.birthCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.birthCertificate)" [src]="userData.documentPreviews.birthCertificate" alt="Birth Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.birthCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{ 'profile.documents.pdfDocument' | translate }}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.birthCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
-                <span>Not uploaded</span>
+                <span>{{ 'profile.documents.notUploaded' | translate }}</span>
               </div>
               <div class="upload-section">
                 <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'birthCertificate')" id="birthCertificateUpload" hidden>
-                <button mat-stroked-button color="primary" (click)="triggerFileInput('birthCertificateUpload')">Upload/Replace</button>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('birthCertificateUpload')">{{ 'profile.documents.uploadReplace' | translate }}</button>
               </div>
             </div>
 
             <!-- Medical Certificate -->
             <div class="document-item">
-              <div class="document-label">Medical Certificate</div>
+              <div class="document-label">{{ 'profile.documents.medicalCertificate' | translate }}</div>
               <div class="document-preview" *ngIf="userData?.documentPreviews?.medicalCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.medicalCertificate)" [src]="userData.documentPreviews.medicalCertificate" alt="Medical Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.medicalCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{ 'profile.documents.pdfDocument' | translate }}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.medicalCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
-                <span>Not uploaded</span>
+                <span>{{ 'profile.documents.notUploaded' | translate }}</span>
               </div>
               <div class="upload-section">
                 <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'medicalCertificate')" id="medicalCertificateUpload" hidden>
-                <button mat-stroked-button color="primary" (click)="triggerFileInput('medicalCertificateUpload')">Upload/Replace</button>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('medicalCertificateUpload')">{{ 'profile.documents.uploadReplace' | translate }}</button>
               </div>
             </div>
 
             <!-- Education Certificate -->
             <div class="document-item">
-              <div class="document-label">Educational Certificate</div>
+              <div class="document-label">{{ 'profile.documents.educationCertificate' | translate }}</div>
               <div class="document-preview" *ngIf="userData?.documentPreviews?.educationCertificate">
                 <img *ngIf="isImageURL(userData.documentPreviews.educationCertificate)" [src]="userData.documentPreviews.educationCertificate" alt="Education Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.educationCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{ 'profile.documents.pdfDocument' | translate }}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.educationCertificate">
                 <mat-icon color="warn">highlight_off</mat-icon>
-                <span>Not uploaded</span>
+                <span>{{ 'profile.documents.notUploaded' | translate }}</span>
               </div>
               <div class="upload-section">
                 <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'educationCertificate')" id="educationCertificateUpload" hidden>
-                <button mat-stroked-button color="primary" (click)="triggerFileInput('educationCertificateUpload')">Upload/Replace</button>
+                <button mat-stroked-button color="primary" (click)="triggerFileInput('educationCertificateUpload')">{{ 'profile.documents.uploadReplace' | translate }}</button>
               </div>
+            </div>
+
+            <div *ngIf="!hasDocuments()" class="no-documents">
+              {{ 'profile.documents.noDocumentsUploaded' | translate }}
             </div>
           </div>
         </mat-card-content>
       </mat-card>
 
-      <!-- Exam Appointment Card -->
-      <mat-card class="appointment-card">
-        <mat-card-header>
-          <mat-card-title>Your Exam Appointment</mat-card-title>
-          <div class="card-actions">
-            <button mat-icon-button color="primary" (click)="rescheduleExam()">
-              <mat-icon>event</mat-icon>
-            </button>
-          </div>
-        </mat-card-header>
-        <mat-card-content>
-          <div *ngIf="!examAppointment" class="no-appointment">
-            <mat-icon>event_busy</mat-icon>
-            <p>You don't have any scheduled exams yet.</p>
-            <button mat-raised-button color="primary" (click)="scheduleExam()">
-              Schedule Exam
-            </button>
+    <!-- Exam Appointment Card -->
+    <mat-card class="appointment-card">
+      <mat-card-header>
+        <mat-card-title>{{ 'profile.exam.title' | translate }}</mat-card-title>
+        <div class="card-actions">
+          <button mat-icon-button color="primary" (click)="rescheduleExam()">
+            <mat-icon>event</mat-icon>
+          </button>
+        </div>
+      </mat-card-header>
+      <mat-card-content>
+        <div *ngIf="!examAppointment" class="no-appointment">
+          <mat-icon>event_busy</mat-icon>
+          <p>{{ 'profile.exam.noUpcomingAppointment' | translate }}</p>
+          <button mat-raised-button color="primary" (click)="scheduleExam()">
+            {{ 'profile.exam.scheduleExam' | translate }}
+          </button>
+        </div>
+        
+        <div *ngIf="examAppointment" class="appointment-details">
+          <div class="appointment-header">
+            <mat-icon color="primary">event_available</mat-icon>
+            <h3>{{ 'profile.exam.upcomingAppointment' | translate }}</h3>
           </div>
           
-          <div *ngIf="examAppointment" class="appointment-details">
-            <div class="appointment-header">
-              <mat-icon color="primary">event_available</mat-icon>
-              <h3>Your exam is scheduled!</h3>
+          <div class="info-grid appointment-grid">
+            <div class="info-item">
+              <span class="label">{{ 'profile.exam.date' | translate }}</span>
+              <span class="value">{{ examAppointment.date | date:'fullDate' }}</span>
             </div>
-            
-            <div class="info-grid appointment-grid">
-              <div class="info-item">
-                <span class="label">Exam Date</span>
-                <span class="value">{{ examAppointment.date | date:'fullDate' }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Exam Time</span>
-                <span class="value">{{ examAppointment.time }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Exam Type</span>
-                <span class="value">{{ examAppointment.examType }}</span>
-              </div>
-              <div class="info-item">
-                <span class="label">Location</span>
-                <span class="value">{{ examAppointment.location }}</span>
-              </div>
+            <div class="info-item">
+              <span class="label">{{ 'profile.exam.time' | translate }}</span>
+              <span class="value">{{ examAppointment.time }}</span>
             </div>
-            
-            <div class="appointment-actions">
-              <button mat-button color="warn" (click)="cancelExam()">
-                <mat-icon>cancel</mat-icon> Cancel
-              </button>
-              <button mat-button color="primary" (click)="rescheduleExam()">
-                <mat-icon>update</mat-icon> Reschedule
-              </button>
+            <div class="info-item">
+              <span class="label">{{ 'profile.exam.examType' | translate }}</span>
+              <span class="value">{{ examAppointment.examType }}</span>
+            </div>
+            <div class="info-item">
+              <span class="label">{{ 'profile.exam.location' | translate }}</span>
+              <span class="value">{{ examAppointment.location }}</span>
             </div>
           </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
+          
+          <div class="appointment-actions">
+            <button mat-button color="warn" (click)="cancelExam()">
+              <mat-icon>cancel</mat-icon> {{ 'profile.exam.cancelExam' | translate }}
+            </button>
+            <button mat-button color="primary" (click)="rescheduleExam()">
+              <mat-icon>update</mat-icon> {{ 'profile.exam.reschedule' | translate }}
+            </button>
+          </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
-  
-  <!-- No Data Message -->
-  <!-- <div class="no-data" *ngIf="!userData">
-    <mat-icon>account_circle</mat-icon>
-    <h2>No Profile Data</h2>
-    <p>You haven't completed your registration yet.</p>
-    <button mat-raised-button color="primary" routerLink="/registration">
-      Go to Registration
-    </button>
-  </div> -->
-
-
 </div>
+</div>
+

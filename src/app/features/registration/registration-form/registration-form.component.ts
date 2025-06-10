@@ -10,6 +10,8 @@ import { RegistrationService } from '../../../core/services/registration.service
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-registration-form',
@@ -24,7 +26,8 @@ import { MatIconModule } from '@angular/material/icon';
     MatInputModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    TranslateModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -43,7 +46,10 @@ export class RegistrationFormComponent implements OnInit {
   licenceCategory: licenceCategory[]=[];
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private fb: FormBuilder, private dropdown: DropdownService, private reg: RegistrationService) {
+  constructor(private fb: FormBuilder,
+    private dropdown: DropdownService,
+    private reg: RegistrationService,
+    private languageService: LanguageService) {
     this.registrationForm = this.fb.group({
       // Personal Information
 

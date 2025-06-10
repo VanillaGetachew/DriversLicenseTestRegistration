@@ -7,7 +7,9 @@ import { UserDataService } from '../../core/services/user-data.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
-import { EditProfileDialogComponent } from './edit-profile-dialog.component';
+import { EditProfileDialogComponent } from './edit-profile-dialog/edit-profile-dialog.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../core/services/language.service';
 
 // Define an interface for exam appointments
 interface ExamAppointment {
@@ -25,7 +27,8 @@ interface ExamAppointment {
     RouterModule, 
     MaterialModule,
     FormsModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    TranslateModule
   ],
   templateUrl: './profile.component.html',
   styleUrls: ['./profile.component.scss']
@@ -44,7 +47,9 @@ export class ProfileComponent implements OnInit {
     private userDataService: UserDataService,
     private snackBar: MatSnackBar,
     private router: Router,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private languageService: LanguageService,
+    private translate: TranslateService // Inject TranslateService
   ) { }
 
   ngOnInit(): void {
@@ -109,14 +114,17 @@ export class ProfileComponent implements OnInit {
           this.userData = { ...this.userData, ...result };
           
           // Save the updated data
-          this.userDataService.setUserData(this.userData);
-          this.snackBar.open('Profile updated successfully', 'Close', {
-            duration: 3000
+          this.languageService.getTranslation('profile.updateSuccess').subscribe(translatedText => {
+            this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+              duration: 3000
+            });
           });
         } catch (error) {
           console.error('Error updating profile:', error);
-          this.snackBar.open('Error updating profile', 'Close', {
-            duration: 3000
+          this.languageService.getTranslation('profile.updateError').subscribe(translatedText => {
+            this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+              duration: 3000
+            });
           });
         }
       }
@@ -138,8 +146,10 @@ export class ProfileComponent implements OnInit {
       location: 'Main Testing Center, Addis Ababa'
     };
     
-    this.snackBar.open('Exam scheduled successfully!', 'Close', {
-      duration: 3000
+    this.languageService.getTranslation('profile.examScheduled').subscribe(translatedText => {
+      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+        duration: 3000
+      });
     });
   }
 
@@ -155,8 +165,10 @@ export class ProfileComponent implements OnInit {
       this.examAppointment.date = futureDate;
       this.examAppointment.time = '2:00 PM';
       
-      this.snackBar.open('Exam rescheduled successfully!', 'Close', {
-        duration: 3000
+      this.languageService.getTranslation('profile.examRescheduled').subscribe(translatedText => {
+        this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+          duration: 3000
+        });
       });
     } else {
       this.scheduleExam();
@@ -170,8 +182,10 @@ export class ProfileComponent implements OnInit {
     
     this.examAppointment = null;
     
-    this.snackBar.open('Exam canceled successfully', 'Close', {
-      duration: 3000
+    this.languageService.getTranslation('profile.examCanceled').subscribe(translatedText => {
+      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+        duration: 3000
+      });
     });
   }
 
@@ -180,7 +194,9 @@ export class ProfileComponent implements OnInit {
     this.userData = null;
     this.searchResult = null;
     if (!this.searchId && !this.searchFirstName && !this.searchFatherName && !this.searchGrandfatherName) {
-      this.snackBar.open('Please enter at least one search field.', 'Close', { duration: 3000 });
+      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+      });
       return;
     }
     // For demo: only search by National ID (extend as needed)
@@ -189,7 +205,9 @@ export class ProfileComponent implements OnInit {
         if (data) {
           this.searchResult = data;
         } else {
-          this.snackBar.open('No profile found for this National ID.', 'Close', { duration: 3000 });
+          this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
+            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+          });
         }
       });
     } else {
@@ -204,10 +222,14 @@ export class ProfileComponent implements OnInit {
         ) {
           this.searchResult = userData;
         } else {
-          this.snackBar.open('No profile found for the provided names.', 'Close', { duration: 3000 });
+          this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
+            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+          });
         }
       } else {
-        this.snackBar.open('No profile found.', 'Close', { duration: 3000 });
+        this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
+          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+        });
       }
     }
   }
@@ -248,13 +270,11 @@ export class ProfileComponent implements OnInit {
       }
       this.userData.documentPreviews[docType] = reader.result;
       // Persist the change (simulate API call)
-      this.userDataService.setUserData(this.userData);
-      this.snackBar.open(docType + ' uploaded successfully!', 'Close', { duration: 2000 });
     };
-    if (file.type.startsWith('image/') || file.type === 'application/pdf') {
-      reader.readAsDataURL(file);
-    } else {
-      this.snackBar.open('Unsupported file type', 'Close', { duration: 2000 });
-    }
+    reader.readAsDataURL(file);
+  }
+
+  hasDocuments(): boolean {
+    return this.userData?.documentPreviews && Object.keys(this.userData.documentPreviews).length > 0;
   }
 }
