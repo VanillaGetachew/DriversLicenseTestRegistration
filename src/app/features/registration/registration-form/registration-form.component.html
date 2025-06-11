@@ -1,0 +1,266 @@
+<div class="registration-container">
+  <h1>{{ 'registration.title' | translate }}</h1>
+
+  <form [formGroup]="registrationForm" (ngSubmit)="onSubmit()">
+    <!-- Personal Information -->
+    <div class="form-section">
+      <h2>{{ 'registration.personalInfo.title' | translate }}</h2>
+      
+      <div class="form-row">
+        
+          <mat-form-field appearance="outline">
+            <mat-label>ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="firstNameAmh" required type="text" amharicOnly>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+           
+          <mat-form-field appearance="outline">
+            <mat-label>የአባት ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="fatherNameAmh" required type="text" amharicOnly>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        
+          <mat-form-field appearance="outline">
+            <mat-label>የአያት ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="grandNameAmh" required type="text" amharicOnly>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        
+      </div>
+
+      <div class="form-row">
+      
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.firstName' | translate }}</mat-label>
+            <input matInput formControlName="firstName" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+      
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.fatherName' | translate }}</mat-label>
+            <input matInput formControlName="fatherName" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+      
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.grandfatherName' | translate }}</mat-label>
+            <input matInput formControlName="grandName" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        
+      </div>
+
+      <div class="form-row">
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.sex' | translate }}</mat-label>
+            <mat-select formControlName="sex">
+              <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+          
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.birthDate' | translate }}</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="birthDate" required>
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error
+              *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
+              >Minimum age must be 18
+            </mat-error>
+          </mat-form-field>
+
+
+
+
+
+            
+
+          
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.birthPlace' | translate }}</mat-label>
+            <input matInput formControlName="birthPlace" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+        
+      </div>
+
+      <div class="form-row">
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.bloodType' | translate }}</mat-label>
+            <mat-select formControlName="bloodType">
+              <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+       
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.nationality' | translate }}</mat-label>
+            <mat-select formControlName="nationality">
+              <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+       
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.personal.education' | translate }}</mat-label>
+            <mat-select formControlName="education">
+              <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        
+      </div>
+    </div>
+
+    <!-- Contact & Address -->
+    <div class="form-section">
+      <h2>{{ 'registration.contactAddress.title' | translate }}</h2>
+      
+      <div class="form-row">
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
+            <span matPrefix>+251 &nbsp;</span>
+            <input matInput formControlName="tel1" required (input)="onPhoneInput($event)">
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
+              Please enter exactly 9 digits (after +251)
+            </mat-error>
+          </mat-form-field>
+
+          <!-- <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
+            <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
+            <span matPrefix>+251 &nbsp;</span>
+            <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"
+              placeholder="912345678" type="tel">
+            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+            <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
+              Please enter exactly 9 digits (after +251)
+            </mat-error>
+          </mat-form-field> -->
+
+       
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.region' | translate }}</mat-label>
+            <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
+              <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+     
+
+        
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.town' | translate }}</mat-label>
+            <mat-select [disabled]="!town.length" (selectionChange)="onTownChange($event.value)" formControlName="town">
+              <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+        
+      </div>
+
+      <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.woreda' | translate }}</mat-label>
+            <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
+              <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.kebele' | translate }}</mat-label>
+            <mat-select [disabled]="!kebele.length" formControlName="kebele">
+              <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>{{ 'profile.contact.houseNo' | translate }}</mat-label>
+            <input matInput formControlName="houseNo" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+      </div>
+    </div>
+
+    <!-- License Information -->
+    <div class="form-section">
+      <h2>{{ 'registration.licenseInfo.title' | translate }}</h2>
+
+      <div class="form-row">
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'registration.licenseInfo.category' | translate }}</mat-label>
+            <mat-select formControlName="licenceGrade">
+              <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>Language</mat-label>
+            <mat-select formControlName="isTheoryExamEnglish">
+              <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
+            </mat-select>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'common.nationalId' | translate }}</mat-label>
+            <input matInput formControlName="nationalId" required>
+            <mat-error>{{ 'common.required' | translate }}</mat-error>
+          </mat-form-field>
+      </div>
+    </div>
+
+    <!-- Photo Upload Section -->
+    <div class="form-section">
+      <h2>{{ 'registration.photoUpload.title' | translate }}</h2>
+
+      <div class="photo-upload-container">
+        <div class="photo-preview">
+          <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile photo" />
+          <div *ngIf="!imagePreview" class="no-photo">
+            <mat-icon>account_circle</mat-icon>
+          </div>
+        </div>
+
+        <div class="photo-actions">
+          <input
+            type="file"
+            id="photoUpload"
+            (change)="onPhotoSelected($event)"
+            accept="image/jpeg,image/png"
+            hidden
+          />
+
+          <button type="button" mat-raised-button color="primary" class="upload-button" (click)="triggerPhotoUpload()">
+            <mat-icon>photo_camera</mat-icon>
+            {{ imagePreview ? ('common.change' | translate) : ('common.upload' | translate) }}
+          </button>
+
+          <button *ngIf="imagePreview" type="button" mat-raised-button color="warn" class="upload-button" (click)="removePhoto()">
+            <mat-icon>delete</mat-icon>
+            {{ 'common.remove' | translate }}
+          </button>
+        </div>
+
+        <p class="upload-hint">{{ 'registration.photoUpload.hint' | translate }}</p>
+      </div>
+
+      <input type="hidden" formControlName="photoBase64" />
+    </div>
+
+    <!-- Form Actions -->
+    <div class="form-actions">
+      <button type="button" class="btn-reset" (click)="resetForm()">{{ 'common.reset' | translate }}</button>
+      <button type="submit" class="btn-register">{{ 'common.register' | translate }}</button>
+    </div>
+  </form>
+</div>

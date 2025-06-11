@@ -1,0 +1,100 @@
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+  }
+  
+  h2 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+  
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px;
+  }
+  
+  .loading-spinner p {
+    margin-top: 16px;
+    color: #666;
+  }
+  
+  .license-card {
+    margin-bottom: 30px;
+  }
+  
+  .license-card mat-card-title {
+    color: #3f51b5;
+    margin-bottom: 16px;
+  }
+  
+  .license-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 16px;
+  }
+  
+  .detail-item {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  .detail-item .label {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 4px;
+  }
+  
+  .detail-item .value {
+    font-size: 16px;
+    font-weight: 500;
+  }
+  
+  .detail-item .status-active {
+    color: green;
+  }
+  
+  .detail-item .status-expired {
+    color: red;
+  }
+  
+  .upgrade-form-container {
+    background-color: #f5f5f5;
+    border-radius: 8px;
+    padding: 20px;
+  }
+  
+  .upgrade-form-container h3 {
+    margin-bottom: 20px;
+    color: #3f51b5;
+  }
+  
+  .form-field {
+    margin-bottom: 16px;
+  }
+  
+  .form-field mat-form-field {
+    width: 100%;
+  }
+  
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 16px;
+    margin-top: 24px;
+  }
+  
+  .spinner {
+    display: inline-block;
+    margin-right: 8px;
+  }
+  
+  /* Responsive adjustments */
+  @media (max-width: 600px) {
+    .license-details {
+      grid-template-columns: 1fr;
+    }
+  }

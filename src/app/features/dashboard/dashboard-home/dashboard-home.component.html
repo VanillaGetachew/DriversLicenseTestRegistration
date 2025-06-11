@@ -1,0 +1,254 @@
+<div class="dashboard-container">
+  <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
+  
+  <!-- Stats Cards -->
+  <!-- <div class="selector">
+  <mat-form-field>
+    <mat-select placeholder="Select a site" (selectionChange)="onSiteChange($event.value)">
+      <mat-option value="" disabled></mat-option>
+      <mat-option  *ngFor ="let st of site" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div>
+
+<div class="selector">
+  <mat-form-field>
+    <mat-select placeholder="Select a school" [disabled]="!site2.length">
+      <mat-option value="" disabled></mat-option>
+      <mat-option  *ngFor ="let st of site2" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+    </mat-select>
+  </mat-form-field>
+</div> -->
+
+<div class="selector-container">
+  <mat-form-field appearance="outline" class="site-selector">
+    <mat-label>{{ 'dashboard.selector.selectSite' | translate }}</mat-label>
+    <mat-select [(value)]="selectedId" (selectionChange)="onSelectedIdChange()">
+      <mat-option *ngFor="let st of school" [value]="st.code">
+        {{st.siteNameAmh}}
+      </mat-option>
+    </mat-select>
+    <mat-icon matSuffix>location_on</mat-icon>
+  </mat-form-field>
+</div>
+
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>person</mat-icon>
+      </div>
+      <div class="stat-details">
+        <!-- <h3>Total Applicants</h3> -->
+        <h3>{{ 'dashboard.stats.totalApplicants' | translate }}</h3>
+        <div class="stat-value" *ngFor ="let gnd of gend">{{ gnd.value }}</div>
+        <div class="stat-trend positive">
+          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '12' } }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>check_circle</mat-icon>
+      </div>
+      <div class="stat-details">
+        <!-- <h3>Pass Rate</h3> -->
+         <h3>{{ 'dashboard.stats.passRate' | translate }}</h3>
+        <div class="stat-value" *ngFor ="let gnd of gend1">{{ gnd.value }}</div>
+        <div class="stat-trend negative">
+          <mat-icon>arrow_downward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '4' } }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>event</mat-icon>
+      </div>
+      <div class="stat-details">
+        <!-- <h3>Upcoming Tests</h3> -->
+        <h3>{{ 'dashboard.stats.upcomingTests' | translate }}</h3>
+        <div class="stat-value" *ngFor ="let gnd of gend2">{{ gnd.value }}</div>
+        <div class="stat-trend positive">
+          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastWeek' | translate: { value: '8' } }}
+        </div>
+      </div>
+    </div>
+    
+    <div class="stat-card">
+      <div class="stat-icon">
+        <mat-icon>commute</mat-icon>
+      </div>
+      <div class="stat-details">
+        <!-- <h3>Available Vehicles</h3> -->
+        <h3>{{ 'dashboard.stats.availableVehicles' | translate }}</h3>
+        <div class="stat-value" *ngFor ="let gnd of gend3">{{ gnd.value }}</div>
+        
+        <div class="stat-trend neutral">
+          {{ 'dashboard.stats.noChange' | translate }}
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <!-- Charts Section -->
+  <div class="charts-grid">
+    <!-- Registration Distribution Chart -->
+    <!-- <div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.registrationDistribution' | translate }}</h3>
+      </div>
+      <div class="chart-body registration-chart">
+        <div class="chart-placeholder">
+          <div class="bar" *ngFor="let item of registrationData" [style.height]="item.percentage + '%'" [style.backgroundColor]="item.color">
+            <span class="bar-label">{{ item.value }}</span>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item" *ngFor="let item of registrationData">
+            <div class="legend-color" [style.backgroundColor]="item.color"></div>
+            <div class="legend-text">{{ item.label }}</div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+<div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.studentsByLicenseGrade' | translate }}</h3>
+    <div class="LicenceGrade">
+  <ngx-charts-bar-vertical
+    [view]="[450, 300]"
+    [scheme]="colorScheme"
+    [results]="barChartData"
+    [gradient]="false"
+    [xAxis]="true"
+    [yAxis]="true"
+    [legend]="true"
+    [showXAxisLabel]="true"
+    [showYAxisLabel]="true"
+    [xAxisLabel]="'dashboard.charts.licenseGrade' | translate"
+    [yAxisLabel]="'dashboard.charts.count' | translate">
+  </ngx-charts-bar-vertical>
+</div>
+</div>
+</div>
+
+    
+    <!-- Test Centers Map -->
+    <div class="chart-card map-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.testCentersMap' | translate }}</h3>
+      </div>
+      <div class="chart-body map-container">
+        <div class="map-placeholder">
+          <!-- <img src="assets/images/map-placeholder.png" alt="Test Centers Map" onerror="this.src='https://via.placeholder.com/500x300?text=Map+of+Test+Centers'"> -->
+                    <img src="assets/images/map-placeholder.png" alt="Test Centers Map">
+        </div>
+        <div class="map-legend">
+          <div class="legend-item">
+            <div class="legend-marker active"></div>
+            <div class="legend-text">{{ 'dashboard.charts.activeCenters' | translate }}</div>
+          </div>
+          <div class="legend-item">
+            <div class="legend-marker inactive"></div>
+            <div class="legend-text">{{ 'dashboard.charts.inactiveCenters' | translate }}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Monthly Performance Chart -->
+    <!-- <div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.monthlyPerformance' | translate }}</h3>
+      </div>
+      <div class="chart-body line-chart">
+        <div class="chart-placeholder">
+          <div class="line-chart-container">
+            <div class="line-chart-grid">
+              <div class="grid-line" *ngFor="let line of [0,1,2,3,4]"></div>
+            </div>
+            <div class="line-chart-line">
+              <svg viewBox="0 0 100 50" preserveAspectRatio="none">
+                <polyline
+                  points="0,35 20,25 40,30 60,15 80,20 100,10"
+                  fill="none"
+                  stroke="#3498db"
+                  stroke-width="2"
+                />
+              </svg>
+            </div>
+            <div class="line-chart-labels">
+              <span>{{ 'dashboard.charts.months.jan' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.feb' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.mar' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.apr' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.may' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.jun' | translate }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+
+ <div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.studentsByGender' | translate }}</h3>
+    <div class="GenderSummary">
+  <ngx-charts-pie-chart
+    [view]="[400, 300]"
+    [scheme]="colorScheme"
+    [results]="genderChartData"
+    [legend]="true"
+    [doughnut]="false"
+    [labels]="true">
+  </ngx-charts-pie-chart>
+</div>
+</div>
+</div>
+    
+    <!-- License Types Chart -->
+    <!-- <div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.licenseTypeDistribution' | translate }}</h3>
+      </div>
+      <div class="chart-body pie-chart">
+        <div class="chart-placeholder">
+          <div class="donut-chart">
+            <div class="donut-segment" *ngFor="let item of licenseTypes; let i = index" 
+                 [style.--offset]="item.offset" 
+                 [style.--value]="item.percentage" 
+                 [style.--bg]="item.color">
+            </div>
+            <div class="donut-hole">{{ licenseTypes[0].percentage }}%</div>
+          </div>
+        </div>
+        <div class="chart-legend">
+          <div class="legend-item" *ngFor="let item of licenseTypes">
+            <div class="legend-color" [style.backgroundColor]="item.color"></div>
+            <div class="legend-text">{{ item.label }}</div>
+          </div>
+        </div>
+      </div>
+    </div> -->
+
+     <div class="chart-card">
+      <div class="chart-header">
+        <h3>{{ 'dashboard.charts.passFailSummary' | translate }}</h3>
+<div class="PassFail">
+  <ngx-charts-pie-chart
+    [view]="[400, 300]"
+    [scheme]="colorScheme"
+    [results]="passfailChartData"
+    [legend]="true"
+    [doughnut]="false"
+    [labels]="true">
+  </ngx-charts-pie-chart>
+</div>
+</div>
+</div>
+
+
+  </div>
+</div>

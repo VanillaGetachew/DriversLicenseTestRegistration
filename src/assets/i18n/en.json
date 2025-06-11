@@ -1,0 +1,220 @@
+{
+    "common": {
+      "save": "Save",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "remove": "Remove",
+      "upload": "Upload",
+      "change": "Change",
+      "required": "Required",
+      "reset": "Reset",
+      "register": "Register",
+      "close": "Close",
+      "notProvided": "Not provided",
+      "notApplicable": "N/A",
+      "nationalId": "National ID",
+      "clear": "Clear",
+      "search": "Search",
+      "actions": "Actions"
+    },
+    "profile": {
+      "title": "Edit Profile Information",
+      "updateSuccess": "Profile updated successfully",
+      "updateError": "Error updating profile",
+      "examScheduled": "Exam scheduled successfully!",
+      "examRescheduled": "Exam rescheduled successfully!",
+      "examCanceled": "Exam canceled successfully",
+      "searchError": "Please enter at least one search field.",
+      "noProfileFoundId": "No profile found for this National ID.",
+      "noProfileFoundNames": "No profile found for the provided names.",
+      "noProfileFound": "No profile found.",
+      "photo": {
+        "upload": "Upload Photo",
+        "change": "Change Photo",
+        "remove": "Remove Photo"
+      },
+      "search": {
+        "nationalId": "National ID",
+        "enterNationalId": "Enter National ID",
+        "searchProfile": "Search Profile",
+        "name": "Name"
+      },
+      "backToSearch": "Back to Search",
+      "subtitle": "Driver's License Applicant",
+      "profileInfo": {
+        "title": "Profile Information"
+      },
+      "personal": {
+        "firstName": "First Name",
+        "firstNameAmharic": "First Name (Amharic)",
+        "fatherName": "Father's Name",
+        "fatherNameAmharic": "Father's Name (Amharic)",
+        "grandfatherName": "Grandfather's Name",
+        "grandfatherNameAmharic": "Grandfather's Name (Amharic)",
+        "sex": "Sex",
+        "birthDate": "Birth Date",
+        "birthPlace": "Birth Place",
+        "bloodType": "Blood Type",
+        "nationality": "Nationality",
+        "education": "Education"
+      },
+      "contact": {
+        "phoneNumber": "Phone Number",
+        "region": "Region",
+        "town": "Town",
+        "woreda": "Woreda",
+        "kebele": "Kebele",
+        "houseNo": "House No."
+      },
+      "license": {
+        "grade": "License Grade",
+        "examLanguage": "Exam Language"
+      },
+      "education": {
+        "none": "None",
+        "primary": "Primary",
+        "secondary": "Secondary",
+        "diploma": "Diploma",
+        "degree": "Degree",
+        "masters": "Masters",
+        "phd": "PhD"
+      },
+      "sex": {
+        "male": "Male",
+        "female": "Female"
+      },
+      "language": {
+        "english": "English",
+        "amharic": "Amharic"
+      },
+      "documents": {
+        "title": "Required Documents",
+        "nationalIdCard": "National ID Card",
+        "pdfDocument": "PDF Document",
+        "notUploaded": "Not uploaded",
+        "uploadReplace": "Upload/Replace",
+        "birthCertificate": "Birth Certificate",
+        "medicalCertificate": "Medical Certificate",
+        "educationCertificate": "Educational Certificate",
+        "supportingDocuments": "Supporting Documents",
+        "noDocumentsUploaded": "No documents uploaded."
+      },
+      "exam": {
+        "title": "Exam Appointment",
+        "upcomingAppointment": "Upcoming Appointment Details:",
+        "date": "Date",
+        "time": "Time",
+        "examType": "Exam Type",
+        "location": "Location",
+        "reschedule": "Reschedule Exam",
+        "cancelExam": "Cancel Exam",
+        "noUpcomingAppointment": "No upcoming exam appointments.",
+        "scheduleExam": "Schedule New Exam"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard Overview",
+      "selector": {
+        "selectSite": "Select a site",
+        "selectSchool": "Select a school"
+      },
+      "stats": {
+        "totalApplicants": "Total Applicants",
+        "passRate": "Pass Rate",
+        "upcomingTests": "Upcoming Tests",
+        "availableVehicles": "Available Vehicles",
+        "fromLastMonth": "{{value}}% from last month",
+        "fromLastWeek": "{{value}}% from last week",
+        "noChange": "No change"
+      },
+      "charts": {
+        "registrationDistribution": "Registration Distribution",
+        "testCentersMap": "Test Centers Map",
+        "monthlyPerformance": "Monthly Performance",
+        "licenseTypeDistribution": "License Type Distribution",
+        "activeCenters": "Active Centers",
+        "inactiveCenters": "Inactive Centers",
+        "months": {
+          "jan": "Jan",
+          "feb": "Feb",
+          "mar": "Mar",
+          "apr": "Apr",
+          "may": "May",
+          "jun": "Jun"
+        },
+        "studentsByLicenseGrade": "Number of Students by License Grade",
+        "studentsByGender": "Number of Students by Gender",
+        "passFailSummary": "Pass-Fail Summary",
+        "licenseGrade": "License Grade",
+        "count": "Count"
+      }
+    },
+    "registration": {
+      "title": "Driver License Exam Registration",
+      "personalInfo": {
+        "title": "Personal Information",
+        "firstNameAmh": "ስም",
+        "fatherNameAmh": "የአባት ስም",
+        "grandNameAmh": "የአያት ስም"
+      },
+      "contactAddress": {
+        "title": "Contact & Address"
+      },
+      "licenseInfo": {
+        "title": "License Information",
+        "category": "License Category",
+        "examLanguage": "Language"
+      },
+      "photoUpload": {
+        "title": "Photo Upload",
+        "hint": "JPG or PNG, max 5MB"
+      }
+    },
+    "sidebar": {
+      "logo": "Dash",
+      "registration": "Registration",
+      "licenseUpgrade": "License Upgrade",
+      "reports": "Reports"
+    },
+    "header": {
+      "appTitle": "Driver's License Test Registration",
+      "myProfile": "My Profile",
+      "changePassword": "Change Password",
+      "logout": "Logout"
+    },
+    "footer": {
+      "contactUs": {
+        "title": "Contact Us"
+      },
+      "quickLinks": {
+        "title": "Quick Links",
+        "aboutUs": "About Us",
+        "faqs": "FAQs",
+        "privacyPolicy": "Privacy Policy",
+        "termsOfService": "Terms of Service"
+      },
+      "openingHours": {
+        "title": "Opening Hours",
+        "monFri": "Monday - Friday: 8:00 AM - 5:00 PM",
+        "sat": "Saturday: 9:00 AM - 1:00 PM",
+        "sun": "Sunday: Closed"
+      },
+      "copyright": "© 2025 Custor Driver's License Test Registration. All rights reserved."
+    },
+    "licenseUpgrade": {
+      "search": {
+        "title": "Search for a License to Upgrade",
+        "licenseGrade": "License Grade",
+        "licenseNumber": "License Number",
+        "enterLicenseNumber": "Enter license number",
+        "all": "All",
+        "foundResults": "Found {{count}} {{count === 1 ? 'result' : 'results'}}",
+        "noResults": "No licenses found matching your search criteria",
+        "licenseType": "License Type",
+        "issueDate": "Issue Date",
+        "expiryDate": "Expiry Date",
+        "upgrade": "Upgrade"
+      }
+    }
+  }

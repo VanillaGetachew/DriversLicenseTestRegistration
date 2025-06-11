@@ -1,0 +1,30 @@
+<div class="sidebar" [class.sidebar-collapsed]="!isOpen">
+  <div class="logo-container">
+    <a [routerLink]="['/dashboard']" class="logo">
+      <span class="logo-icon">{{ 'sidebar.logo' | translate }}</span>board
+    </a>
+  </div>
+
+  <nav class="sidebar-nav">
+    <ul class="nav-list">
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/registration']" class="nav-link">
+          <mat-icon class="nav-icon">app_registration</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.registration' | translate }}</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/license-upgrade']" class="nav-link">
+          <mat-icon class="nav-icon">upgrade</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.licenseUpgrade' | translate }}</span>
+        </a>
+      </li>
+      <li class="nav-item" [routerLinkActive]="'active'">
+        <a [routerLink]="['/reports']" class="nav-link">
+          <mat-icon class="nav-icon">assessment</mat-icon>
+          <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.reports' | translate }}</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>
