@@ -139,17 +139,6 @@
             </mat-error>
           </mat-form-field>
 
-          <!-- <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
-            <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
-            <span matPrefix>+251 &nbsp;</span>
-            <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"
-              placeholder="912345678" type="tel">
-            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
-            <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
-              Please enter exactly 9 digits (after +251)
-            </mat-error>
-          </mat-form-field> -->
-
        
           <mat-form-field appearance="outline">
             <mat-label>{{ 'profile.contact.region' | translate }}</mat-label>
@@ -220,41 +209,11 @@
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
 
-          <!-- <mat-form-field appearance="outline">
-            <mat-label>Language</mat-label>
-            <mat-select formControlName="isTheoryExamEnglish">
-              <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
-            </mat-select>
-          </mat-form-field> -->
+
       </div>
     </div>
     </div>
 
-    <!-- Photo Upload -->
-    <!-- <div class="form-section">
-      <h2>Photo Upload</h2>
-      
-      <div class="photo-upload-container">
-        <div class="photo-preview">
-          <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile photo">
-          <div *ngIf="!imagePreview" class="no-photo">
-            <mat-icon>account_circle</mat-icon>
-          </div>
-        </div>
-        <div class="photo-actions">
-          <input type="file" id="photoUpload" formControlName="photo" accept="image/jpeg,image/png" hidden (change)="onPhotoSelected($event)">
-          <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
-            <mat-icon>photo_camera</mat-icon>
-            {{ imagePreview ? ('common.change' | translate) : ('common.upload' | translate) }}
-          </button>
-          <button *ngIf="imagePreview" type="button" class="upload-button" (click)="removePhoto()">
-            <mat-icon>delete</mat-icon>
-            {{ 'common.remove' | translate }}
-          </button>
-        </div>
-        <p class="upload-hint">{{ 'registration.photoUpload.hint' | translate }}</p>
-      </div>
-    </div> -->
 
     <!-- Image Preview Section -->
 <div class="form-section">
@@ -268,7 +227,6 @@
       </div>
     </div>
 
-    <!-- File Input (NO formControlName) -->
     <div class="photo-actions">
       <input
         type="file"
@@ -292,7 +250,6 @@
     <p class="upload-hint">JPG or PNG, max 5MB</p>
   </div>
 
-  <!-- Hidden base64 field in form -->
   <input type="hidden" formControlName="photoBase64" />
 </div>
 

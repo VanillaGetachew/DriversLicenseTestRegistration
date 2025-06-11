@@ -106,38 +106,6 @@ export class RegistrationFormComponent implements OnInit {
     document.getElementById('photoUpload')?.click();
   }
 
-  // onPhotoSelected(event: Event): void {
-  //   const fileInput = event.target as HTMLInputElement;
-  //   if (fileInput.files && fileInput.files.length > 0) {
-  //     const file = fileInput.files[0];
-      
-  //     // Validate file type
-  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
-  //       alert('Only JPG or PNG files are allowed');
-  //       return;
-  //     }
-      
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5 * 1024 * 1024) {
-  //       alert('File size exceeds 5MB limit');
-  //       return;
-  //     }
-      
-  //     // this.photoFile = file;
-      
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       const base64 = (reader.result as string).split(',')[1];
-  //       this.imagePreview = reader.result;
-
-  //     this.registrationForm.patchValue({photo: base64});
-  //     this.registrationForm.get('photo')?.updateValueAndValidity();
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
   onPhotoSelected(event: Event): void {
   const fileInput = event.target as HTMLInputElement;
   if (fileInput.files && fileInput.files.length > 0) {
@@ -180,7 +148,7 @@ export class RegistrationFormComponent implements OnInit {
       // };
       const formData = {
       ...this.registrationForm.value,
-      photo: this.registrationForm.get('photoBase64')?.value // rename to 'photo' if backend expects that
+      photo: this.registrationForm.get('photoBase64')?.value
       };
 
       this.reg.createRegistration(formData).subscribe({
@@ -190,9 +158,7 @@ export class RegistrationFormComponent implements OnInit {
       })
       
       console.log('Form submitted:', formData);
-      // TODO: Send data to backend service
     } else {
-      // Mark all fields as touched to trigger validation messages
       Object.keys(this.registrationForm.controls).forEach(field => {
         const control = this.registrationForm.get(field);
         control?.markAsTouched({ onlySelf: true });
@@ -315,9 +281,8 @@ export class RegistrationFormComponent implements OnInit {
   }
 onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
+    let value = input.value.replace(/\D/g, '');
     
-    // Ensure we don't exceed max length
     if (value.length > 9) {
       value = value.substring(0, 9);
     }

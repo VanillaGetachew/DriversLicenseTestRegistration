@@ -17,7 +17,6 @@ import { forkJoin } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
 
-// Define an interface for exam appointments
 interface ExamAppointment {
   date: Date;
   time: string;
@@ -48,8 +47,8 @@ export class ProfileComponent implements OnInit {
   searchFirstName: string = '';
   searchFatherName: string = '';
   searchGrandfatherName: string = '';
-  searchResult: any = null; // Holds the result after search
-  showProfileSection: boolean = false; // Controls when to show the full profile section
+  searchResult: any = null;
+  showProfileSection: boolean = false;
    nationality:nationality[] = [];
     bloodType:nationality[] = [];
     region: address[] = [];
@@ -91,7 +90,7 @@ export class ProfileComponent implements OnInit {
     private documentService: DocumentService,
     private route: ActivatedRoute,
     private languageService: LanguageService,
-    private translate: TranslateService // Inject TranslateService
+    private translate: TranslateService
   ) { }
 
   ngOnInit(): void {
