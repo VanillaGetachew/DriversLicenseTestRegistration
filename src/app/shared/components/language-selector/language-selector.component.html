@@ -1,0 +1,11 @@
+<button mat-icon-button [matMenuTriggerFor]="menu" class="language-button">
+  <mat-icon>language</mat-icon>
+</button>
+<mat-menu #menu="matMenu">
+  <button mat-menu-item (click)="changeLanguage('en')">
+    {{ 'profile.language.english' | translate }}
+  </button>
+  <button mat-menu-item (click)="changeLanguage('am')">
+    {{ 'profile.language.amharic' | translate }}
+  </button>
+</mat-menu> 

@@ -2,11 +2,11 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0 20px;
-  height: 64px;
-  background-color: #2c3e50;
+  padding: 0 16px;
+  height: 64px; /* Standard Angular Material toolbar height */
+  background-color: #2c3e50; /* Example: Primary color */
   color: white;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
 
 .header-left {
@@ -15,18 +15,44 @@
 }
 
 .toggle-btn {
-  margin-right: 15px;
+  margin-right: 8px;
   color: white;
 }
 
+.reports-logo {
+  height: 40px; /* Adjust as needed */
+  margin-right: 16px;
+}
+
 .app-title {
-  font-size: 18px;
+  font-size: 20px;
   font-weight: 500;
+  color: white;
 }
 
 .header-right {
   display: flex;
   align-items: center;
+  gap: 16px; /* Space between language selector and profile icon */
+}
+
+/* Ensure language selector button inherits styles */
+app-language-selector {
+  display: flex; /* Make it a flex container to align its content */
+  align-items: center;
+  
+  .language-button {
+    color: white;
+  }
+}
+
+/* Style for buttons in header */
+button[mat-icon-button] {
+  color: white;
+  
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+  }
 }
 
 @media (max-width: 768px) {

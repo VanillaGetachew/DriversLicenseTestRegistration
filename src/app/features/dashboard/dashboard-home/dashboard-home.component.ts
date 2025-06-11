@@ -5,6 +5,7 @@ import { Gend, Gend1, Site } from '../../../core/models/dashboard.model';
 import { DashboardModule } from '../dashboard.module';
 import { DashboardService } from '../../../core/services/dashboard.service';
 import { NgxChartsModule, Color } from '@swimlane/ngx-charts';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dashboard-home',
@@ -12,7 +13,8 @@ import { NgxChartsModule, Color } from '@swimlane/ngx-charts';
   imports: [
     CommonModule,
     MaterialModule,
-    NgxChartsModule
+    NgxChartsModule,
+    TranslateModule
   ],
   templateUrl: './dashboard-home.component.html',
   styleUrls: ['./dashboard-home.component.scss']

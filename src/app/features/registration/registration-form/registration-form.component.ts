@@ -14,6 +14,8 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AmharicOnlyDirective } from '../../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../../core/Validator/validator';
+import { TranslateModule } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-registration-form',
@@ -30,7 +32,8 @@ import { minAgeValidator } from '../../../core/Validator/validator';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    AmharicOnlyDirective
+    AmharicOnlyDirective,
+    TranslateModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -50,7 +53,10 @@ export class RegistrationFormComponent implements OnInit {
   licenceCategory: licenceCategory[]=[];
   imagePreview: string | ArrayBuffer | null = null;
 
-  constructor(private fb: FormBuilder, private dropdown: DropdownService, private reg: RegistrationService) {
+  constructor(private fb: FormBuilder,
+    private dropdown: DropdownService,
+    private reg: RegistrationService,
+    private languageService: LanguageService) {
     this.registrationForm = this.fb.group({
       // Personal Information
 

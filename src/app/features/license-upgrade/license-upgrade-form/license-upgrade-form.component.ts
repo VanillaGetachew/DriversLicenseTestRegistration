@@ -11,11 +11,13 @@ import { UpgradeService } from '../../../core/services/upgrade.service';
 import { Driver } from '../../../core/models/driver.model';
 import { DropdownService } from '../../../core/services/dropdown.service';
 import { education, language, licenceCategory } from '../../../core/models/dropdown.model';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-license-upgrade-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, MaterialModule],
+  imports: [CommonModule, ReactiveFormsModule, MaterialModule, TranslateModule],
   templateUrl: './license-upgrade-form.component.html',
   styleUrls: ['./license-upgrade-form.component.scss']
 })
@@ -38,7 +40,9 @@ export class LicenseUpgradeFormComponent implements OnInit {
     private licenseService: LicenseService,
     private snackBar: MatSnackBar,
     private upgrade: UpgradeService,
-    private dropdown: DropdownService
+    private dropdown: DropdownService,
+    private translate: TranslateService,
+    private languageService: LanguageService
   ) { }
 
   ngOnInit(): void {
@@ -54,7 +58,9 @@ export class LicenseUpgradeFormComponent implements OnInit {
         this.licenseId = +params['licenceNo'];
         this.loadLicenseData();
       } else {
-        this.snackBar.open('No license ID provided', 'Close', { duration: 3000 });
+        this.languageService.getTranslation('licenseUpgrade.noLicenseId').subscribe(translatedText => {
+          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+        });
         this.router.navigate(['/license-upgrade']);
       }
     });
@@ -70,7 +76,9 @@ export class LicenseUpgradeFormComponent implements OnInit {
         this.isLoading = false;
       },
       error: (error) => {
-        this.snackBar.open('Error loading license data', 'Close', { duration: 3000 });
+        this.languageService.getTranslation('licenseUpgrade.errorLoadingLicense').subscribe(translatedText => {
+          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+        });
         this.isLoading = false;
         this.router.navigate(['/license-upgrade']);
         console.error('License load error:', error);

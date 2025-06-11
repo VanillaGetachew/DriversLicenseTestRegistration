@@ -1,5 +1,5 @@
 <div class="dashboard-container">
-  <h1 class="dashboard-title">Dashboard Overview</h1>
+  <h1 class="dashboard-title">{{ 'dashboard.title' | translate }}</h1>
   
   <!-- Stats Cards -->
   <!-- <div class="selector">
@@ -34,10 +34,11 @@
         <mat-icon>person</mat-icon>
       </div>
       <div class="stat-details">
-        <h3>Total Applicants</h3>
+        <!-- <h3>Total Applicants</h3> -->
+        <h3>{{ 'dashboard.stats.totalApplicants' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend">{{ gnd.value }}</div>
         <div class="stat-trend positive">
-          <mat-icon>arrow_upward</mat-icon> 12% from last month
+          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '12' } }}
         </div>
       </div>
     </div>
@@ -47,10 +48,11 @@
         <mat-icon>check_circle</mat-icon>
       </div>
       <div class="stat-details">
-        <h3>Pass Rate</h3>
+        <!-- <h3>Pass Rate</h3> -->
+         <h3>{{ 'dashboard.stats.passRate' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend1">{{ gnd.value }}</div>
         <div class="stat-trend negative">
-          <mat-icon>arrow_downward</mat-icon> 4% from last month
+          <mat-icon>arrow_downward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '4' } }}
         </div>
       </div>
     </div>
@@ -60,10 +62,11 @@
         <mat-icon>event</mat-icon>
       </div>
       <div class="stat-details">
-        <h3>Upcoming Tests</h3>
+        <!-- <h3>Upcoming Tests</h3> -->
+        <h3>{{ 'dashboard.stats.upcomingTests' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend2">{{ gnd.value }}</div>
         <div class="stat-trend positive">
-          <mat-icon>arrow_upward</mat-icon> 8% from last week
+          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastWeek' | translate: { value: '8' } }}
         </div>
       </div>
     </div>
@@ -73,10 +76,12 @@
         <mat-icon>commute</mat-icon>
       </div>
       <div class="stat-details">
-        <h3>Available Vehicles</h3>
+        <!-- <h3>Available Vehicles</h3> -->
+        <h3>{{ 'dashboard.stats.availableVehicles' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend3">{{ gnd.value }}</div>
+        
         <div class="stat-trend neutral">
-          No change
+          {{ 'dashboard.stats.noChange' | translate }}
         </div>
       </div>
     </div>
@@ -87,7 +92,7 @@
     <!-- Registration Distribution Chart -->
     <!-- <div class="chart-card">
       <div class="chart-header">
-        <h3>Registration Distribution</h3>
+        <h3>{{ 'dashboard.charts.registrationDistribution' | translate }}</h3>
       </div>
       <div class="chart-body registration-chart">
         <div class="chart-placeholder">
@@ -128,7 +133,7 @@
     <!-- Test Centers Map -->
     <div class="chart-card map-card">
       <div class="chart-header">
-        <h3>Test Centers Map</h3>
+        <h3>{{ 'dashboard.charts.testCentersMap' | translate }}</h3>
       </div>
       <div class="chart-body map-container">
         <div class="map-placeholder">
@@ -138,11 +143,11 @@
         <div class="map-legend">
           <div class="legend-item">
             <div class="legend-marker active"></div>
-            <div class="legend-text">Active Centers</div>
+            <div class="legend-text">{{ 'dashboard.charts.activeCenters' | translate }}</div>
           </div>
           <div class="legend-item">
             <div class="legend-marker inactive"></div>
-            <div class="legend-text">Inactive Centers</div>
+            <div class="legend-text">{{ 'dashboard.charts.inactiveCenters' | translate }}</div>
           </div>
         </div>
       </div>
@@ -151,7 +156,7 @@
     <!-- Monthly Performance Chart -->
     <!-- <div class="chart-card">
       <div class="chart-header">
-        <h3>Monthly Performance</h3>
+        <h3>{{ 'dashboard.charts.monthlyPerformance' | translate }}</h3>
       </div>
       <div class="chart-body line-chart">
         <div class="chart-placeholder">
@@ -170,12 +175,12 @@
               </svg>
             </div>
             <div class="line-chart-labels">
-              <span>Jan</span>
-              <span>Feb</span>
-              <span>Mar</span>
-              <span>Apr</span>
-              <span>May</span>
-              <span>Jun</span>
+              <span>{{ 'dashboard.charts.months.jan' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.feb' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.mar' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.apr' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.may' | translate }}</span>
+              <span>{{ 'dashboard.charts.months.jun' | translate }}</span>
             </div>
           </div>
         </div>
@@ -202,7 +207,7 @@
     <!-- License Types Chart -->
     <!-- <div class="chart-card">
       <div class="chart-header">
-        <h3>License Type Distribution</h3>
+        <h3>{{ 'dashboard.charts.licenseTypeDistribution' | translate }}</h3>
       </div>
       <div class="chart-body pie-chart">
         <div class="chart-placeholder">
