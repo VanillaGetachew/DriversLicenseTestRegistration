@@ -11,6 +11,9 @@ import { EditProfileDialogComponent } from './edit-profile-dialog.component';
 import { RegistrationService } from '../../core/services/registration.service';
 import { DocumentDTO } from '../../core/models/document.model';
 import { DocumentService } from '../../core/services/document.service';
+import { DropdownService } from '../../core/services/dropdown.service';
+import { address, education, language, licenceCategory, nationality, sex } from '../../core/models/dropdown.model';
+import { forkJoin } from 'rxjs';
 
 // Define an interface for exam appointments
 interface ExamAppointment {
@@ -35,6 +38,8 @@ interface ExamAppointment {
 })
 export class ProfileComponent implements OnInit {
   userData: any = null;
+  
+  photoUrl: string | null = null;
   examAppointment: ExamAppointment | null = null;
   searchId: string = '';
   searchFirstName: string = '';
@@ -42,14 +47,40 @@ export class ProfileComponent implements OnInit {
   searchGrandfatherName: string = '';
   searchResult: any = null; // Holds the result after search
   showProfileSection: boolean = false; // Controls when to show the full profile section
+   nationality:nationality[] = [];
+    bloodType:nationality[] = [];
+    region: address[] = [];
+    town: address[] = [];
+    woreda: address[] = [];
+    kebele: address[] = [];
+    parentCode: number = -1;
+    sex: sex[]=[];
+    education: education[]=[];
+    language: language[]=[];
+    licenceCategory: licenceCategory[]=[];
+
+  
+    documentTypeId!: number;
+    file!: File | null;
 
 
   documents: DocumentDTO[] = [];
   errorMessage: string = '';
   isLoading: boolean = false;
 
+  documentTypeMap: Record<string, number> = {
+    idCard: 4,
+    birthCertificate: 6,
+    medicalCertificate: 3,
+    educationCertificate: 5
+  };
+  
+  selectedFiles: Record<string, File> = {};
+  
+
   constructor(
     private userDataService: UserDataService,
+    private dropdown:DropdownService,
     private snackBar: MatSnackBar,
     private router: Router,
     private dialog: MatDialog,
@@ -62,6 +93,7 @@ export class ProfileComponent implements OnInit {
     // Subscribe to user data changes
     this.userDataService.getUserData().subscribe(data => {
       this.userData = data;
+      this.loadLookups();
       console.log('Profile loaded user data:', this.userData);
       
       // Example: Load a mock appointment
@@ -102,6 +134,7 @@ clickhandle():void{
   // Load a mock appointment for demo purposes
   loadMockAppointment(): void {
     // 50% chance of having an appointment for demo
+    if (!this.userData) return;
     if (Math.random() > 0.5) {
       const futureDate = new Date();
       futureDate.setDate(futureDate.getDate() + Math.floor(Math.random() * 14) + 1);
@@ -126,7 +159,7 @@ clickhandle():void{
         section: section
       }
     });
-
+console.log(this.userData);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         try {
@@ -208,11 +241,12 @@ clickhandle():void{
       this.snackBar.open('Please enter at least one search field.', 'Close', { duration: 3000 });
       return;
     }
-    // For demo: only search by National ID (extend as needed)
     if (this.searchId) {
       this.reg.getRegistrationById(this.searchId).subscribe(data => {
         if (data) {
           this.searchResult = data;
+          this.userData = data;
+           this.setPhotoUrl(data.photo);
         } else {
           this.snackBar.open('No profile found for this National ID.', 'Close', { duration: 3000 });
         }
@@ -237,6 +271,16 @@ clickhandle():void{
     }
   }
 
+setPhotoUrl(photoBase64: string): void {
+  if (!photoBase64) {
+    this.photoUrl = null;
+    return;
+  }
+
+  this.photoUrl = `data:image/jpeg;base64,${photoBase64}`;
+  // If your backend sends PNG instead, change to image/png
+}
+
   goToProfileSection(): void {
     this.userData = this.searchResult;
     this.showProfileSection = true;
@@ -258,35 +302,60 @@ clickhandle():void{
       fileInput.click();
     }
   }
+  
 
-  onFileSelected(event: Event, docType: string): void {
+  onFileSelected(event: Event, documentKey: string): void {
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
+  
     const file = input.files[0];
-
-    // Simulate upload (replace with real upload logic)
+  
+    // Check file type first
+    if (!file.type.startsWith('image/') && file.type !== 'application/pdf') {
+      this.snackBar.open('Unsupported file type', 'Close', { duration: 2000 });
+      return;
+    }
+  
+    // Read file locally for preview
     const reader = new FileReader();
     reader.onload = () => {
-      // Save the file as a data URL (for demo)
       if (!this.userData.documentPreviews) {
         this.userData.documentPreviews = {};
       }
-      this.userData.documentPreviews[docType] = reader.result;
-      // Persist the change (simulate API call)
+      this.userData.documentPreviews[documentKey] = reader.result;
+  
+      // Optionally persist locally, e.g. cache or save UI state
       this.userDataService.setUserData(this.userData);
-      this.snackBar.open(docType + ' uploaded successfully!', 'Close', { duration: 2000 });
+  
+      // Show preview first, then upload
+      this.snackBar.open(`${documentKey} preview loaded, uploading...`, 'Close', { duration: 1500 });
+  
+      // Upload file to backend
+      const documentTypeId = this.documentTypeMap[documentKey];
+
+      this.removeDocuments(this.searchId.toString(), documentTypeId);
+      this.documentService.addDocument(this.searchId.toString(), documentTypeId, file).subscribe({
+        next: () => {
+          this.fetchDocuments(); // refresh documents from backend
+          this.snackBar.open(`${documentKey} uploaded successfully!`, 'Close', { duration: 2000 });
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Upload failed';
+          this.snackBar.open(`Error uploading ${documentKey}: ${this.errorMessage}`, 'Close', { duration: 3000 });
+        }
+      });
     };
-    if (file.type.startsWith('image/') || file.type === 'application/pdf') {
-      reader.readAsDataURL(file);
-    } else {
-      this.snackBar.open('Unsupported file type', 'Close', { duration: 2000 });
-    }
+  
+    reader.readAsDataURL(file);
   }
+  
+  
   fetchDocuments(): void {
     this.isLoading = true;
     this.documentService.getDocumentById(this.searchId).subscribe({
       next: (docs) => {
         this.mapDocuments(docs);
+        this.documents = docs;
         this.isLoading = false;
       },
       error: (err) => {
@@ -295,6 +364,25 @@ clickhandle():void{
       }
     });
   }
+
+  removeDocuments(searchId: string, documentTypeId: number): void {
+    // event.preventDefault();
+  
+    // const documentTypeId = this.documentTypeMap[documentKey];
+
+    this.isLoading = true;
+
+    this.documentService.deleteRegistration(searchId, documentTypeId).subscribe({
+      next: () => {
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = err.message || 'Failed to delete documents.';
+        this.isLoading = false;
+      }
+    });
+  }
+
   mapDocuments(docs: DocumentDTO[]): void {
     if (!this.userData.documentPreviews) {
       this.userData.documentPreviews = {}; // ← This line is crucial
@@ -321,5 +409,121 @@ clickhandle():void{
   
     console.log('Document previews:', this.userData.documentPreviews);
   }
+  get medicalCertificateFileName(): string | null {
+    const url = this.userData?.documentPreviews?.medicalCertificate;
+    if (!url) return null;
+    const doc = this.documents.find(d => d.fileUrl === url);
+    return doc ? doc.fileName : null;
+  }
+  get educationCertificateFileName(): string | null {
+    const url = this.userData?.documentPreviews?.educationCertificate;
+    if (!url) return null;
+    const doc = this.documents.find(d => d.fileUrl === url);
+    return doc ? doc.fileName : null;
+  }
+  get birthCertificateFileName(): string | null {
+    const url = this.userData?.documentPreviews?.birthCertificate;
+    if (!url) return null;
+    const doc = this.documents.find(d => d.fileUrl === url);
+    return doc ? doc.fileName : null;
+  }
+  get idCardFileName(): string | null {
+    const url = this.userData?.documentPreviews?.idCard;
+    if (!url) return null;
+    const doc = this.documents.find(d => d.fileUrl === url);
+    return doc ? doc.fileName : null;
+  }
+
+  // uploadDocument(): void {
+  //   const formData = new FormData();
+  //   formData.append('file', file);
+
   
+  //   this.documentService.addDocument(this.searchId, this.documentTypeId, formData).subscribe({
+  //     next: () => this.fetchDocuments(), // Refresh list
+  //     error: err => this.errorMessage = err.message
+  //   });
+  // }
+
+  // uploadDocument(): void {
+  //   if (!this.file) {
+  //     this.errorMessage = 'No file selected.';
+  //     return;
+  //   }
+
+  //   const formData = new FormData();
+  //   formData.append('file', this.file);
+
+  //   this.documentService.addDocument(this.searchId, this.documentTypeId, formData).subscribe({
+  //     next: () => this.fetchDocuments(),
+  //     error: err => this.errorMessage = err.message || 'File upload failed'
+  //   });
+  // }
+
+
+
+  loadLookups(): void {
+    this.dropdown.getNationality().subscribe(data => this.nationality = data);
+    this.dropdown.getSex().subscribe(data => this.sex = data);
+    this.dropdown.getEducation().subscribe(data => this.education = data);
+    this.dropdown.getBloodType().subscribe(data => this.bloodType = data);
+    this.dropdown.getRegion().subscribe(data => this.region = data);
+    // this.dropdown.getKebele().subscribe(data => this.kebele = data);
+    // this.dropdown.getWoreda().subscribe(data => this.woreda = data);
+    // this.dropdown.getZone().subscribe(data => this.town = data);
+    this.dropdown.getLanguage().subscribe(data => this.language = data);
+    this.dropdown.getLicenceCategory().subscribe(data => this.licenceCategory = data);
+  }
+
+  // loadLookups(): void {
+  //   const regionId = 1; // Replace with the actual ID you need
+  //   const zoneId = 1;
+  //   const woredaId = 1;
+  
+  //   forkJoin({
+  //     nationality: this.dropdown.getNationality(),
+  //     sex: this.dropdown.getSex(),
+  //     education: this.dropdown.getEducation(),
+  //     bloodType: this.dropdown.getBloodType(),
+  //     region: this.dropdown.getRegion(),
+  //     // kebele: this.dropdown.getKebele(woredaId),
+  //     // woreda: this.dropdown.getWoreda(zoneId),
+  //     // town: this.dropdown.getZone(regionId),
+  //     language: this.dropdown.getLanguage(),
+  //     licenceCategory: this.dropdown.getLicenceCategory()
+  //   }).subscribe(result => {
+  //     this.nationality = result.nationality;
+  //     this.sex = result.sex;
+  //     this.education = result.education;
+  //     this.bloodType = result.bloodType;
+  //     this.region = result.region;
+  //     // this.kebele = result.kebele;
+  //     // this.woreda = result.woreda;
+  //     // this.town = result.town;
+  //     this.language = result.language;
+  //     this.licenceCategory = result.licenceCategory;
+  //   });
+  // }
+  
+  getNationalityLabel(code: string): string {
+    return this.nationality.find(n => n.code === code)?.amdescription || code;
+  }
+  getSexLabel(id: number): string {
+    return this.sex.find(s => s.id === id)?.nameAmharic || id.toString();
+  }
+  getEducationLabel(id: number): string {
+    return this.education.find(e => e.id === id)?.nameAmharic || id.toString();
+  }
+  getBloodType(code: string): string {
+    return this.bloodType.find(b => b.code === code)?.amdescription || code;
+  }
+  getRegionLabel(code: string): string {
+    return this.region.find(e => e.code === code)?.amDescription || code;
+  }
+  getLanguageLabel(id: number): string {
+    return this.language.find(l => l.id === id)?.nameAmharic || id.toString();
+  }
+  getLicenceLabel(code: number): string {
+    return this.licenceCategory.find(l => l.code === code)?.displayNameAmh || code.toString();
+  }
 }

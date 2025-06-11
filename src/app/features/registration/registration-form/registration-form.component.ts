@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { DropdownService } from '../../../core/services/dropdown.service';
 import { address, education, language, licenceCategory, nationality, sex } from '../../../core/models/dropdown.model';
@@ -12,6 +12,8 @@ import { UserDataService } from '../../../core/services/user-data.service';
 import { MatIconModule } from '@angular/material/icon';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { AmharicOnlyDirective } from '../../../core/Validator/amharicValidator';
+import { minAgeValidator } from '../../../core/Validator/validator';
 
 @Component({
   selector: 'app-registration-form',
@@ -27,7 +29,8 @@ import { MatNativeDateModule } from '@angular/material/core';
     MatIconModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatIconModule
+    MatIconModule,
+    AmharicOnlyDirective
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -58,7 +61,7 @@ export class RegistrationFormComponent implements OnInit {
       fatherName: ['', Validators.required],
       grandName: ['', Validators.required],
       sex: ['', Validators.required],
-      birthDate: ['', Validators.required],
+      birthDate: ['', [Validators.required, minAgeValidator(18)]],
       birthPlace: ['', Validators.required],
       bloodType: ['', Validators.required],
       nationality: ['', Validators.required],
@@ -78,7 +81,8 @@ export class RegistrationFormComponent implements OnInit {
       isTheoryExamEnglish: ['', Validators.required],
       
       // Photo
-      photo: ['']
+      // photo: ['']
+      photoBase64: new FormControl('', Validators.required)
     });
   }
 
@@ -96,48 +100,83 @@ export class RegistrationFormComponent implements OnInit {
     document.getElementById('photoUpload')?.click();
   }
 
+  // onPhotoSelected(event: Event): void {
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     const file = fileInput.files[0];
+      
+  //     // Validate file type
+  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
+  //       alert('Only JPG or PNG files are allowed');
+  //       return;
+  //     }
+      
+  //     // Validate file size (5MB max)
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       alert('File size exceeds 5MB limit');
+  //       return;
+  //     }
+      
+  //     // this.photoFile = file;
+      
+
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const base64 = (reader.result as string).split(',')[1];
+  //       this.imagePreview = reader.result;
+
+  //     this.registrationForm.patchValue({photo: base64});
+  //     this.registrationForm.get('photo')?.updateValueAndValidity();
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
   onPhotoSelected(event: Event): void {
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
-      
-      // Validate file type
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        alert('Only JPG or PNG files are allowed');
-        return;
-      }
-      
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        alert('File size exceeds 5MB limit');
-        return;
-      }
-      
-      // this.photoFile = file;
-      
+  const fileInput = event.target as HTMLInputElement;
+  if (fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
 
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64 = (reader.result as string).split(',')[1];
-        this.imagePreview = reader.result;
-
-      this.registrationForm.patchValue({photo: base64});
-      this.registrationForm.get('photo')?.updateValueAndValidity();
-      };
-      reader.readAsDataURL(file);
+    // Validate file type
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('Only JPG or PNG files are allowed');
+      return;
     }
+
+    // Validate file size (5MB max)
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size exceeds 5MB limit');
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(',')[1];
+      this.imagePreview = reader.result;
+      this.registrationForm.patchValue({ photoBase64: base64 });
+      this.registrationForm.get('photoBase64')?.updateValueAndValidity();
+    };
+    reader.readAsDataURL(file);
   }
+}
+
 
   resetForm(): void {
     this.registrationForm.reset();
     // this.photoFile = null;
   }
   onSubmit(): void {
+    
     if (this.registrationForm.valid) {
+      // const formData = {
+      //   ...this.registrationForm.value
+      //   // photoFile: this.photoFile
+      // };
       const formData = {
-        ...this.registrationForm.value
-        // photoFile: this.photoFile
+      ...this.registrationForm.value,
+      photo: this.registrationForm.get('photoBase64')?.value // rename to 'photo' if backend expects that
       };
+
       this.reg.createRegistration(formData).subscribe({
         next:(res) => {
           alert("Success");
@@ -268,5 +307,16 @@ export class RegistrationFormComponent implements OnInit {
       }
     });
   }
-
+onPhoneInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
+    
+    // Ensure we don't exceed max length
+    if (value.length > 9) {
+      value = value.substring(0, 9);
+    }
+    
+    input.value = value;
+    this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
+  }
 }

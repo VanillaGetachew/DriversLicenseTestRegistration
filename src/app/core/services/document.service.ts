@@ -19,15 +19,25 @@ export class DocumentService {
     });
   }
 
-  createRegistration(registration: Registration): Observable<Registration> {
-    return this.http.post<Registration>(`${this.apiUrl}/create`, registration);
+  // addDocument(id: string, documentId: number, document: FormData): Observable<DocumentDTO[]> {
+  //   return this.http.post<DocumentDTO[]>(`${this.apiUrl}/upload`, document, {
+  //     params: { nationalId: id.toString(), documentId: documentId.toString() }
+  //   });
+  // }
+  addDocument(id: string, documentId: number, file: File): Observable<DocumentDTO[]> {
+    console.log(id, documentId);
+    const formData = new FormData();
+    formData.append('nationalId', id);
+    formData.append('documentTypeId', documentId.toString());
+    formData.append('file', file);
+    
+  
+    return this.http.post<DocumentDTO[]>(`${this.apiUrl}/upload`, formData);
   }
 
-  updateRegistration(id: number, registration: RegistrationRequest): Observable<Registration> {
-    return this.http.put<Registration>(`${this.apiUrl}/${id}`, registration);
-  }
-
-  deleteRegistration(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  deleteRegistration(id: string, documentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/Documents`, {
+      params: { nationalId: id.toString(), documentTypeId: documentId.toString() }
+    });
   }
 }

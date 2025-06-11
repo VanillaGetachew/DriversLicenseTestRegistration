@@ -1,18 +1,26 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogModule } from '@angular/material/dialog';
 import { MaterialModule } from '../../material/material.module';
+import { DropdownService } from '../../core/services/dropdown.service';
+import { address, education, language, licenceCategory, nationality, sex } from '../../core/models/dropdown.model';
+import { forkJoin } from 'rxjs';
+import { RegistrationService } from '../../core/services/registration.service';
+import { Router } from '@angular/router';
+import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
+import { minAgeValidator } from '../../core/Validator/validator';
 
 @Component({
   selector: 'app-edit-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective],
   template: `
     <h2 mat-dialog-title>Edit Profile Information</h2>
     <mat-dialog-content>
       <form [formGroup]="editForm" class="edit-form">
         <!-- Photo Upload Section -->
+
         <div class="photo-section" *ngIf="data.section === 'all' || data.section === 'personal'">
           <div class="photo-preview">
             <img *ngIf="photoPreview" [src]="photoPreview" alt="Profile photo">
@@ -31,23 +39,24 @@ import { MaterialModule } from '../../material/material.module';
               Remove
             </button>
           </div>
+          <input type="hidden" formControlName="photoBase64">
         </div>
 
         <div class="form-grid">
           <!-- Personal Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>First Name (Amharic)</mat-label>
-            <input matInput formControlName="firstNameAmharic">
+            <input matInput formControlName="firstNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Father's Name (Amharic)</mat-label>
-            <input matInput formControlName="fatherNameAmharic">
+            <input matInput formControlName="fatherNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name (Amharic)</mat-label>
-            <input matInput formControlName="grandfatherNameAmharic">
+            <input matInput formControlName="grandNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
@@ -62,14 +71,13 @@ import { MaterialModule } from '../../material/material.module';
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandfatherName" required>
+            <input matInput formControlName="grandName" required>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Sex</mat-label>
             <mat-select formControlName="sex">
-              <mat-option value="Male">Male</mat-option>
-              <mat-option value="Female">Female</mat-option>
+              <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
           </mat-form-field>
 
@@ -78,6 +86,10 @@ import { MaterialModule } from '../../material/material.module';
             <input matInput [matDatepicker]="picker" formControlName="birthDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
+            <mat-error
+              *ngIf="editForm.get('birthDate')?.hasError('minAge') && editForm.get('birthDate')?.touched"
+              >Minimum age must be 18
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
@@ -88,59 +100,63 @@ import { MaterialModule } from '../../material/material.module';
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Blood Type</mat-label>
             <mat-select formControlName="bloodType">
-              <mat-option value="A+">A+</mat-option>
-              <mat-option value="A-">A-</mat-option>
-              <mat-option value="B+">B+</mat-option>
-              <mat-option value="B-">B-</mat-option>
-              <mat-option value="AB+">AB+</mat-option>
-              <mat-option value="AB-">AB-</mat-option>
-              <mat-option value="O+">O+</mat-option>
-              <mat-option value="O-">O-</mat-option>
+              <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Nationality</mat-label>
-            <input matInput formControlName="nationality">
-          </mat-form-field>
+              <mat-label>Nationality</mat-label>
+              <mat-select formControlName="nationality">
+                <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
+              </mat-select>
+            </mat-form-field>
+
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Education</mat-label>
             <mat-select formControlName="education">
-              <mat-option value="None">None</mat-option>
-              <mat-option value="Primary">Primary</mat-option>
-              <mat-option value="Secondary">Secondary</mat-option>
-              <mat-option value="Diploma">Diploma</mat-option>
-              <mat-option value="Degree">Degree</mat-option>
-              <mat-option value="Masters">Masters</mat-option>
-              <mat-option value="PhD">PhD</mat-option>
+              <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <!-- Contact Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
             <mat-label>Phone Number</mat-label>
-            <input matInput formControlName="phoneNumber">
+            <input matInput formControlName="tel1" (input)="onPhoneInput($event)">
+            <mat-error *ngIf="editForm.get('tel1')?.hasError('pattern')">
+              Please enter exactly 10 digits
+            </mat-error>
           </mat-form-field>
+            
 
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
+          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Region</mat-label>
-            <input matInput formControlName="region">
+            <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
+              <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
           </mat-form-field>
+     
 
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
+        
+          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Town</mat-label>
-            <input matInput formControlName="town">
+            <mat-select  (selectionChange)="onTownChange($event.value)" formControlName="town">
+              <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
           </mat-form-field>
-
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
+        
+          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Woreda</mat-label>
-            <input matInput formControlName="woreda">
+            <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
+              <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
+          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Kebele</mat-label>
-            <input matInput formControlName="kebele">
+            <mat-select [disabled]="!kebele.length" formControlName="kebele">
+              <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
+            </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
@@ -149,23 +165,19 @@ import { MaterialModule } from '../../material/material.module';
           </mat-form-field>
 
           <!-- License Info -->
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'license'">
-            <mat-label>License Grade</mat-label>
-            <mat-select formControlName="licenseGrade">
-              <mat-option value="A">A</mat-option>
-              <mat-option value="B">B</mat-option>
-              <mat-option value="C">C</mat-option>
-              <mat-option value="D">D</mat-option>
+          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
+            <mat-label>License Category</mat-label>
+            <mat-select formControlName="licenceGrade">
+              <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
             </mat-select>
           </mat-form-field>
 
-          <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'license'">
-            <mat-label>Exam Language</mat-label>
-            <mat-select formControlName="englishExam">
-              <mat-option [value]="true">English</mat-option>
-              <mat-option [value]="false">Amharic</mat-option>
-            </mat-select>
-          </mat-form-field>
+            <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
+              <mat-label>Language</mat-label>
+              <mat-select formControlName="isTheoryExamEnglish">
+                <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
+              </mat-select>
+            </mat-form-field>
         </div>
       </form>
     </mat-dialog-content>
@@ -237,85 +249,424 @@ export class EditProfileDialogComponent implements OnInit {
   editForm: FormGroup;
   photoPreview: string | null = null;
   selectedPhoto: File | null = null;
-
+  photoPreviewUrl: string | null = null;
+    nationality:nationality[] = [];
+    bloodType:nationality[] = [];
+    region: address[] = [];
+    town: address[] = [];
+    woreda: address[] = [];
+    kebele: address[] = [];
+    parentCode: number = -1;
+    sex: sex[]=[];
+    education: education[]=[];
+    language: language[]=[];
+    licenceCategory: licenceCategory[]=[];
+    imagePreview: string | ArrayBuffer | null = null;
   constructor(
     private fb: FormBuilder,
+    private dropdown: DropdownService,
+    private reg: RegistrationService,
+    private router: Router,
     public dialogRef: MatDialogRef<EditProfileDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string }
   ) {
     this.editForm = this.fb.group({
       // Personal Info
-      firstNameAmharic: [''],
-      fatherNameAmharic: [''],
-      grandfatherNameAmharic: [''],
+      firstNameAmh: [''],
+      fatherNameAmh: [''],
+      grandNameAmh: [''],
       firstName: ['', Validators.required],
       fatherName: ['', Validators.required],
-      grandfatherName: ['', Validators.required],
+      grandName: ['', Validators.required],
       sex: [''],
-      birthDate: [null],
+      birthDate: ['', minAgeValidator(18)],
       birthPlace: [''],
       bloodType: [''],
       nationality: [''],
       education: [''],
       
       // Contact Info
-      phoneNumber: [''],
+      tel1: ['', Validators.pattern(/^[0-9]{10}$/)],
       region: [''],
       town: [''],
       woreda: [''],
       kebele: [''],
       houseNo: [''],
+      photoBase64: new FormControl(''),
       
       // License Info
-      licenseGrade: [''],
-      englishExam: [false]
+      licenceGrade: [''],
+      isTheoryExamEnglish: [''],
+      nationalId: ['']
     });
+    
   }
 
   ngOnInit(): void {
-    if (this.data.userData) {
-      this.editForm.patchValue(this.data.userData);
-      if (this.data.userData.photoUrl) {
-        this.photoPreview = this.data.userData.photoUrl;
-      }
-    }
+this.loadDropdowns();
+this.loadDropdownsAndPatch();
   }
 
+  loadDropdowns(): void {
+    forkJoin({
+      nationality: this.dropdown.getNationality(),
+      bloodType: this.dropdown.getBloodType(),
+      sex: this.dropdown.getSex(),
+      education: this.dropdown.getEducation(),
+      language: this.dropdown.getLanguage(),
+      licenceCategory: this.dropdown.getLicenceCategory(),
+      region: this.dropdown.getRegion()
+    }).subscribe(result => {
+      this.nationality = result.nationality;
+      this.bloodType = result.bloodType;
+      this.sex = result.sex;
+      this.education = result.education;
+      this.language = result.language;
+      this.licenceCategory = result.licenceCategory;
+      this.region = result.region;
+  
+      const patchedData = {
+        ...this.data.userData,
+        nationality: this.data.userData.nationality ? this.data.userData.nationality.toString() : '',
+        bloodType: this.data.userData.bloodType ? this.data.userData.bloodType.toString() : ''
+      };
+      this.editForm.patchValue(patchedData);
+  
+        if (this.data.userData.photo) {
+         this.photoPreview = `data:image/jpeg;base64,${this.data.userData.photo}`;
+        }
+      }
+    );
+  }
+
+  loadDropdownsAndPatch(): void {
+    this.dropdown.getRegion().subscribe(regions => {
+      this.region = regions;
+  
+      if (this.data.userData?.region) {
+        this.editForm.patchValue({ region: this.data.userData.region });
+
+        this.dropdown.getZone(this.data.userData.region).subscribe(towns => {
+          this.town = towns;
+  
+          if (this.data.userData?.town) {
+            this.editForm.patchValue({ town: this.data.userData.town });
+
+            this.dropdown.getWoreda(this.data.userData.town).subscribe(woredas => {
+              this.woreda = woredas;
+  
+              if (this.data.userData?.woreda) {
+                this.editForm.patchValue({ woreda: this.data.userData.woreda });
+
+                this.dropdown.getKebele(this.data.userData.woreda).subscribe(kebeles => {
+                  this.kebele = kebeles;
+  
+                  if (this.data.userData?.kebele) {
+                    this.editForm.patchValue({ kebele: this.data.userData.kebele });
+                  }
+                });
+              }
+            });
+          }
+        });
+      }
+    });
+  }
   triggerPhotoUpload(): void {
     document.getElementById('photoUpload')?.click();
   }
 
-  onPhotoSelected(event: Event): void {
-    const file = (event.target as HTMLInputElement).files?.[0];
-    if (file) {
-      this.selectedPhoto = file;
-      const reader = new FileReader();
-      reader.onload = () => {
-        this.photoPreview = reader.result as string;
-      };
-      reader.readAsDataURL(file);
+  // onPhotoSelected(event: Event): void {
+  //   const file = (event.target as HTMLInputElement).files?.[0];
+  //   if (file) {
+  //     this.selectedPhoto = file;
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       this.photoPreview = reader.result as string;
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
+
+//     onPhotoSelected(event: Event): void {
+//   const fileInput = event.target as HTMLInputElement;
+//   if (fileInput.files && fileInput.files.length > 0) {
+//     const file = fileInput.files[0];
+
+//     // Validate file type
+//     if (!['image/jpeg', 'image/png'].includes(file.type)) {
+//       alert('Only JPG or PNG files are allowed');
+//       return;
+//     }
+
+//     // Validate file size (5MB max)
+//     if (file.size > 5 * 1024 * 1024) {
+//       alert('File size exceeds 5MB limit');
+//       return;
+//     }
+
+//     const reader = new FileReader();
+//     reader.onload = () => {
+//       const base64 = (reader.result as string).split(',')[1];
+//       this.imagePreview = reader.result;
+//       this.editForm.patchValue({ photoBase64: base64 });
+//       this.editForm.get('photoBase64')?.updateValueAndValidity();
+//     };
+//     reader.readAsDataURL(file);
+//   }
+// }
+
+onPhotoSelected(event: Event): void {
+  const fileInput = event.target as HTMLInputElement;
+  if (fileInput.files && fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+
+    if (!['image/jpeg', 'image/png'].includes(file.type)) {
+      alert('Only JPG or PNG files are allowed');
+      return;
     }
+
+    if (file.size > 5 * 1024 * 1024) {
+      alert('File size exceeds 5MB limit');
+      return;
+    }
+
+    this.selectedPhoto = file;
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = (reader.result as string).split(',')[1];
+      this.photoPreview = reader.result as string; // ✅ Set for display
+      this.editForm.patchValue({ photoBase64: base64 });
+      this.editForm.get('photoBase64')?.updateValueAndValidity();
+    };
+    reader.readAsDataURL(file);
   }
+}
+
 
   removePhoto(): void {
     this.photoPreview = null;
     this.selectedPhoto = null;
   }
 
-  onSave(): void {
-    if (this.editForm.valid) {
-      const formData = this.editForm.value;
-      if (this.selectedPhoto) {
-        formData.photo = this.selectedPhoto;
+  // onSave(): void {
+  //   if (this.editForm.valid) {
+  //     const formData = this.editForm.value;
+  //     this.reg.updateRegistration(formData.nationalId, formData).subscribe({
+  //       next:(res) => {
+  //         alert("Success");
+  //         this.dialogRef.close(formData);
+  //         this.router.navigate(['/profile']);
+  //       }
+  //   })
+    
+  //   } else {
+  //     // Mark all fields as touched to trigger validation messages
+  //     Object.keys(this.editForm.controls).forEach(field => {
+  //       const control = this.editForm.get(field);
+  //       control?.markAsTouched({ onlySelf: true });
+  //     });
+  //     // if (this.selectedPhoto) {
+  //     //   formData.photo = this.selectedPhoto;
+  //     // }
+  //     // if (this.photoPreview === null) {
+  //     //   formData.removePhoto = true;
+  //     // }
+      
+  //   }
+  // }
+  // onSave(): void {
+    
+  //   if (this.editForm.valid) {
+  //     const formData = {
+  //     ...this.editForm.value,
+  //     photo: this.editForm.get('photoBase64')?.value // rename to 'photo' if backend expects that
+  //     };
+  //     // const formData = this.editForm.value;
+  
+  //     const payload = new FormData();
+  
+  //     for (const key in formData) {
+  //       if (formData[key] !== null && formData[key] !== undefined) {
+  //         payload.append(key, formData[key]);
+  //       }
+  //     }
+  //     if (this.selectedPhoto) {
+  //       payload.append('photoBase64', formData.photo);
+  //     }
+  
+  //     this.reg.updateRegistration(formData.nationalId, payload).subscribe({
+  //       next: (res) => {
+  //         alert("Success");
+  //         this.dialogRef.close(formData);
+  //         this.router.navigate(['/profile']);
+  //       },
+  //       error: (err) => {
+  //         console.error('Error updating registration:', err);
+  //         alert("Update failed");
+  //       }
+  //     });
+  
+  //   } else {
+  //     Object.keys(this.editForm.controls).forEach(field => {
+  //       const control = this.editForm.get(field);
+  //       control?.markAsTouched({ onlySelf: true });
+  //     });
+  //   }
+  // }
+  
+onSave(): void {
+  if (this.editForm.valid) {
+    const formData = {
+      ...this.editForm.value,
+      photo: this.editForm.get('photoBase64')?.value
+    };
+
+    this.reg.updateRegistration(formData.nationalId, formData).subscribe({
+      next: (res) => {
+        alert("Success");
+        this.dialogRef.close(formData);
+        this.router.navigate(['/profile']);
+      },
+      error: (err) => {
+        console.error('Error updating registration:', err);
+        alert("Update failed");
       }
-      if (this.photoPreview === null) {
-        formData.removePhoto = true;
-      }
-      this.dialogRef.close(formData);
-    }
+    });
+  } else {
+    Object.keys(this.editForm.controls).forEach(field => {
+      const control = this.editForm.get(field);
+      control?.markAsTouched({ onlySelf: true });
+    });
   }
+}
+
+
+
 
   onCancel(): void {
     this.dialogRef.close();
   }
+  getNationality(): void {
+      this.dropdown.getNationality().subscribe({
+        next: (res: nationality[]) => {
+          this.nationality = res;
+        }
+      });
+    }
+    getRegion(): void {
+      this.dropdown.getRegion().subscribe({
+        next: (res: address[]) => {
+          this.region = res;
+        }
+      });
+    }
+  
+    onRegionChange(siteCode: number): void {
+      this.parentCode = siteCode;
+      this.getTown(siteCode);
+      this.woreda=[];
+      this.kebele=[];
+    }
+  
+    getTown(siteCode: number): void {
+      this.dropdown.getZone(siteCode).subscribe({
+        next: (res: address[]) => {
+          this.town = res;
+        },
+        error: (err) => {
+          console.error('Error fetching child sites:', err);
+          this.town = [];
+        }
+      });
+    }
+  
+    onTownChange(siteCode: number): void {
+      this.parentCode = siteCode;
+      this.getWoreda(siteCode);
+      this.kebele=[];
+    }
+  
+    getWoreda(siteCode: number): void {
+      this.dropdown.getWoreda(siteCode).subscribe({
+        next: (res: address[]) => {
+          this.woreda = res;
+        },
+        error: (err) => {
+          console.error('Error fetching child sites:', err);
+          this.woreda = [];
+        }
+      });
+    }
+  
+    onWoredaChange(siteCode: number): void {
+      this.parentCode = siteCode;
+      this.getKebele(siteCode);
+    }
+  
+    getKebele(siteCode: number): void {
+      this.dropdown.getKebele(siteCode).subscribe({
+        next: (res: address[]) => {
+          this.kebele = res;
+        },
+        error: (err) => {
+          console.error('Error fetching child sites:', err);
+          this.kebele = [];
+        }
+      });
+    }
+  
+    getBloodType(): void {
+      this.dropdown.getBloodType().subscribe({
+        next: (res: nationality[]) => {
+          this.bloodType = res;
+        }
+      });
+    }
+  
+    getSex(): void {
+      this.dropdown.getSex().subscribe({
+        next: (res: sex[]) => {
+          this.sex = res;
+        }
+      });
+    }
+  
+    getEducation(): void {
+      this.dropdown.getEducation().subscribe({
+        next: (res: education[]) => {
+          this.education = res;
+        }
+      });
+    }
+  
+    getLanguage(): void {
+      this.dropdown.getLanguage().subscribe({
+        next: (res: language[]) => {
+          this.language = res;
+        }
+      });
+    }
+  
+    getLicenceCategory(): void {
+      this.dropdown.getLicenceCategory().subscribe({
+        next: (res: licenceCategory[]) => {
+          this.licenceCategory = res;
+        }
+      });
+    }
+    onPhoneInput(event: Event): void {
+      const input = event.target as HTMLInputElement;
+      let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
+      
+      // Ensure we don't exceed max length
+      if (value.length > 9) {
+        value = value.substring(0, 9);
+      }
+      
+      input.value = value;
+      this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
+    }
 } 

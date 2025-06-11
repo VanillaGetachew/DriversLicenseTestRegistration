@@ -56,12 +56,12 @@ export class UserDataService {
   createTestUser(): void {
     const testUserData = {
       // Personal Information
-      firstNameAmharic: 'ሃይሌ',
-      fatherNameAmharic: 'ገብረ',
-      grandfatherNameAmharic: 'ስላሴ',
+      firstNameAmh: 'ሃይሌ',
+      fatherNameAmh: 'ገብረ',
+      grandNameAmh: 'ስላሴ',
       firstName: 'Haile',
       fatherName: 'Gebre',
-      grandfatherName: 'Selassie',
+      grandName: 'Selassie',
       sex: 'Male',
       birthDate: '1990-05-15',
       birthPlace: 'Addis Ababa',
@@ -70,7 +70,7 @@ export class UserDataService {
       education: 'tertiary',
       
       // Contact & Address
-      phoneNumber: '0912345678',
+      tel1: '0912345678',
       region: 'addisAbaba',
       town: 'Bole',
       woreda: '03',
@@ -78,9 +78,9 @@ export class UserDataService {
       houseNo: '123',
       
       // License Information
-      licenseGrade: 'B',
+      licenceCategory: 'B',
       nationalId: 'ETH1234567890',
-      englishExam: true,
+      isTheoryExamEnglish: true,
       
       // Photo URL (placeholder)
       photoUrl: null,
@@ -114,4 +114,5 @@ export class UserDataService {
     // Not found
     return new BehaviorSubject(null).asObservable();
   }
+  
 }

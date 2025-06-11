@@ -45,8 +45,10 @@ export class RegistrationService {
     return this.http.post<Registration>(`${this.apiUrl}/create`, registration);
   }
 
-  updateRegistration(id: number, registration: RegistrationRequest): Observable<Registration> {
-    return this.http.put<Registration>(`${this.apiUrl}/${id}`, registration);
+  updateRegistration(id: string, data: Registration): Observable<Registration> {
+    return this.http.patch<Registration>(`${this.apiUrl}/Update/NationalId`, data, {
+      params: { nationalId: id }
+    });
   }
 
   deleteRegistration(id: number): Observable<void> {

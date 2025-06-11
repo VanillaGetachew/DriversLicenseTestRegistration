@@ -59,10 +59,16 @@
       <mat-icon>arrow_back</mat-icon>
       Back to Search
     </button>
+<!-- <div class="photo-container">
+  <img *ngIf="photoUrl" [src]="photoUrl" alt="User Photo" class="profile-photo" />
+  <p *ngIf="!photoUrl">No photo available</p>
+</div> -->
+
+
     <div class="profile-header" *ngIf="userData">
       <div class="profile-photo">
-        <img *ngIf="userData.photo" [src]="userData.photo" alt="Profile photo">
-        <div *ngIf="!userData.photo" class="no-photo">
+        <img *ngIf="photoUrl" [src]="photoUrl" alt="Profile photo">
+        <div *ngIf="!photoUrl" class="no-photo">
           <mat-icon>account_circle</mat-icon>
         </div>
       </div>
@@ -112,7 +118,7 @@
             </div>
             <div class="info-item">
               <span class="label">Sex</span>
-              <span class="value">{{ userData.sex || 'Not provided' }}</span>
+              <span class="value">{{ getSexLabel(userData.sex)|| 'Not provided' }}</span>
             </div>
             <div class="info-item">
               <span class="label">Birth Date</span>
@@ -124,15 +130,15 @@
             </div>
             <div class="info-item">
               <span class="label">Blood Type</span>
-              <span class="value">{{ userData.bloodType || 'Not provided' }}</span>
+              <span class="value">{{ getBloodType(userData.bloodType.toString()) || 'Not provided' }}</span>
             </div>
             <div class="info-item">
               <span class="label">Nationality</span>
-              <span class="value">{{ userData.nationality || 'Not provided' }}</span>
+              <span class="value">{{getNationalityLabel(userData.nationality.toString()) || 'Not provided' }}</span>
             </div>
             <div class="info-item">
               <span class="label">Education</span>
-              <span class="value">{{ userData.education || 'Not provided' }}</span>
+              <span class="value">{{ getEducationLabel(userData.education) || 'Not provided' }}</span>
             </div>
             <!-- Contact & Address -->
             <div class="info-item">
@@ -141,7 +147,7 @@
             </div>
             <div class="info-item">
               <span class="label">Region</span>
-              <span class="value">{{ userData.region || 'Not provided' }}</span>
+              <span class="value">{{ getRegionLabel(userData.region) || 'Not provided' }}</span>
             </div>
             <div class="info-item">
               <span class="label">Town</span>
@@ -162,7 +168,7 @@
             <!-- License Info -->
             <div class="info-item">
               <span class="label">License Grade</span>
-              <span class="value">{{ userData.licenceGrade || 'Not provided' }}</span>
+              <span class="value">{{ getLicenceLabel(userData.licenceGrade.toString()) || 'Not provided' }}</span>
             </div>
             <div class="info-item">
               <span class="label">National ID</span>
@@ -170,7 +176,7 @@
             </div>
             <div class="info-item">
               <span class="label">Exam Language</span>
-              <span class="value">{{ userData.isTheoryExamEnglish || 'Not Provided' }}</span>
+              <span class="value">{{ getLanguageLabel(userData.isTheoryExamEnglish) || 'Not Provided' }}</span>
             </div>
           </div>
         </mat-card-content>
@@ -190,7 +196,7 @@
                 <img *ngIf="isImageURL(userData.documentPreviews.idCard)" [src]="userData.documentPreviews.idCard" alt="ID Card">
                 <div *ngIf="isPdfURL(userData.documentPreviews.idCard)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{idCardFileName}}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.idCard">
@@ -210,7 +216,7 @@
                 <img *ngIf="isImageURL(userData.documentPreviews.birthCertificate)" [src]="userData.documentPreviews.birthCertificate" alt="Birth Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.birthCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{birthCertificateFileName}}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.birthCertificate">
@@ -230,7 +236,7 @@
                 <img *ngIf="isImageURL(userData.documentPreviews.medicalCertificate)" [src]="userData.documentPreviews.medicalCertificate" alt="Medical Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.medicalCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{medicalCertificateFileName}}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.medicalCertificate">
@@ -250,7 +256,7 @@
                 <img *ngIf="isImageURL(userData.documentPreviews.educationCertificate)" [src]="userData.documentPreviews.educationCertificate" alt="Education Certificate">
                 <div *ngIf="isPdfURL(userData.documentPreviews.educationCertificate)" class="pdf-preview">
                   <mat-icon>picture_as_pdf</mat-icon>
-                  <p>PDF Document</p>
+                  <p>{{educationCertificateFileName}}</p>
                 </div>
               </div>
               <div class="document-status" *ngIf="!userData?.documentPreviews?.educationCertificate">

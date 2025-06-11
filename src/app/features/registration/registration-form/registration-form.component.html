@@ -9,20 +9,20 @@
       <div class="form-row">
         
           <mat-form-field appearance="outline">
-            <mat-label>ስም</mat-label>
-            <input matInput formControlName="firstNameAmh" required>
+            <mat-label>ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="firstNameAmh" required type="text" amharicOnly>
             <mat-error>Required</mat-error>
           </mat-form-field>
            
           <mat-form-field appearance="outline">
-            <mat-label>የአባት ስም</mat-label>
-            <input matInput formControlName="fatherNameAmh" required>
+            <mat-label>የአባት ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="fatherNameAmh" required type="text" amharicOnly>
             <mat-error>Required</mat-error>
           </mat-form-field>
         
           <mat-form-field appearance="outline">
-            <mat-label>የአያት ስም</mat-label>
-            <input matInput formControlName="grandNameAmh" required>
+            <mat-label>የአያት ስም (በአማርኛ ጻፍ)</mat-label>
+            <input matInput formControlName="grandNameAmh" required type="text" amharicOnly>
             <mat-error>Required</mat-error>
           </mat-form-field>
         
@@ -70,8 +70,19 @@
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error>Required</mat-error>
+            <mat-error
+              *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
+              >Minimum age must be 18
+            </mat-error>
           </mat-form-field>
-        
+
+
+
+
+
+            
+
+          
 
         
           <mat-form-field appearance="outline">
@@ -120,10 +131,24 @@
         
           <mat-form-field appearance="outline">
             <mat-label>Phone Number</mat-label>
-            <input matInput formControlName="tel1" required>
+            <span matPrefix>+251 &nbsp;</span>
+            <input matInput formControlName="tel1" required (input)="onPhoneInput($event)">
             <mat-error>Required</mat-error>
+            <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
+              Please enter exactly 9 digits (after +251)
+            </mat-error>
           </mat-form-field>
-        
+
+          <!-- <mat-form-field appearance="outline" class="form-field phone-input-container" style="max-width: 250px;">
+            <mat-label>{{'TEMP.TEL' | translate }}</mat-label>
+            <span matPrefix>+251 &nbsp;</span>
+            <input matInput formControlName="tel1" required maxlength="9" (input)="onPhoneInput($event)"
+              placeholder="912345678" type="tel">
+            <mat-error>{{'ERROR.REQUIRED' | translate }}</mat-error>
+            <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
+              Please enter exactly 9 digits (after +251)
+            </mat-error>
+          </mat-form-field> -->
 
        
           <mat-form-field appearance="outline">
@@ -206,7 +231,7 @@
     </div>
 
     <!-- Photo Upload -->
-    <div class="form-section">
+    <!-- <div class="form-section">
       <h2>Photo Upload</h2>
       
       <div class="photo-upload-container">
@@ -229,7 +254,48 @@
         </div>
         <p class="upload-hint">JPG or PNG, max 5MB</p>
       </div>
+    </div> -->
+
+    <!-- Image Preview Section -->
+<div class="form-section">
+  <h2>Photo Upload</h2>
+
+  <div class="photo-upload-container">
+    <div class="photo-preview">
+      <img *ngIf="imagePreview" [src]="imagePreview" alt="Profile photo" />
+      <div *ngIf="!imagePreview" class="no-photo">
+        <mat-icon>account_circle</mat-icon>
+      </div>
     </div>
+
+    <!-- File Input (NO formControlName) -->
+    <div class="photo-actions">
+      <input
+        type="file"
+        id="photoUpload"
+        (change)="onPhotoSelected($event)"
+        accept="image/jpeg,image/png"
+        hidden
+      />
+
+      <button type="button" class="upload-button" (click)="triggerPhotoUpload()">
+        <mat-icon>photo_camera</mat-icon>
+        {{ imagePreview ? 'Change Photo' : 'Upload Photo' }}
+      </button>
+
+      <button *ngIf="imagePreview" type="button" class="upload-button" (click)="removePhoto()">
+        <mat-icon>delete</mat-icon>
+        Remove
+      </button>
+    </div>
+
+    <p class="upload-hint">JPG or PNG, max 5MB</p>
+  </div>
+
+  <!-- Hidden base64 field in form -->
+  <input type="hidden" formControlName="photoBase64" />
+</div>
+
 
     <!-- Form Actions -->
     <div class="form-actions">
