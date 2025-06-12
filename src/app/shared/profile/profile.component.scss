@@ -317,3 +317,131 @@ mat-card {
     display: none;
   }
 }
+
+// Exam Schedule Table Styles
+table {
+  width: 100%;
+  margin-top: 16px;
+}
+
+.mat-mdc-header-cell {
+  background-color: #f5f5f5;
+  font-weight: 600;
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.mat-mdc-cell {
+  padding: 12px 16px;
+}
+
+.pass {
+  color: #4caf50;
+  font-weight: 500;
+}
+
+.fail {
+  color: #f44336;
+  font-weight: 500;
+}
+
+// Responsive Styles
+@media screen and (max-width: 1200px) {
+  .profile-container {
+    padding: 16px;
+  }
+
+  .profile-search-bar mat-card {
+    min-width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  .profile-content {
+    gap: 16px;
+  }
+
+  .info-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .documents-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .profile-header {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
+
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
+
+  .info-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .documents-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .document-item {
+    max-width: 100%;
+  }
+
+  // Make table responsive
+  .mat-mdc-table {
+    display: block;
+    overflow-x: auto;
+    white-space: nowrap;
+  }
+
+  .mat-mdc-header-cell,
+  .mat-mdc-cell {
+    min-width: 120px;
+  }
+
+  // Adjust form fields in search bar
+  .profile-search-bar mat-form-field {
+    flex: 1 1 100% !important;
+    min-width: 100% !important;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .profile-container {
+    padding: 8px;
+  }
+
+  .profile-photo {
+    width: 100px;
+    height: 100px;
+  }
+
+  .profile-name h1 {
+    font-size: 1.5rem;
+  }
+
+  .mat-mdc-card {
+    padding: 12px;
+  }
+
+  .mat-mdc-card-header {
+    padding: 8px 0;
+  }
+
+  .mat-mdc-card-content {
+    padding: 8px 0;
+  }
+
+  .info-item {
+    padding: 8px;
+  }
+
+  .document-preview {
+    height: 150px;
+  }
+}

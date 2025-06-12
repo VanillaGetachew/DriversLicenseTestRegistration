@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { EditProfileDialogComponent } from './edit-profile-dialog/edit-profile-dialog.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
+import { ExamService, ExamSchedule, ExamScheduleResponse } from '../../core/services/exam.service';
 
 // Define an interface for exam appointments
 interface ExamAppointment {
@@ -42,6 +43,8 @@ export class ProfileComponent implements OnInit {
   searchGrandfatherName: string = '';
   searchResult: any = null; // Holds the result after search
   showProfileSection: boolean = false; // Controls when to show the full profile section
+  displayedColumns: string[] = ['appointmentDate', 'examType', 'startDate', 'endDate', 'period', 'result'];
+  examSchedule: ExamSchedule[] = [];
 
   constructor(
     private userDataService: UserDataService,
@@ -49,7 +52,8 @@ export class ProfileComponent implements OnInit {
     private router: Router,
     private dialog: MatDialog,
     private languageService: LanguageService,
-    private translate: TranslateService // Inject TranslateService
+    private translate: TranslateService,
+    private examService: ExamService
   ) { }
 
   ngOnInit(): void {
@@ -235,9 +239,12 @@ export class ProfileComponent implements OnInit {
   }
 
   goToProfileSection(): void {
-    this.userData = this.searchResult;
-    this.showProfileSection = true;
-    this.loadMockAppointment();
+    if (this.searchResult) {
+      this.userData = this.searchResult;
+      this.showProfileSection = true;
+      // Load exam schedule when profile is loaded
+      this.loadExamSchedule();
+    }
   }
 
   backToSearch(): void {
@@ -276,5 +283,20 @@ export class ProfileComponent implements OnInit {
 
   hasDocuments(): boolean {
     return this.userData?.documentPreviews && Object.keys(this.userData.documentPreviews).length > 0;
+  }
+
+  private loadExamSchedule(): void {
+    if (this.userData?.nationalId) {
+      this.examService.getExamSchedule(this.userData.nationalId)
+        .subscribe({
+          next: (response: ExamScheduleResponse) => {
+            this.examSchedule = response.items;
+          },
+          error: (error) => {
+            console.error('Error loading exam schedule:', error);
+            // TODO: Add proper error handling/notification
+          }
+        });
+    }
   }
 }
