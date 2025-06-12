@@ -186,7 +186,7 @@
       <h2>{{ 'registration.licenseInfo.title' | translate }}</h2>
 
       <div class="form-row">
-          <mat-form-field appearance="outline">
+          <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'registration.licenseInfo.category' | translate }}</mat-label>
             <mat-select formControlName="licenceGrade">
               <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
@@ -203,8 +203,8 @@
           </div>
 
         <div class="form-field">
-          <mat-form-field appearance="outline">
-            <mat-label>{{ 'registration.licenseInfo.nationalId' | translate }}</mat-label>
+          <mat-form-field appearance="outline" class="form-field">
+            <mat-label>{{ 'common.nationalId' | translate }}</mat-label>
             <input matInput formControlName="nationalId" required>
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>

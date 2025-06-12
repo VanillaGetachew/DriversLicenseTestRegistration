@@ -115,6 +115,10 @@
     },
     "dashboard": {
       "title": "Dashboard Overview",
+      "selector": {
+        "selectSite": "Select a site",
+        "selectSchool": "Select a school"
+      },
       "stats": {
         "totalApplicants": "Total Applicants",
         "passRate": "Pass Rate",
@@ -138,7 +142,12 @@
           "apr": "Apr",
           "may": "May",
           "jun": "Jun"
-        }
+        },
+        "studentsByLicenseGrade": "Number of Students by License Grade",
+        "studentsByGender": "Number of Students by Gender",
+        "passFailSummary": "Pass-Fail Summary",
+        "licenseGrade": "License Grade",
+        "count": "Count"
       }
     },
     "registration": {

@@ -94,16 +94,13 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Subscribe to user data changes
     this.userDataService.getUserData().subscribe(data => {
       this.userData = data;
       this.loadLookups();
       console.log('Profile loaded user data:', this.userData);
       
-      // Example: Load a mock appointment
+
       if (this.userData && !this.examAppointment) {
-        // Simulating appointment data retrieval
-        // In a real application, this would come from a service
         this.loadMockAppointment();
       }
     });
@@ -163,27 +160,30 @@ clickhandle():void{
         section: section
       }
     });
-console.log(this.userData);
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        try {
-          // Update the user data with the edited values
-          this.userData = { ...this.userData, ...result };
-          
-          // Save the updated data
-          this.languageService.getTranslation('profile.updateSuccess').subscribe(translatedText => {
-            this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-              duration: 3000
+        
+        this.reg.getRegistrationById(this.searchId).subscribe({
+          next: updatedData => {
+            this.userData = updatedData;
+            this.setPhotoUrl(updatedData.photo);
+            this.fetchDocuments();
+            
+            this.languageService.getTranslation('profile.updateSuccess').subscribe(translatedText => {
+              this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+                duration: 3000
+              });
             });
-          });
-        } catch (error) {
-          console.error('Error updating profile:', error);
-          this.languageService.getTranslation('profile.updateError').subscribe(translatedText => {
-            this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-              duration: 3000
+          },
+          error: (err) => {
+            console.error('Error reloading profile:', err);
+            this.languageService.getTranslation('profile.updateError').subscribe(translatedText => {
+              this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+                duration: 3000
+              });
             });
-          });
-        }
+          }
+        });
       }
     });
   }
@@ -312,10 +312,8 @@ setPhotoUrl(photoBase64: string): void {
     this.showProfileSection = false;
     this.userData = null;
     this.examAppointment = null;
-    // Optionally, keep search fields and last search result, or clear them as needed
   }
 
-  // --- File Upload Logic for Documents ---
 
   triggerFileInput(inputId: string): void {
     const fileInput = document.getElementById(inputId) as HTMLInputElement;
@@ -406,7 +404,7 @@ setPhotoUrl(photoBase64: string): void {
 
   mapDocuments(docs: DocumentDTO[]): void {
     if (!this.userData.documentPreviews) {
-      this.userData.documentPreviews = {}; // ← This line is crucial
+      this.userData.documentPreviews = {};
     }
   
     for (const doc of docs) {

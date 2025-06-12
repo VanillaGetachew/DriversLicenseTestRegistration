@@ -161,6 +161,10 @@
   },
   "dashboard": {
     "title": "ዳሽቦርድ አጠቃላይ እይታ",
+    "selector": {
+      "selectSite": "ማዕከል ይምረጡ",
+      "selectSchool": "ትምህርት ቤት ይምረጡ"
+    },
     "stats": {
       "totalApplicants": "ጠቅላላ ማመልከቻዎች",
       "passRate": "የማለፍ መጠን",
@@ -184,7 +188,12 @@
         "apr": "ኤፕሪ",
         "may": "ሜይ",
         "jun": "ጁን"
-      }
+      },
+      "studentsByLicenseGrade": "በፍቃድ ደረጃ ተማሪዎች ብዛት",
+      "studentsByGender": "በጾታ ተማሪዎች ብዛት",
+      "passFailSummary": "የማለፍ-የመውደቅ ማጠቃለያ",
+      "licenseGrade": "የፍቃድ ደረጃ",
+      "count": "ብዛት"
     }
   },
   "header": {

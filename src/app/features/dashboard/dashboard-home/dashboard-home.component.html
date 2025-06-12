@@ -20,11 +20,15 @@
   </mat-form-field>
 </div> -->
 
-<div class="selector">
-  <mat-form-field appearance="outline">
-    <mat-select placeholder="Select a site" [(value)]="selectedId" (selectionChange)="onSelectedIdChange()">
-      <mat-option  *ngFor ="let st of school" [value]="st.code">{{st.siteNameAmh}}</mat-option>
+<div class="selector-container">
+  <mat-form-field appearance="outline" class="site-selector">
+    <mat-label>{{ 'dashboard.selector.selectSite' | translate }}</mat-label>
+    <mat-select [(value)]="selectedId" (selectionChange)="onSelectedIdChange()">
+      <mat-option *ngFor="let st of school" [value]="st.code">
+        {{st.siteNameAmh}}
+      </mat-option>
     </mat-select>
+    <mat-icon matSuffix>location_on</mat-icon>
   </mat-form-field>
 </div>
 
@@ -110,7 +114,7 @@
     </div> -->
 <div class="chart-card">
       <div class="chart-header">
-        <h3>Number of Students by Licence Grade</h3>
+        <h3>{{ 'dashboard.charts.studentsByLicenseGrade' | translate }}</h3>
     <div class="LicenceGrade">
   <ngx-charts-bar-vertical
     [view]="[450, 300]"
@@ -122,8 +126,8 @@
     [legend]="true"
     [showXAxisLabel]="true"
     [showYAxisLabel]="true"
-    xAxisLabel="License Grade"
-    yAxisLabel="Count">
+    [xAxisLabel]="'dashboard.charts.licenseGrade' | translate"
+    [yAxisLabel]="'dashboard.charts.count' | translate">
   </ngx-charts-bar-vertical>
 </div>
 </div>
@@ -190,7 +194,7 @@
 
  <div class="chart-card">
       <div class="chart-header">
-        <h3>Number of Students by Gender</h3>
+        <h3>{{ 'dashboard.charts.studentsByGender' | translate }}</h3>
     <div class="GenderSummary">
   <ngx-charts-pie-chart
     [view]="[400, 300]"
@@ -231,7 +235,7 @@
 
      <div class="chart-card">
       <div class="chart-header">
-        <h3>Pass-Fail Summary</h3>
+        <h3>{{ 'dashboard.charts.passFailSummary' | translate }}</h3>
 <div class="PassFail">
   <ngx-charts-pie-chart
     [view]="[400, 300]"

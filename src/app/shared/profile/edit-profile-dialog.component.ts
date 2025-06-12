@@ -376,46 +376,6 @@ this.loadDropdownsAndPatch();
     document.getElementById('photoUpload')?.click();
   }
 
-  // onPhotoSelected(event: Event): void {
-  //   const file = (event.target as HTMLInputElement).files?.[0];
-  //   if (file) {
-  //     this.selectedPhoto = file;
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       this.photoPreview = reader.result as string;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-
-//     onPhotoSelected(event: Event): void {
-//   const fileInput = event.target as HTMLInputElement;
-//   if (fileInput.files && fileInput.files.length > 0) {
-//     const file = fileInput.files[0];
-
-//     // Validate file type
-//     if (!['image/jpeg', 'image/png'].includes(file.type)) {
-//       alert('Only JPG or PNG files are allowed');
-//       return;
-//     }
-
-//     // Validate file size (5MB max)
-//     if (file.size > 5 * 1024 * 1024) {
-//       alert('File size exceeds 5MB limit');
-//       return;
-//     }
-
-//     const reader = new FileReader();
-//     reader.onload = () => {
-//       const base64 = (reader.result as string).split(',')[1];
-//       this.imagePreview = reader.result;
-//       this.editForm.patchValue({ photoBase64: base64 });
-//       this.editForm.get('photoBase64')?.updateValueAndValidity();
-//     };
-//     reader.readAsDataURL(file);
-//   }
-// }
 
 onPhotoSelected(event: Event): void {
   const fileInput = event.target as HTMLInputElement;
@@ -449,84 +409,21 @@ onPhotoSelected(event: Event): void {
   removePhoto(): void {
     this.photoPreview = null;
     this.selectedPhoto = null;
+    this.editForm.patchValue({ photoBase64: '' });
   }
-
-  // onSave(): void {
-  //   if (this.editForm.valid) {
-  //     const formData = this.editForm.value;
-  //     this.reg.updateRegistration(formData.nationalId, formData).subscribe({
-  //       next:(res) => {
-  //         alert("Success");
-  //         this.dialogRef.close(formData);
-  //         this.router.navigate(['/profile']);
-  //       }
-  //   })
-    
-  //   } else {
-  //     // Mark all fields as touched to trigger validation messages
-  //     Object.keys(this.editForm.controls).forEach(field => {
-  //       const control = this.editForm.get(field);
-  //       control?.markAsTouched({ onlySelf: true });
-  //     });
-  //     // if (this.selectedPhoto) {
-  //     //   formData.photo = this.selectedPhoto;
-  //     // }
-  //     // if (this.photoPreview === null) {
-  //     //   formData.removePhoto = true;
-  //     // }
-      
-  //   }
-  // }
-  // onSave(): void {
-    
-  //   if (this.editForm.valid) {
-  //     const formData = {
-  //     ...this.editForm.value,
-  //     photo: this.editForm.get('photoBase64')?.value // rename to 'photo' if backend expects that
-  //     };
-  //     // const formData = this.editForm.value;
-  
-  //     const payload = new FormData();
-  
-  //     for (const key in formData) {
-  //       if (formData[key] !== null && formData[key] !== undefined) {
-  //         payload.append(key, formData[key]);
-  //       }
-  //     }
-  //     if (this.selectedPhoto) {
-  //       payload.append('photoBase64', formData.photo);
-  //     }
-  
-  //     this.reg.updateRegistration(formData.nationalId, payload).subscribe({
-  //       next: (res) => {
-  //         alert("Success");
-  //         this.dialogRef.close(formData);
-  //         this.router.navigate(['/profile']);
-  //       },
-  //       error: (err) => {
-  //         console.error('Error updating registration:', err);
-  //         alert("Update failed");
-  //       }
-  //     });
-  
-  //   } else {
-  //     Object.keys(this.editForm.controls).forEach(field => {
-  //       const control = this.editForm.get(field);
-  //       control?.markAsTouched({ onlySelf: true });
-  //     });
-  //   }
-  // }
   
 onSave(): void {
   if (this.editForm.valid) {
+
     const formData = {
       ...this.editForm.value,
       photo: this.editForm.get('photoBase64')?.value
     };
 
+delete formData.photoBase64; // ✅ Prevent backend confusion
+
     this.reg.updateRegistration(formData.nationalId, formData).subscribe({
       next: (res) => {
-        alert("Success");
         this.dialogRef.close(formData);
         this.router.navigate(['/profile']);
       },
@@ -544,11 +441,10 @@ onSave(): void {
 }
 
 
-
-
   onCancel(): void {
     this.dialogRef.close();
   }
+  
   getNationality(): void {
       this.dropdown.getNationality().subscribe({
         next: (res: nationality[]) => {
