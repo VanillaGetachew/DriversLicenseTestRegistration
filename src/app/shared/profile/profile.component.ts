@@ -16,6 +16,8 @@ import { address, education, language, licenceCategory, nationality, sex } from 
 import { forkJoin } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
+import { ExamService} from '../../core/services/exam.service';
+import { AppointmentPeriod } from '../../core/models/appointment.model';
 
 interface ExamAppointment {
   date: Date;
@@ -78,7 +80,11 @@ export class ProfileComponent implements OnInit {
   };
   
   selectedFiles: Record<string, File> = {};
-  
+
+  displayedColumns: string[] = ['examType', 'appointmentDate', 'startDate', 'endDate', 'period', 'result'];
+
+  // appointmentPeriod!: AppointmentPeriod;
+  appointmentPeriod: AppointmentPeriod [] = []
 
   constructor(
     private userDataService: UserDataService,
@@ -90,7 +96,8 @@ export class ProfileComponent implements OnInit {
     private documentService: DocumentService,
     private route: ActivatedRoute,
     private languageService: LanguageService,
-    private translate: TranslateService
+    private translate: TranslateService,
+    private examService: ExamService
   ) { }
 
   ngOnInit(): void {
@@ -303,9 +310,12 @@ setPhotoUrl(photoBase64: string): void {
 }
 
   goToProfileSection(): void {
-    this.userData = this.searchResult;
-    this.showProfileSection = true;
-    this.loadMockAppointment();
+    if (this.searchResult) {
+      this.userData = this.searchResult;
+      this.showProfileSection = true;
+      // Load exam schedule when profile is loaded
+      this.loadExamSchedule();
+    }
   }
 
   backToSearch(): void {
@@ -544,5 +554,20 @@ setPhotoUrl(photoBase64: string): void {
   }
   getLicenceLabel(code: number): string {
     return this.licenceCategory.find(l => l.code === code)?.displayNameAmh || code.toString();
+  }
+
+  private loadExamSchedule(): void {
+    if (this.userData?.nationalId) {
+      this.examService.getAppointmentById(this.userData.nationalId)
+        .subscribe({
+          next: (res: AppointmentPeriod[]) => {
+            console.log('Received appointmentPeriod:', res);
+            this.appointmentPeriod= res;
+          },
+          error: (error) => {
+            console.error('Error loading exam schedule:', error);
+          }
+        });
+    }
   }
 }

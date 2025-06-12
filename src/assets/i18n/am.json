@@ -110,26 +110,38 @@
       "reschedule": "ቀጠሮ ቀይር",
       "cancelExam": "ፈተና ሰርዝ",
       "noUpcomingAppointment": "የሚመጣ የፈተና ቀጠሮ የለም።",
-      "scheduleExam": "አዲስ ፈተና ቀጥር"
+      "scheduleExam": "አዲስ ፈተና ቀጥር",
+      "schedule": {
+        "title": "የፈተና ዕቅድ",
+        "appointmentDate": "የቀጠሮ ቀን",
+        "examType": "የፈተና አይነት",
+        "startDate": "የመጀመሪያ ቀን",
+        "endDate": "የመጨረሻ ቀን",
+        "period": "ጊዜ",
+        "result": "ውጤት"
+      }
     },
     "footer": {
       "contactUs": {
-        "title": "አግኙን"
+        "title": "ያግኙን",
+        "phone": "ስልክ",
+        "email": "ኢሜይል",
+        "address": "አድራሻ"
       },
       "quickLinks": {
         "title": "ፈጣን አገናኞች",
         "aboutUs": "ስለ እኛ",
-        "faqs": "ተደጋጋሚ ጥያቄዎች",
+        "faqs": "ተደጋጋሚ ጥያFቄዎች",
         "privacyPolicy": "የግላዊነት ፖሊሲ",
         "termsOfService": "የአገልግሎት ውሎች"
       },
       "openingHours": {
-        "title": "የስራ ሰዓት",
-        "monFri": "ሰኞ - አርብ: 8:00 ጥዋት - 5:00 ከሰዓት",
-        "sat": "ቅዳሜ: 9:00 ጥዋት - 1:00 ከሰዓት",
-        "sun": "እሁድ: ዝግ ነው"
+        "title": "የስራ ሰዓቶች",
+        "monFri": "ሰኞ - አርብ፡ 8:00 ጥዋት - 5:00 ማታ",
+        "sat": "ቅዳሜ፡ 9:00 ጥዋት - 1:00 ማታ",
+        "sun": "እሁድ፡ ዝግ"
       },
-      "copyright": "© 2025 ኩስቶር የመንጃ ፈቃድ የፈተና ምዝገባ። ሁሉም መብቶች የተጠበቁ ናቸው።"
+      "copyright": "© 2024 የሹፌሮች ፈቃድ አስተዳደር ስርዓት። ሁሉም መብቶች የተጠበቁ ናቸው።"
     }
   },
   "registration": {
@@ -146,6 +158,7 @@
     "licenseInfo": {
       "title": "የፍቃድ መረጃ",
       "category": "የፍቃድ ምድብ",
+      "nationalId": "ብሔራዊ መታወቂያ",
       "examLanguage": "ቋንቋ"
     },
     "photoUpload": {

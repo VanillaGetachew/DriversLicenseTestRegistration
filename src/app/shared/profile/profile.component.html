@@ -276,62 +276,121 @@
         </mat-card-content>
       </mat-card>
 
-    <!-- Exam Appointment Card -->
-    <mat-card class="appointment-card">
-      <mat-card-header>
-        <mat-card-title>{{ 'profile.exam.title' | translate }}</mat-card-title>
-        <div class="card-actions">
-          <button mat-icon-button color="primary" (click)="rescheduleExam()">
-            <mat-icon>event</mat-icon>
-          </button>
-        </div>
-      </mat-card-header>
-      <mat-card-content>
-        <div *ngIf="!examAppointment" class="no-appointment">
-          <mat-icon>event_busy</mat-icon>
-          <p>{{ 'profile.exam.noUpcomingAppointment' | translate }}</p>
-          <button mat-raised-button color="primary" (click)="scheduleExam()">
-            {{ 'profile.exam.scheduleExam' | translate }}
-          </button>
-        </div>
-        
-        <div *ngIf="examAppointment" class="appointment-details">
-          <div class="appointment-header">
-            <mat-icon color="primary">event_available</mat-icon>
-            <h3>{{ 'profile.exam.upcomingAppointment' | translate }}</h3>
+      <!-- Exam Schedule Card -->
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>{{ 'profile.exam.schedule.title' | translate }}</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table *ngIf="appointmentPeriod" [dataSource]="appointmentPeriod" class="mat-elevation-z1" style="width: 100%;">
+            
+            <!-- Exam Type Column -->
+            <ng-container matColumnDef="examType">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.examType' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.appointmentDTO?.examType }}</td>
+            </ng-container>
+            
+            <!-- Appointment Date Column -->
+            <ng-container matColumnDef="appointmentDate">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.appointmentDate' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.appointmentDTO?.appointmentDate}}</td>
+            </ng-container>
+
+            <!-- Start Date Column -->
+            <ng-container matColumnDef="startDate">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.startDate' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.periodDTO?.startingTime}}</td>
+            </ng-container>
+
+            <!-- End Date Column -->
+            <ng-container matColumnDef="endDate">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.endDate' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.periodDTO?.endTime }}</td>
+            </ng-container>
+
+            <!-- Period Column -->
+            <ng-container matColumnDef="period">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.period' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.periodDTO?.amharic }}</td>
+            </ng-container>
+
+            <!-- Result Column -->
+            <!-- <ng-container matColumnDef="result">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.result' | translate }}</th>
+              <td mat-cell *matCellDef="let element">
+                <span [ngClass]="{'pass': element.result === 'Pass', 'fail': element.result === 'fail'}">
+                  {{ element.result }}
+                </span>
+              </td>
+            </ng-container> -->
+
+            <ng-container matColumnDef="result">
+              <th mat-header-cell *matHeaderCellDef>{{ 'profile.exam.schedule.result' | translate }}</th>
+              <td mat-cell *matCellDef="let element">{{ element.appointmentDTO?.passFail }}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+
+      <!-- Exam Appointment Card -->
+      <!-- <mat-card class="appointment-card">
+        <mat-card-header>
+          <mat-card-title>{{ 'profile.exam.title' | translate }}</mat-card-title>
+          <div class="card-actions">
+            <button mat-icon-button color="primary" (click)="rescheduleExam()">
+              <mat-icon>event</mat-icon>
+            </button>
+          </div>
+        </mat-card-header>
+        <mat-card-content>
+          <div *ngIf="!examAppointment" class="no-appointment">
+            <mat-icon>event_busy</mat-icon>
+            <p>{{ 'profile.exam.noUpcomingAppointment' | translate }}</p>
+            <button mat-raised-button color="primary" (click)="scheduleExam()">
+              {{ 'profile.exam.scheduleExam' | translate }}
+            </button>
           </div>
           
-          <div class="info-grid appointment-grid">
-            <div class="info-item">
-              <span class="label">{{ 'profile.exam.date' | translate }}</span>
-              <span class="value">{{ examAppointment.date | date:'fullDate' }}</span>
+          <div *ngIf="examAppointment" class="appointment-details">
+            <div class="appointment-header">
+              <mat-icon color="primary">event_available</mat-icon>
+              <h3>{{ 'profile.exam.upcomingAppointment' | translate }}</h3>
             </div>
-            <div class="info-item">
-              <span class="label">{{ 'profile.exam.time' | translate }}</span>
-              <span class="value">{{ examAppointment.time }}</span>
+            
+            <div class="info-grid appointment-grid">
+              <div class="info-item">
+                <span class="label">{{ 'profile.exam.date' | translate }}</span>
+                <span class="value">{{ examAppointment.date | date:'fullDate' }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">{{ 'profile.exam.time' | translate }}</span>
+                <span class="value">{{ examAppointment.time }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">{{ 'profile.exam.examType' | translate }}</span>
+                <span class="value">{{ examAppointment.examType }}</span>
+              </div>
+              <div class="info-item">
+                <span class="label">{{ 'profile.exam.location' | translate }}</span>
+                <span class="value">{{ examAppointment.location }}</span>
+              </div>
             </div>
-            <div class="info-item">
-              <span class="label">{{ 'profile.exam.examType' | translate }}</span>
-              <span class="value">{{ examAppointment.examType }}</span>
-            </div>
-            <div class="info-item">
-              <span class="label">{{ 'profile.exam.location' | translate }}</span>
-              <span class="value">{{ examAppointment.location }}</span>
+            
+            <div class="appointment-actions">
+              <button mat-button color="warn" (click)="cancelExam()">
+                <mat-icon>cancel</mat-icon> {{ 'profile.exam.cancelExam' | translate }}
+              </button>
+              <button mat-button color="primary" (click)="rescheduleExam()">
+                <mat-icon>update</mat-icon> {{ 'profile.exam.reschedule' | translate }}
+              </button>
             </div>
           </div>
-          
-          <div class="appointment-actions">
-            <button mat-button color="warn" (click)="cancelExam()">
-              <mat-icon>cancel</mat-icon> {{ 'profile.exam.cancelExam' | translate }}
-            </button>
-            <button mat-button color="primary" (click)="rescheduleExam()">
-              <mat-icon>update</mat-icon> {{ 'profile.exam.reschedule' | translate }}
-            </button>
-          </div>
-        </div>
-      </mat-card-content>
-    </mat-card>
+        </mat-card-content>
+      </mat-card> -->
+    </div>
   </div>
-</div>
 </div>
 

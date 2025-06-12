@@ -110,7 +110,16 @@
         "reschedule": "Reschedule Exam",
         "cancelExam": "Cancel Exam",
         "noUpcomingAppointment": "No upcoming exam appointments.",
-        "scheduleExam": "Schedule New Exam"
+        "scheduleExam": "Schedule New Exam",
+        "schedule": {
+          "title": "Exam Schedule",
+          "appointmentDate": "Appointment Date",
+          "examType": "Exam Type",
+          "startDate": "Start Date",
+          "endDate": "End Date",
+          "period": "Period",
+          "result": "Result"
+        }
       }
     },
     "dashboard": {
@@ -164,6 +173,7 @@
       "licenseInfo": {
         "title": "License Information",
         "category": "License Category",
+        "nationalId": "National ID",
         "examLanguage": "Language"
       },
       "photoUpload": {
@@ -185,7 +195,10 @@
     },
     "footer": {
       "contactUs": {
-        "title": "Contact Us"
+        "title": "Contact Us",
+        "phone": "Phone",
+        "email": "Email",
+        "address": "Address"
       },
       "quickLinks": {
         "title": "Quick Links",
@@ -200,7 +213,7 @@
         "sat": "Saturday: 9:00 AM - 1:00 PM",
         "sun": "Sunday: Closed"
       },
-      "copyright": "© 2025 Custor Driver's License Test Registration. All rights reserved."
+      "copyright": "© 2024 Drivers License Management System. All rights reserved."
     },
     "licenseUpgrade": {
       "search": {
