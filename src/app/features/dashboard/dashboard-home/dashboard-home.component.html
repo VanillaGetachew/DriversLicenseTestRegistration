@@ -42,7 +42,7 @@
         <h3>{{ 'dashboard.stats.totalApplicants' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend">{{ gnd.value }}</div>
         <div class="stat-trend positive">
-          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '12' } }}
+          <!-- <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '12' } }} -->
         </div>
       </div>
     </div>
@@ -56,7 +56,7 @@
          <h3>{{ 'dashboard.stats.passRate' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend1">{{ gnd.value }}</div>
         <div class="stat-trend negative">
-          <mat-icon>arrow_downward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '4' } }}
+          <!-- <mat-icon>arrow_downward</mat-icon> {{ 'dashboard.stats.fromLastMonth' | translate: { value: '4' } }} -->
         </div>
       </div>
     </div>
@@ -70,7 +70,7 @@
         <h3>{{ 'dashboard.stats.upcomingTests' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend2">{{ gnd.value }}</div>
         <div class="stat-trend positive">
-          <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastWeek' | translate: { value: '8' } }}
+          <!-- <mat-icon>arrow_upward</mat-icon> {{ 'dashboard.stats.fromLastWeek' | translate: { value: '8' } }} -->
         </div>
       </div>
     </div>
@@ -84,9 +84,9 @@
         <h3>{{ 'dashboard.stats.availableVehicles' | translate }}</h3>
         <div class="stat-value" *ngFor ="let gnd of gend3">{{ gnd.value }}</div>
         
-        <div class="stat-trend neutral">
+        <!-- <div class="stat-trend neutral">
           {{ 'dashboard.stats.noChange' | translate }}
-        </div>
+        </div> -->
       </div>
     </div>
   </div>

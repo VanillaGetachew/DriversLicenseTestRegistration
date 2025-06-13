@@ -193,24 +193,23 @@
             </mat-select>
           </mat-form-field>
 
-          <div class="form-field">
-            <mat-form-field appearance="outline">
+          <!-- <div class="form-field"> -->
+            <mat-form-field appearance="outline" class="form-field">
               <mat-label>Language</mat-label>
               <mat-select formControlName="isTheoryExamEnglish">
                 <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
               </mat-select>
             </mat-form-field>
-          </div>
+          <!-- </div> -->
 
-        <div class="form-field">
+        <!-- <div class="form-field"> -->
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'common.nationalId' | translate }}</mat-label>
             <input matInput formControlName="nationalId" required>
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
 
-
-      </div>
+      <!-- </div> -->
     </div>
     </div>
 

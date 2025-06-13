@@ -14,8 +14,10 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { AmharicOnlyDirective } from '../../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../../core/Validator/validator';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-registration-form',
@@ -33,7 +35,8 @@ import { LanguageService } from '../../../core/services/language.service';
     MatNativeDateModule,
     MatIconModule,
     AmharicOnlyDirective,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -56,7 +59,9 @@ export class RegistrationFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private dropdown: DropdownService,
     private reg: RegistrationService,
-    private languageService: LanguageService) {
+    private languageService: LanguageService,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService) {
     this.registrationForm = this.fb.group({
       // Personal Information
 
@@ -107,37 +112,104 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   onPhotoSelected(event: Event): void {
-  const fileInput = event.target as HTMLInputElement;
-  if (fileInput.files && fileInput.files.length > 0) {
-    const file = fileInput.files[0];
+  // const fileInput = event.target as HTMLInputElement;
+  // if (fileInput.files && fileInput.files.length > 0) {
+  //   const file = fileInput.files[0];
 
-    // Validate file type
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      alert('Only JPG or PNG files are allowed');
-      return;
-    }
-
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size exceeds 5MB limit');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = (reader.result as string).split(',')[1];
-      this.imagePreview = reader.result;
-      this.registrationForm.patchValue({ photoBase64: base64 });
+  //   // Validate file type
+  //   if (!['image/jpeg', 'image/png'].includes(file.type)) {
+  //     alert('Only JPG or PNG files are allowed');
+  //     return;
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+      
+      // Validate file type
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.invalidType'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
+        return;
+      }
+      
+      // Validate file size (5MB max)
+      if (file.size > 5 * 1024 * 1024) {
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.sizeLimit'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
+        return;
+      }
+      
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        this.imagePreview = reader.result;
+        this.registrationForm.patchValue({ photoBase64: base64 });
       this.registrationForm.get('photoBase64')?.updateValueAndValidity();
-    };
-    reader.readAsDataURL(file);
-  }
+        
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.success'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['success-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
+      };
+      reader.readAsDataURL(file);
+    }
+
+    // // Validate file size (5MB max)
+    // if (file.size > 5 * 1024 * 1024) {
+    //   alert('File size exceeds 5MB limit');
+    //   return;
+    // }
+
+  //   const reader = new FileReader();
+  //   reader.onload = () => {
+  //     const base64 = (reader.result as string).split(',')[1];
+  //     this.imagePreview = reader.result;
+  //     this.registrationForm.patchValue({ photoBase64: base64 });
+  //     this.registrationForm.get('photoBase64')?.updateValueAndValidity();
+  //   };
+  //   reader.readAsDataURL(file);
+  // }
 }
 
 
   resetForm(): void {
     this.registrationForm.reset();
-    // this.photoFile = null;
+    this.imagePreview = null;
+    forkJoin({
+      message: this.languageService.getTranslation('registration.formReset'),
+      close: this.languageService.getTranslation('common.close')
+    }).subscribe(({ message, close }) => {
+      this.snackBar.open(message, close, {
+        duration: 3000,
+        panelClass: ['info-snackbar'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+    });
   }
   onSubmit(): void {
     
@@ -152,8 +224,33 @@ export class RegistrationFormComponent implements OnInit {
       };
 
       this.reg.createRegistration(formData).subscribe({
-        next:(res) => {
-          alert("Success");
+        next: (res) => {
+          forkJoin({
+            message: this.languageService.getTranslation('registration.success'),
+            close: this.languageService.getTranslation('common.close')
+          }).subscribe(({ message, close }) => {
+            this.snackBar.open(message, close, {
+              duration: 5000,
+              panelClass: ['success-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          });
+          this.resetForm();
+        },
+        error: (error) => {
+          forkJoin({
+            message: this.languageService.getTranslation('registration.error'),
+            close: this.languageService.getTranslation('common.close')
+          }).subscribe(({ message, close }) => {
+            this.snackBar.open(message, close, {
+              duration: 5000,
+              panelClass: ['error-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          });
+          console.error('Registration error:', error);
         }
       })
       
@@ -163,12 +260,35 @@ export class RegistrationFormComponent implements OnInit {
         const control = this.registrationForm.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
+      
+      forkJoin({
+        message: this.languageService.getTranslation('registration.validationError'),
+        close: this.languageService.getTranslation('common.close')
+      }).subscribe(({ message, close }) => {
+        this.snackBar.open(message, close, {
+          duration: 5000,
+          panelClass: ['error-snackbar'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        });
+      });
     }
   }
 
   removePhoto(): void {
     this.imagePreview = null;
     this.registrationForm.get('photo')?.setValue(null);
+    forkJoin({
+      message: this.languageService.getTranslation('registration.photoUpload.removed'),
+      close: this.languageService.getTranslation('common.close')
+    }).subscribe(({ message, close }) => {
+      this.snackBar.open(message, close, {
+        duration: 3000,
+        panelClass: ['info-snackbar'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+    });
   }
 
   getNationality(): void {

@@ -232,7 +232,7 @@ clickhandle():void{
           (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
           (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
         ) {
-          this.searchResult = userData;
+          // this.searchResults = userData; // Add single result to array
         } else {
           this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
             this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
