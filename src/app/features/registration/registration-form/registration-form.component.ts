@@ -46,7 +46,7 @@ export class RegistrationFormComponent implements OnInit {
   town: address[] = [];
   woreda: address[] = [];
   kebele: address[] = [];
-  parentCode: number = -1;
+  parentCode: string | null = null;
   sex: sex[]=[];
   education: education[]=[];
   language: language[]=[];
@@ -186,14 +186,14 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
 
-  onRegionChange(siteCode: number): void {
+  onRegionChange(siteCode: string): void {
     this.parentCode = siteCode;
     this.getTown(siteCode);
     this.woreda=[];
     this.kebele=[];
   }
 
-  getTown(siteCode: number): void {
+  getTown(siteCode: string): void {
     this.dropdown.getZone(siteCode).subscribe({
       next: (res: address[]) => {
         this.town = res;
@@ -205,13 +205,13 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
 
-  onTownChange(siteCode: number): void {
+  onTownChange(siteCode: string): void {
     this.parentCode = siteCode;
     this.getWoreda(siteCode);
     this.kebele=[];
   }
 
-  getWoreda(siteCode: number): void {
+  getWoreda(siteCode: string): void {
     this.dropdown.getWoreda(siteCode).subscribe({
       next: (res: address[]) => {
         this.woreda = res;
@@ -223,12 +223,12 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
 
-  onWoredaChange(siteCode: number): void {
+  onWoredaChange(siteCode: string): void {
     this.parentCode = siteCode;
     this.getKebele(siteCode);
   }
 
-  getKebele(siteCode: number): void {
+  getKebele(siteCode: string): void {
     this.dropdown.getKebele(siteCode).subscribe({
       next: (res: address[]) => {
         this.kebele = res;

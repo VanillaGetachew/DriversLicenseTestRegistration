@@ -20,17 +20,17 @@ export class DropdownService {
   getRegion(): Observable<address[]> {
     return this.http.get<address[]>(`${this.url}/Addresses/Region`);
   }
-  getZone(id: number): Observable<address[]> {
+  getZone(id: string): Observable<address[]> {
     return this.http.get<address[]>(`${this.url}/Addresses/Zone`, {
     params: { regionCode: id.toString() }
   });
   }
-  getWoreda(id: number): Observable<address[]> {
+  getWoreda(id: string): Observable<address[]> {
     return this.http.get<address[]>(`${this.url}/Addresses/Woreda`, {
     params: { zoneCode: id.toString() }
   });
   }
-  getKebele(id: number): Observable<address[]> {
+  getKebele(id: string): Observable<address[]> {
     return this.http.get<address[]>(`${this.url}/Addresses/Kebele`, {
     params: { woredaCode: id.toString() }
   });
@@ -52,20 +52,5 @@ export class DropdownService {
 
   getLicenceCategory(): Observable<licenceCategory[]> {
     return this.http.get<licenceCategory[]>(`${this.url}/Licence`);
-  }
-
-
-        refreshList(){
-            this.http.get(this.url).subscribe({
-              next: res =>{
-                console.log(res)
-              },
-              error: err =>{
-                console.log(err)
-              }
-            })
-        }
-  postDefendant(){
-    // return this.http.post(this.url, this.formData);
   }
 }

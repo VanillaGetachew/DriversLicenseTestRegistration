@@ -13,18 +13,11 @@ import { DocumentDTO } from '../../core/models/document.model';
 import { DocumentService } from '../../core/services/document.service';
 import { DropdownService } from '../../core/services/dropdown.service';
 import { address, education, language, licenceCategory, nationality, sex } from '../../core/models/dropdown.model';
-import { forkJoin } from 'rxjs';
+import { forkJoin, switchMap, tap } from 'rxjs';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../core/services/language.service';
 import { ExamService} from '../../core/services/exam.service';
 import { AppointmentPeriod } from '../../core/models/appointment.model';
-
-interface ExamAppointment {
-  date: Date;
-  time: string;
-  examType: string;
-  location: string;
-}
 
 @Component({
   selector: 'app-profile',
@@ -44,8 +37,9 @@ export class ProfileComponent implements OnInit {
   userData: any = null;
   
   photoUrl: string | null = null;
-  examAppointment: ExamAppointment | null = null;
   searchId: string = '';
+  phoneNumber: string = '';
+  searchName: string =''
   searchFirstName: string = '';
   searchFatherName: string = '';
   searchGrandfatherName: string = '';
@@ -104,12 +98,8 @@ export class ProfileComponent implements OnInit {
     this.userDataService.getUserData().subscribe(data => {
       this.userData = data;
       this.loadLookups();
+      this.loadLookupswithParam();
       console.log('Profile loaded user data:', this.userData);
-      
-
-      if (this.userData && !this.examAppointment) {
-        this.loadMockAppointment();
-      }
     });
 
     this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
@@ -139,22 +129,6 @@ clickhandle():void{
     return url.match(/\.pdf$/i) !== null || url.startsWith('data:application/pdf');
   }
 
-  // Load a mock appointment for demo purposes
-  loadMockAppointment(): void {
-    // 50% chance of having an appointment for demo
-    if (!this.userData) return;
-    if (Math.random() > 0.5) {
-      const futureDate = new Date();
-      futureDate.setDate(futureDate.getDate() + Math.floor(Math.random() * 14) + 1);
-      
-      this.examAppointment = {
-        date: futureDate,
-        time: '10:00 AM',
-        examType: this.userData.englishExam ? 'Theory Exam (English)' : 'Theory Exam (Amharic)',
-        location: 'Main Testing Center, Addis Ababa'
-      };
-    }
-  }
 
   // Edit a specific section of the profile
   editSection(section: string): void {
@@ -195,69 +169,16 @@ clickhandle():void{
     });
   }
 
-  // Schedule a new exam appointment
-  scheduleExam(): void {
-    console.log('Scheduling exam');
-    // In a real application, this would open a scheduling dialog or navigate to a scheduling page
-    
-    const futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + 7);
-    
-    this.examAppointment = {
-      date: futureDate,
-      time: '10:00 AM',
-      examType: this.userData.englishExam ? 'Theory Exam (English)' : 'Theory Exam (Amharic)',
-      location: 'Main Testing Center, Addis Ababa'
-    };
-    
-    this.languageService.getTranslation('profile.examScheduled').subscribe(translatedText => {
-      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-        duration: 3000
-      });
-    });
-  }
 
-  // Reschedule an existing exam appointment
-  rescheduleExam(): void {
-    console.log('Rescheduling exam');
-    // In a real application, this would open a rescheduling dialog
-    
-    if (this.examAppointment) {
-      const futureDate = new Date();
-      futureDate.setDate(futureDate.getDate() + 14);
-      
-      this.examAppointment.date = futureDate;
-      this.examAppointment.time = '2:00 PM';
-      
-      this.languageService.getTranslation('profile.examRescheduled').subscribe(translatedText => {
-        this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-          duration: 3000
-        });
-      });
-    } else {
-      this.scheduleExam();
-    }
-  }
-
-  // Cancel an existing exam appointment
-  cancelExam(): void {
-    console.log('Canceling exam');
-    // In a real application, this would show a confirmation dialog before canceling
-    
-    this.examAppointment = null;
-    
-    this.languageService.getTranslation('profile.examCanceled').subscribe(translatedText => {
-      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-        duration: 3000
-      });
-    });
-  }
 
   searchProfile(): void {
     this.showProfileSection = false;
     this.userData = null;
     this.searchResult = null;
-    if (!this.searchId && !this.searchFirstName && !this.searchFatherName && !this.searchGrandfatherName) {
+    this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
+  .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
+    // if (!this.searchId && !this.searchName) {
+    if (!this.searchId && !this.phoneNumber) {
       this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
       });
@@ -275,7 +196,33 @@ clickhandle():void{
           });
         }
       });
-    } else {
+    } 
+    // if (this.searchName) {
+    //   this.reg.getRegistrationByName(this.searchName).subscribe(data => {
+    //     if (data) {
+    //       this.searchResult = data;
+    //       this.userData = data;
+    //        this.setPhotoUrl(data.photo);
+    //     } else {
+    //       this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
+    //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+    //       });
+    //     }
+    //   });
+    // }
+    if (this.phoneNumber) {
+      this.reg.getRegistrationByPhone(this.phoneNumber).subscribe(data => {
+        if (data) {
+          this.searchResult = data;
+          this.userData = data;
+           this.setPhotoUrl(data.photo);
+        } else {
+          this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
+            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+          });
+        }
+      });
+    }else {
       // For demo: fallback to localStorage and match by names
       const storedData = localStorage.getItem('user_registration_data');
       if (storedData) {
@@ -321,7 +268,6 @@ setPhotoUrl(photoBase64: string): void {
   backToSearch(): void {
     this.showProfileSection = false;
     this.userData = null;
-    this.examAppointment = null;
   }
 
 
@@ -361,9 +307,9 @@ setPhotoUrl(photoBase64: string): void {
   
       // Upload file to backend
       const documentTypeId = this.documentTypeMap[documentKey];
-
-      this.removeDocuments(this.searchId.toString(), documentTypeId);
-      this.documentService.addDocument(this.searchId.toString(), documentTypeId, file).subscribe({
+console.log(this.userData.nationalId);
+      this.removeDocuments(this.userData.nationalId, documentTypeId);
+      this.documentService.addDocument(this.userData.nationalId, documentTypeId, file).subscribe({
         next: () => {
           this.fetchDocuments(); // refresh documents from backend
           this.snackBar.open(`${documentKey} uploaded successfully!`, 'Close', { duration: 2000 });
@@ -381,17 +327,19 @@ setPhotoUrl(photoBase64: string): void {
   
   fetchDocuments(): void {
     this.isLoading = true;
-    this.documentService.getDocumentById(this.searchId).subscribe({
-      next: (docs) => {
-        this.mapDocuments(docs);
-        this.documents = docs;
-        this.isLoading = false;
-      },
-      error: (err) => {
-        this.errorMessage = err.message || 'Failed to fetch documents.';
-        this.isLoading = false;
-      }
-    });
+    if (this.userData?.nationalId) {
+      this.documentService.getDocumentById(this.userData.nationalId).subscribe({
+        next: (docs) => {
+          this.mapDocuments(docs);
+          this.documents = docs;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Failed to fetch documents.';
+          this.isLoading = false;
+        }
+      });
+    }
   }
 
   removeDocuments(searchId: string, documentTypeId: number): void {
@@ -463,32 +411,6 @@ setPhotoUrl(photoBase64: string): void {
     return doc ? doc.fileName : null;
   }
 
-  // uploadDocument(): void {
-  //   const formData = new FormData();
-  //   formData.append('file', file);
-
-  
-  //   this.documentService.addDocument(this.searchId, this.documentTypeId, formData).subscribe({
-  //     next: () => this.fetchDocuments(), // Refresh list
-  //     error: err => this.errorMessage = err.message
-  //   });
-  // }
-
-  // uploadDocument(): void {
-  //   if (!this.file) {
-  //     this.errorMessage = 'No file selected.';
-  //     return;
-  //   }
-
-  //   const formData = new FormData();
-  //   formData.append('file', this.file);
-
-  //   this.documentService.addDocument(this.searchId, this.documentTypeId, formData).subscribe({
-  //     next: () => this.fetchDocuments(),
-  //     error: err => this.errorMessage = err.message || 'File upload failed'
-  //   });
-  // }
-
 
 
   loadLookups(): void {
@@ -497,42 +419,36 @@ setPhotoUrl(photoBase64: string): void {
     this.dropdown.getEducation().subscribe(data => this.education = data);
     this.dropdown.getBloodType().subscribe(data => this.bloodType = data);
     this.dropdown.getRegion().subscribe(data => this.region = data);
-    // this.dropdown.getKebele().subscribe(data => this.kebele = data);
-    // this.dropdown.getWoreda().subscribe(data => this.woreda = data);
-    // this.dropdown.getZone().subscribe(data => this.town = data);
     this.dropdown.getLanguage().subscribe(data => this.language = data);
     this.dropdown.getLicenceCategory().subscribe(data => this.licenceCategory = data);
   }
 
-  // loadLookups(): void {
-  //   const regionId = 1; // Replace with the actual ID you need
-  //   const zoneId = 1;
-  //   const woredaId = 1;
-  
-  //   forkJoin({
-  //     nationality: this.dropdown.getNationality(),
-  //     sex: this.dropdown.getSex(),
-  //     education: this.dropdown.getEducation(),
-  //     bloodType: this.dropdown.getBloodType(),
-  //     region: this.dropdown.getRegion(),
-  //     // kebele: this.dropdown.getKebele(woredaId),
-  //     // woreda: this.dropdown.getWoreda(zoneId),
-  //     // town: this.dropdown.getZone(regionId),
-  //     language: this.dropdown.getLanguage(),
-  //     licenceCategory: this.dropdown.getLicenceCategory()
-  //   }).subscribe(result => {
-  //     this.nationality = result.nationality;
-  //     this.sex = result.sex;
-  //     this.education = result.education;
-  //     this.bloodType = result.bloodType;
-  //     this.region = result.region;
-  //     // this.kebele = result.kebele;
-  //     // this.woreda = result.woreda;
-  //     // this.town = result.town;
-  //     this.language = result.language;
-  //     this.licenceCategory = result.licenceCategory;
-  //   });
-  // }
+loadLookupswithParam(): void {
+  this.dropdown.getRegion().pipe(
+    tap(regionData => this.region = regionData),
+    switchMap(regionData => {
+      const regionId = regionData[0]?.code;
+      if (!regionId) throw new Error('Region ID not found');
+      return this.dropdown.getZone(regionId);
+    }),
+    tap(zoneData => this.town = zoneData),
+    switchMap(zoneData => {
+      const zoneId = zoneData[0]?.code;
+      console.log('Zone ID being passed to getWoreda:', zoneId);
+      if (!zoneId) throw new Error('Zone ID not found');
+      return this.dropdown.getWoreda(zoneId);
+    }),
+    tap(woredaData => this.woreda = woredaData),
+    switchMap(woredaData => {
+      const woredaId = woredaData[0]?.code;
+      if (!woredaId) throw new Error('Woreda ID not found');
+      return this.dropdown.getKebele(woredaId);
+    })
+  ).subscribe({
+    next: kebeleData => this.kebele = kebeleData,
+    error: err => console.error('Error loading lookups', err)
+  });
+}
   
   getNationalityLabel(code: string): string {
     return this.nationality.find(n => n.code === code)?.amdescription || code;
@@ -549,11 +465,22 @@ setPhotoUrl(photoBase64: string): void {
   getRegionLabel(code: string): string {
     return this.region.find(e => e.code === code)?.amDescription || code;
   }
+  getTownLabel(code: string): string {
+    return this.town.find(e => e.code === code)?.amDescription || code;
+  }
+  getWoredaLabel(code: string): string {
+    return this.woreda.find(e => e.code === code)?.amDescription || code;
+  }
+  getKebeleLabel(code: string): string {
+    return this.kebele.find(e => e.code === code)?.amDescription || code;
+  }
   getLanguageLabel(id: number): string {
     return this.language.find(l => l.id === id)?.nameAmharic || id.toString();
   }
-  getLicenceLabel(code: number): string {
-    return this.licenceCategory.find(l => l.code === code)?.displayNameAmh || code.toString();
+  getLicenceLabel(code: number | string): string {
+  const codeNum = typeof code === 'string' ? parseInt(code, 10) : code;
+  const found = this.licenceCategory.find(l => l.code === codeNum);
+  return found?.displayNameAmh || codeNum.toString();
   }
 
   private loadExamSchedule(): void {

@@ -256,7 +256,7 @@ export class EditProfileDialogComponent implements OnInit {
     town: address[] = [];
     woreda: address[] = [];
     kebele: address[] = [];
-    parentCode: number = -1;
+    parentCode: string | null = null;
     sex: sex[]=[];
     education: education[]=[];
     language: language[]=[];
@@ -460,14 +460,14 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
       });
     }
   
-    onRegionChange(siteCode: number): void {
+    onRegionChange(siteCode: string): void {
       this.parentCode = siteCode;
       this.getTown(siteCode);
       this.woreda=[];
       this.kebele=[];
     }
   
-    getTown(siteCode: number): void {
+    getTown(siteCode: string): void {
       this.dropdown.getZone(siteCode).subscribe({
         next: (res: address[]) => {
           this.town = res;
@@ -479,13 +479,13 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
       });
     }
   
-    onTownChange(siteCode: number): void {
+    onTownChange(siteCode: string): void {
       this.parentCode = siteCode;
       this.getWoreda(siteCode);
       this.kebele=[];
     }
   
-    getWoreda(siteCode: number): void {
+    getWoreda(siteCode: string): void {
       this.dropdown.getWoreda(siteCode).subscribe({
         next: (res: address[]) => {
           this.woreda = res;
@@ -497,12 +497,12 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
       });
     }
   
-    onWoredaChange(siteCode: number): void {
+    onWoredaChange(siteCode: string): void {
       this.parentCode = siteCode;
       this.getKebele(siteCode);
     }
   
-    getKebele(siteCode: number): void {
+    getKebele(siteCode: string): void {
       this.dropdown.getKebele(siteCode).subscribe({
         next: (res: address[]) => {
           this.kebele = res;
@@ -558,8 +558,8 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
       let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
       
       // Ensure we don't exceed max length
-      if (value.length > 9) {
-        value = value.substring(0, 9);
+      if (value.length > 10) {
+        value = value.substring(0, 10);
       }
       
       input.value = value;

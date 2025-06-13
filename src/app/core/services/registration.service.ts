@@ -40,6 +40,16 @@ export class RegistrationService {
       params: { nationalId: id.toString() }
     });
   }
+  getRegistrationByName(name: string): Observable<Registration> {
+    return this.http.get<Registration>(`${this.apiUrl}/Name`, {
+      params: { name: name }
+    });
+  }
+  getRegistrationByPhone(phone: string): Observable<Registration> {
+    return this.http.get<Registration>(`${this.apiUrl}/Phone`, {
+      params: { phone: phone }
+    });
+  }
 
   createRegistration(registration: Registration): Observable<Registration> {
     return this.http.post<Registration>(`${this.apiUrl}/create`, registration);
