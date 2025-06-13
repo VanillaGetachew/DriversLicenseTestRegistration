@@ -10,8 +10,10 @@ import { RegistrationService } from '../../../core/services/registration.service
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { forkJoin } from 'rxjs';
 
 @Component({
   selector: 'app-registration-form',
@@ -27,7 +29,8 @@ import { LanguageService } from '../../../core/services/language.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatIconModule,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -49,7 +52,9 @@ export class RegistrationFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private dropdown: DropdownService,
     private reg: RegistrationService,
-    private languageService: LanguageService) {
+    private languageService: LanguageService,
+    private snackBar: MatSnackBar,
+    private translate: TranslateService) {
     this.registrationForm = this.fb.group({
       // Personal Information
 
@@ -105,26 +110,54 @@ export class RegistrationFormComponent implements OnInit {
       
       // Validate file type
       if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        alert('Only JPG or PNG files are allowed');
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.invalidType'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
         return;
       }
       
       // Validate file size (5MB max)
       if (file.size > 5 * 1024 * 1024) {
-        alert('File size exceeds 5MB limit');
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.sizeLimit'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
         return;
       }
       
-      // this.photoFile = file;
-      
-
       const reader = new FileReader();
       reader.onload = () => {
         const base64 = (reader.result as string).split(',')[1];
         this.imagePreview = reader.result;
-
-      this.registrationForm.patchValue({photo: base64});
-      this.registrationForm.get('photo')?.updateValueAndValidity();
+        this.registrationForm.patchValue({photo: base64});
+        this.registrationForm.get('photo')?.updateValueAndValidity();
+        
+        forkJoin({
+          message: this.languageService.getTranslation('registration.photoUpload.success'),
+          close: this.languageService.getTranslation('common.close')
+        }).subscribe(({ message, close }) => {
+          this.snackBar.open(message, close, {
+            duration: 3000,
+            panelClass: ['success-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          });
+        });
       };
       reader.readAsDataURL(file);
     }
@@ -132,28 +165,72 @@ export class RegistrationFormComponent implements OnInit {
 
   resetForm(): void {
     this.registrationForm.reset();
-    // this.photoFile = null;
+    this.imagePreview = null;
+    forkJoin({
+      message: this.languageService.getTranslation('registration.formReset'),
+      close: this.languageService.getTranslation('common.close')
+    }).subscribe(({ message, close }) => {
+      this.snackBar.open(message, close, {
+        duration: 3000,
+        panelClass: ['info-snackbar'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+    });
   }
 
   onSubmit(): void {
     if (this.registrationForm.valid) {
       const formData = {
         ...this.registrationForm.value
-        // photoFile: this.photoFile
       };
       this.reg.createRegistration(formData).subscribe({
-        next:(res) => {
-          alert("Success");
+        next: (res) => {
+          forkJoin({
+            message: this.languageService.getTranslation('registration.success'),
+            close: this.languageService.getTranslation('common.close')
+          }).subscribe(({ message, close }) => {
+            this.snackBar.open(message, close, {
+              duration: 5000,
+              panelClass: ['success-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          });
+          this.resetForm();
+        },
+        error: (error) => {
+          forkJoin({
+            message: this.languageService.getTranslation('registration.error'),
+            close: this.languageService.getTranslation('common.close')
+          }).subscribe(({ message, close }) => {
+            this.snackBar.open(message, close, {
+              duration: 5000,
+              panelClass: ['error-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            });
+          });
+          console.error('Registration error:', error);
         }
-      })
-      
-      console.log('Form submitted:', formData);
-      // TODO: Send data to backend service
+      });
     } else {
       // Mark all fields as touched to trigger validation messages
       Object.keys(this.registrationForm.controls).forEach(field => {
         const control = this.registrationForm.get(field);
         control?.markAsTouched({ onlySelf: true });
+      });
+      
+      forkJoin({
+        message: this.languageService.getTranslation('registration.validationError'),
+        close: this.languageService.getTranslation('common.close')
+      }).subscribe(({ message, close }) => {
+        this.snackBar.open(message, close, {
+          duration: 5000,
+          panelClass: ['error-snackbar'],
+          horizontalPosition: 'end',
+          verticalPosition: 'top'
+        });
       });
     }
   }
@@ -161,6 +238,17 @@ export class RegistrationFormComponent implements OnInit {
   removePhoto(): void {
     this.imagePreview = null;
     this.registrationForm.get('photo')?.setValue(null);
+    forkJoin({
+      message: this.languageService.getTranslation('registration.photoUpload.removed'),
+      close: this.languageService.getTranslation('common.close')
+    }).subscribe(({ message, close }) => {
+      this.snackBar.open(message, close, {
+        duration: 3000,
+        panelClass: ['info-snackbar'],
+        horizontalPosition: 'end',
+        verticalPosition: 'top'
+      });
+    });
   }
 
   getNationality(): void {

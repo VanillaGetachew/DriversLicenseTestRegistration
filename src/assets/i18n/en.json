@@ -152,6 +152,10 @@
     },
     "registration": {
       "title": "Driver License Exam Registration",
+      "success": "Registration completed successfully!",
+      "error": "Error occurred during registration. Please try again.",
+      "validationError": "Please fill in all required fields correctly.",
+      "formReset": "Form has been reset.",
       "personalInfo": {
         "title": "Personal Information",
         "firstNameAmh": "ስም",
@@ -169,7 +173,11 @@
       },
       "photoUpload": {
         "title": "Photo Upload",
-        "hint": "JPG or PNG, max 5MB"
+        "hint": "JPG or PNG, max 5MB",
+        "success": "Photo uploaded successfully!",
+        "invalidType": "Only JPG or PNG files are allowed.",
+        "sizeLimit": "File size exceeds 5MB limit.",
+        "removed": "Photo has been removed."
       }
     },
     "sidebar": {

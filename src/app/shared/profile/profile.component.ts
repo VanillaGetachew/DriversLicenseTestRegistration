@@ -41,7 +41,7 @@ export class ProfileComponent implements OnInit {
   searchFirstName: string = '';
   searchFatherName: string = '';
   searchGrandfatherName: string = '';
-  searchResult: any = null; // Holds the result after search
+  searchResults: any[] = []; // Changed from searchResult to searchResults array
   showProfileSection: boolean = false; // Controls when to show the full profile section
   displayedColumns: string[] = ['appointmentDate', 'examType', 'startDate', 'endDate', 'period', 'result'];
   examSchedule: ExamSchedule[] = [];
@@ -134,80 +134,22 @@ export class ProfileComponent implements OnInit {
       }
     });
   }
-
-  // Schedule a new exam appointment
-  scheduleExam(): void {
-    console.log('Scheduling exam');
-    // In a real application, this would open a scheduling dialog or navigate to a scheduling page
-    
-    const futureDate = new Date();
-    futureDate.setDate(futureDate.getDate() + 7);
-    
-    this.examAppointment = {
-      date: futureDate,
-      time: '10:00 AM',
-      examType: this.userData.englishExam ? 'Theory Exam (English)' : 'Theory Exam (Amharic)',
-      location: 'Main Testing Center, Addis Ababa'
-    };
-    
-    this.languageService.getTranslation('profile.examScheduled').subscribe(translatedText => {
-      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-        duration: 3000
-      });
-    });
-  }
-
-  // Reschedule an existing exam appointment
-  rescheduleExam(): void {
-    console.log('Rescheduling exam');
-    // In a real application, this would open a rescheduling dialog
-    
-    if (this.examAppointment) {
-      const futureDate = new Date();
-      futureDate.setDate(futureDate.getDate() + 14);
-      
-      this.examAppointment.date = futureDate;
-      this.examAppointment.time = '2:00 PM';
-      
-      this.languageService.getTranslation('profile.examRescheduled').subscribe(translatedText => {
-        this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-          duration: 3000
-        });
-      });
-    } else {
-      this.scheduleExam();
-    }
-  }
-
-  // Cancel an existing exam appointment
-  cancelExam(): void {
-    console.log('Canceling exam');
-    // In a real application, this would show a confirmation dialog before canceling
-    
-    this.examAppointment = null;
-    
-    this.languageService.getTranslation('profile.examCanceled').subscribe(translatedText => {
-      this.snackBar.open(translatedText, this.translate.instant('common.close'), {
-        duration: 3000
-      });
-    });
-  }
-
   searchProfile(): void {
     this.showProfileSection = false;
     this.userData = null;
-    this.searchResult = null;
+    this.searchResults = []; // Reset search results array
     if (!this.searchId && !this.searchFirstName && !this.searchFatherName && !this.searchGrandfatherName) {
       this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
       });
       return;
     }
-    // For demo: only search by National ID (extend as needed)
+
+    // For demo: search by National ID
     if (this.searchId) {
       this.userDataService.getUserDataByNationalId(this.searchId).subscribe(data => {
         if (data) {
-          this.searchResult = data;
+          this.searchResults = [data]; // Add single result to array
         } else {
           this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
             this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
@@ -224,7 +166,7 @@ export class ProfileComponent implements OnInit {
           (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
           (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
         ) {
-          this.searchResult = userData;
+          this.searchResults = [userData]; // Add single result to array
         } else {
           this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
             this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
@@ -238,13 +180,11 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  goToProfileSection(): void {
-    if (this.searchResult) {
-      this.userData = this.searchResult;
-      this.showProfileSection = true;
-      // Load exam schedule when profile is loaded
-      this.loadExamSchedule();
-    }
+  selectProfile(profile: any): void {
+    this.userData = profile;
+    this.showProfileSection = true;
+    // Load exam schedule when profile is loaded
+    this.loadExamSchedule();
   }
 
   backToSearch(): void {
