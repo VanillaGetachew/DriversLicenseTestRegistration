@@ -1,26 +1,27 @@
 <div class="sidebar" [class.sidebar-collapsed]="!isOpen">
   <div class="logo-container">
     <a [routerLink]="['/dashboard']" class="logo">
-      <span class="logo-icon">{{ 'sidebar.logo' | translate }}</span>
+      <mat-icon class="logo-icon" *ngIf="!isOpen">dashboard</mat-icon>
+      <span class="logo-text" [class.hidden]="!isOpen">{{ 'sidebar.logo' | translate }}</span>
     </a>
   </div>
 
   <nav class="sidebar-nav">
     <ul class="nav-list">
       <li class="nav-item" [routerLinkActive]="'active'">
-        <a [routerLink]="['/registration']" class="nav-link">
+        <a [routerLink]="['/registration']" class="nav-link" matTooltip="{{ 'sidebar.registration' | translate }}" [matTooltipDisabled]="isOpen">
           <mat-icon class="nav-icon">app_registration</mat-icon>
           <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.registration' | translate }}</span>
         </a>
       </li>
       <li class="nav-item" [routerLinkActive]="'active'">
-        <a [routerLink]="['/license-upgrade']" class="nav-link">
+        <a [routerLink]="['/license-upgrade']" class="nav-link" matTooltip="{{ 'sidebar.licenseUpgrade' | translate }}" [matTooltipDisabled]="isOpen">
           <mat-icon class="nav-icon">upgrade</mat-icon>
           <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.licenseUpgrade' | translate }}</span>
         </a>
       </li>
       <li class="nav-item" [routerLinkActive]="'active'">
-        <a [routerLink]="['/reports']" class="nav-link">
+        <a [routerLink]="['/reports']" class="nav-link" matTooltip="{{ 'sidebar.reports' | translate }}" [matTooltipDisabled]="isOpen">
           <mat-icon class="nav-icon">assessment</mat-icon>
           <span class="nav-text" [class.hidden]="!isOpen">{{ 'sidebar.reports' | translate }}</span>
         </a>
