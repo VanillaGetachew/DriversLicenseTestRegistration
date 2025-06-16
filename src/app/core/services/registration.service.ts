@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { Registration, RegistrationRequest } from '../models/registration.model';
+import { Registration, GetRegistration} from '../models/registration.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -35,18 +35,18 @@ export class RegistrationService {
     );
   }
 
-  getRegistrationById(id: string): Observable<Registration> {
-    return this.http.get<Registration>(`${this.apiUrl}/NationalID`, {
+  getRegistrationById(id: string): Observable<GetRegistration> {
+    return this.http.get<GetRegistration>(`${this.apiUrl}/NationalID`, {
       params: { nationalId: id.toString() }
     });
   }
-  getRegistrationByName(name: string): Observable<Registration> {
-    return this.http.get<Registration>(`${this.apiUrl}/Name`, {
+  getRegistrationByName(name: string): Observable<GetRegistration> {
+    return this.http.get<GetRegistration>(`${this.apiUrl}/Name`, {
       params: { name: name }
     });
   }
-  getRegistrationByPhone(phone: string): Observable<Registration> {
-    return this.http.get<Registration>(`${this.apiUrl}/Phone`, {
+  getRegistrationByPhone(phone: string): Observable<GetRegistration> {
+    return this.http.get<GetRegistration>(`${this.apiUrl}/Phone`, {
       params: { phone: phone }
     });
   }

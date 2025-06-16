@@ -437,7 +437,7 @@ export class RegistrationFormComponent implements OnInit {
     let value = input.value.replace(/\D/g, '');
     
     if (value.length > 10) {
-      value = value.substring(0, 9);
+      value = value.substring(0, 10);
     }
     
     input.value = value;
