@@ -16,6 +16,7 @@ import { AmharicOnlyDirective } from '../../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../../core/Validator/validator';
 import { TranslateModule } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-registration-form',
@@ -33,7 +34,8 @@ import { LanguageService } from '../../../core/services/language.service';
     MatNativeDateModule,
     MatIconModule,
     AmharicOnlyDirective,
-    TranslateModule
+    TranslateModule,
+    MatSnackBarModule
   ]
 })
 export class RegistrationFormComponent implements OnInit {
@@ -56,7 +58,9 @@ export class RegistrationFormComponent implements OnInit {
   constructor(private fb: FormBuilder,
     private dropdown: DropdownService,
     private reg: RegistrationService,
-    private languageService: LanguageService) {
+    private languageService: LanguageService,
+    private snackBar: MatSnackBar,
+    private router: Router) {
     this.registrationForm = this.fb.group({
       // Personal Information
 
@@ -138,65 +142,84 @@ export class RegistrationFormComponent implements OnInit {
   //   }
   // }
 
-  onPhotoSelected(event: Event): void {
-  const fileInput = event.target as HTMLInputElement;
-  if (fileInput.files && fileInput.files.length > 0) {
-    const file = fileInput.files[0];
-
-    // Validate file type
-    if (!['image/jpeg', 'image/png'].includes(file.type)) {
-      alert('Only JPG or PNG files are allowed');
-      return;
-    }
-
-    // Validate file size (5MB max)
-    if (file.size > 5 * 1024 * 1024) {
-      alert('File size exceeds 5MB limit');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = () => {
-      const base64 = (reader.result as string).split(',')[1];
-      this.imagePreview = reader.result;
-      this.registrationForm.patchValue({ photoBase64: base64 });
-      this.registrationForm.get('photoBase64')?.updateValueAndValidity();
-    };
-    reader.readAsDataURL(file);
+  private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
+    this.languageService.getTranslation(messageKey).subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        
+        this.snackBar.open(message, action, { 
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
   }
-}
 
+  onPhotoSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        this.showToast('registration.photoUpload.invalidType', 'common.close', 3000, 'error');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        this.showToast('registration.photoUpload.sizeLimit', 'common.close', 3000, 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        this.imagePreview = reader.result;
+        this.registrationForm.patchValue({ photoBase64: base64 });
+        this.registrationForm.get('photoBase64')?.updateValueAndValidity();
+        
+        this.showToast('registration.photoUpload.success', 'common.close', 2000, 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   resetForm(): void {
     this.registrationForm.reset();
-    // this.photoFile = null;
+    this.imagePreview = null;
+    this.showToast('registration.formReset', 'common.close', 2000, 'success');
   }
+
   onSubmit(): void {
-    
     if (this.registrationForm.valid) {
-      // const formData = {
-      //   ...this.registrationForm.value
-      //   // photoFile: this.photoFile
-      // };
       const formData = {
-      ...this.registrationForm.value,
-      photo: this.registrationForm.get('photoBase64')?.value // rename to 'photo' if backend expects that
+        ...this.registrationForm.value,
+        photo: this.registrationForm.get('photoBase64')?.value
       };
 
       this.reg.createRegistration(formData).subscribe({
-        next:(res) => {
-          alert("Success");
+        next: (res) => {
+          this.showToast('registration.success', 'common.close', 3000, 'success');
+          this.router.navigate(['/profile']);
+        },
+        error: (error) => {
+          this.showToast('registration.error', 'common.close', 5000, 'error');
+          console.error('Registration error:', error);
         }
-      })
-      
-      console.log('Form submitted:', formData);
-      // TODO: Send data to backend service
+      });
     } else {
-      // Mark all fields as touched to trigger validation messages
       Object.keys(this.registrationForm.controls).forEach(field => {
         const control = this.registrationForm.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
+      
+      this.showToast('registration.validationError', 'common.close', 3000, 'error');
     }
   }
 
@@ -313,7 +336,7 @@ export class RegistrationFormComponent implements OnInit {
       }
     });
   }
-onPhoneInput(event: Event): void {
+  onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
     

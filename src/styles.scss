@@ -5,3 +5,29 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.custom-toast {
+  background: #323232;
+  color: white;
+  border-radius: 4px;
+  margin: 8px;
+  box-shadow: 0 3px 5px -1px rgba(0,0,0,.2), 0 6px 10px 0 rgba(0,0,0,.14), 0 1px 18px 0 rgba(0,0,0,.12);
+  
+  .mat-simple-snackbar-action {
+    color: #ffd740;
+  }
+
+  &.success-toast {
+    background: #4caf50;
+    .mat-simple-snackbar-action {
+      color: white;
+    }
+  }
+
+  &.error-toast {
+    background: #f44336;
+    .mat-simple-snackbar-action {
+      color: white;
+    }
+  }
+}

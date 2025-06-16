@@ -134,6 +134,10 @@
   },
   "registration": {
     "title": "የመንጃ ፈቃድ ፈተና ምዝገባ",
+    "success": "ምዝገባው በተሳካ ሁኔታ ተጠናቅቋል!",
+    "error": "በምዝገባው ወቅት ስህተት ተከስቷል። እባክዎ እንደገና ይሞከሩ።",
+    "validationError": "እባክዎ ሁሉንም አስገዳጅ መስኮች በትክክል ይሙሉ።",
+    "formReset": "ቅጹ ተመልሷል",
     "personalInfo": {
       "title": "የግል መረጃ",
       "firstNameAmh": "ስም",
@@ -150,11 +154,14 @@
     },
     "photoUpload": {
       "title": "ፎቶ መስቀል",
-      "hint": "JPG ወይም PNG, ቢበዛ 5 ሜባ"
+      "hint": "JPG ወይም PNG, ቢበዛ 5 ሜባ",
+      "invalidType": "JPG ወይም PNG ፋይሎች ብቻ ይፈቀዳሉ",
+      "sizeLimit": "የፋይሉ መጠን 5MB ን አልፏል",
+      "success": "ፎቶው በተሳካ ሁኔታ ተጫኗል"
     }
   },
   "sidebar": {
-    "logo": "ዳሽ",
+    "logo": "ዳሽቦርድ",
     "registration": "ምዝገባ",
     "licenseUpgrade": "ፈቃድ ማሻሻያ",
     "reports": "ሪፖርቶች"
@@ -214,7 +221,10 @@
       "licenseType": "የፈቃድ አይነት",
       "issueDate": "የተሰጠበት ቀን",
       "expiryDate": "የሚያልቅበት ቀን",
-      "upgrade": "አሳድግ"
+      "upgrade": "አሳድግ",
+      "success": "ፈቃዱ በተሳካ ሁኔታ ተገኝቷል",
+      "error": "ፈቃዱን በመፈለግ ላይ ስህተት ተፈጥሯል",
+      "validation": "እባክዎ ቢያንስ አንድ የፍለጋ መስክ ያስገቡ"
     }
   }
 } 

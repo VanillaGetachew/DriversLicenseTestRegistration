@@ -548,4 +548,24 @@ setPhotoUrl(photoBase64: string): void {
   getLicenceLabel(code: number): string {
     return this.licenceCategory.find(l => l.code === code)?.displayNameAmh || code.toString();
   }
+
+  private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
+    this.languageService.getTranslation(messageKey).subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        
+        this.snackBar.open(message, action, { 
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
+  }
 }
