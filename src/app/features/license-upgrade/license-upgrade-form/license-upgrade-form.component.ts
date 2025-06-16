@@ -92,7 +92,12 @@ onSubmit(): void {
         }
       this.upgrade.upgradeDriver(this.licenceGrade, this.licenseId, this.upgradeForm.value.nationalId, formData).subscribe({
         next:(res) => {
-          alert("Success");
+          // alert("Success");
+          this.showToast('registration.success', 'common.close', 3000, 'success');
+        },
+        error: (error) => {
+          const msg = error.error?.message || 'Unexpected error occurred';
+          this.showToast(msg, 'Close', 5000, 'error' );
         }
       })
       
@@ -102,7 +107,7 @@ onSubmit(): void {
       console.log('Form submitted:', formData);
       
       // Navigate to profile page instead of dashboard
-      this.router.navigate(['/profile']);
+      // this.router.navigate(['/profile']);
     } else {
       // Mark all fields as touched to trigger validation messages
       Object.keys(this.upgradeForm.controls).forEach(field => {
@@ -111,7 +116,25 @@ onSubmit(): void {
       });
     }
   }
-
+private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
+    this.languageService.getTranslation(messageKey).subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        
+        this.snackBar.open(message, action, { 
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
+  }
 
 
   // submitUpgradeRequest(): void {

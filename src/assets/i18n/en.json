@@ -31,6 +31,8 @@
       "noProfileFoundId": "No profile found for this National ID.",
       "noProfileFoundNames": "No profile found for the provided names.",
       "noProfileFound": "No profile found.",
+      "examNo": "Exam Number",
+      "approval": "Approval",
       "photo": {
         "upload": "Upload Photo",
         "change": "Change Photo",
@@ -40,7 +42,10 @@
         "nationalId": "National ID",
         "enterNationalId": "Enter National ID",
         "searchProfile": "Search Profile",
-        "name": "Name"
+        "name": "Name",
+        "success": "Profile found successfully",
+        "error": "Error searching for profile",
+        "validation": "Please fill in the required search fields"
       },
       "backToSearch": "Back to Search",
       "subtitle": "Driver's License Applicant",
@@ -165,9 +170,9 @@
     "registration": {
       "title": "Driver License Exam Registration",
       "success": "Registration completed successfully!",
-      "error": "Error occurred during registration. Please try again.",
+      "error": "An error occurred during registration. Please try again.",
       "validationError": "Please fill in all required fields correctly.",
-      "formReset": "Form has been reset.",
+      "formReset": "Form has been reset",
       "personalInfo": {
         "title": "Personal Information",
         "firstNameAmh": "ስም",
@@ -242,7 +247,21 @@
         "licenseType": "License Type",
         "issueDate": "Issue Date",
         "expiryDate": "Expiry Date",
-        "upgrade": "Upgrade"
+        "upgrade": "Upgrade",
+        "success": "License found successfully",
+        "error": "Error searching for license",
+        "validation": "Please enter at least one search criterion"
+      },
+      "upgrade":{
+        "request": "Licence Upgrade Request",
+        "detail": "Current Licence Details",
+        "loading": "Loading license information...",
+        "form": "Upgrade Request Form",
+        "licenceCategory": "Licence Category",
+        "education": "Education",
+        "nationalId": "National ID",
+        "cancel": "Cancel",
+        "submit": "Submit Upgrade Request"
       }
     }
   }

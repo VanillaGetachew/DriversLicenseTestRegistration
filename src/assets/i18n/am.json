@@ -31,6 +31,8 @@
     "noProfileFoundId": "በዚህ ብሔራዊ መታወቂያ ምንም መገለጫ አልተገኘም።",
     "noProfileFoundNames": "ለተሰጡት ስሞች ምንም መገለጫ አልተገኘም።",
     "noProfileFound": "ምንም መገለጫ አልተገኘም።",
+    "examNo": "የመፈተኛ ቁጥር",
+    "approval": "ማረጋገጫ",
     "photo": {
       "upload": "ፎቶ ጫን",
       "change": "ፎቶ ቀይር",
@@ -122,8 +124,9 @@
         "period": "ጊዜ",
         "result": "ውጤት"
       }
-    },
-    "footer": {
+    }
+  },
+  "footer": {
       "contactUs": {
         "title": "ያግኙን",
         "phone": "ስልክ",
@@ -133,7 +136,7 @@
       "quickLinks": {
         "title": "ፈጣን አገናኞች",
         "aboutUs": "ስለ እኛ",
-        "faqs": "ተደጋጋሚ ጥያFቄዎች",
+        "faqs": "ተደጋጋሚ ጥያቄዎች",
         "privacyPolicy": "የግላዊነት ፖሊሲ",
         "termsOfService": "የአገልግሎት ውሎች"
       },
@@ -144,14 +147,13 @@
         "sun": "እሁድ፡ ዝግ"
       },
       "copyright": "© 2024 የሹፌሮች ፈቃድ አስተዳደር ስርዓት። ሁሉም መብቶች የተጠበቁ ናቸው።"
-    }
-  },
+    },
   "registration": {
     "title": "የመንጃ ፈቃድ ፈተና ምዝገባ",
     "success": "ምዝገባው በተሳካ ሁኔታ ተጠናቅቋል!",
     "error": "በምዝገባው ወቅት ስህተት ተከስቷል። እባክዎ እንደገና ይሞከሩ።",
-    "validationError": "እባክዎ ሁሉንም አስገዳጅ መስኮች በትክክል ያስገቡ።",
-    "formReset": "ቅጹ ተስተካክሏል።",
+    "validationError": "እባክዎ ሁሉንም አስገዳጅ መስኮች በትክክል ይሙሉ።",
+    "formReset": "ቅጹ ተመልሷል",
     "personalInfo": {
       "title": "የግል መረጃ",
       "firstNameAmh": "ስም",
@@ -242,7 +244,21 @@
       "licenseType": "የመንጃ ፈቃድ አይነት",
       "issueDate": "የተሰጠበት ቀን",
       "expiryDate": "የሚያልቅበት ቀን",
-      "upgrade": "አሳድግ"
-    }
+      "upgrade": "አሳድግ",
+      "success": "ፈቃዱ በተሳካ ሁኔታ ተገኝቷል",
+      "error": "ፈቃዱን በመፈለግ ላይ ስህተት ተፈጥሯል",
+      "validation": "እባክዎ ቢያንስ አንድ የፍለጋ መስክ ያስገቡ"
+    },
+      "upgrade":{
+        "request": "የመንጃ ፈቃድ ማሳደግያ ማመልከቻ",
+        "detail": "የመንጃ ፈቃድ መረጃ",
+        "loading": "የመንጃ ፈቃድ መረጃ በመጫን ላይ...",
+        "form": "የማሳድጊያ ማምልከቻ ቅጽ",
+        "licenceCategory": "የመንጃ ፈቃድ ደረጃ",
+        "education": "የትምህርት ደረጃ",
+        "nationalId": "ብሔራዊ መታወቂያ",
+        "cancel": "ሰርዝ",
+        "submit": "የማሳድጊያ ማምልከቻ አስገባ"
+      }
   }
 } 

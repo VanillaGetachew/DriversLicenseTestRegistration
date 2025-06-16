@@ -175,8 +175,8 @@ clickhandle():void{
     this.showProfileSection = false;
     this.userData = null;
     this.searchResult = null;
-    this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
-  .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
+  //   this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
+  // .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
     // if (!this.searchId && !this.searchName) {
     if (!this.searchId && !this.phoneNumber) {
       this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
@@ -185,18 +185,20 @@ clickhandle():void{
       return;
     }
     if (this.searchId) {
-      this.reg.getRegistrationById(this.searchId).subscribe(data => {
-        if (data) {
+      this.reg.getRegistrationById(this.searchId).subscribe({
+        next: (data) => {
           this.searchResult = data;
           this.userData = data;
            this.setPhotoUrl(data.photo);
-        } else {
-          this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
-            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-          });
+        },
+        error: (error) => {
+          const msg = 'Applicant Not Found'
+          this.showToast(msg, 'Close', 5000, 'error' );
         }
-      });
+      },
+    );
     } 
+    
     // if (this.searchName) {
     //   this.reg.getRegistrationByName(this.searchName).subscribe(data => {
     //     if (data) {
@@ -211,41 +213,42 @@ clickhandle():void{
     //   });
     // }
     if (this.phoneNumber) {
-      this.reg.getRegistrationByPhone(this.phoneNumber).subscribe(data => {
-        if (data) {
+      this.reg.getRegistrationByPhone(this.phoneNumber).subscribe({
+        next: (data) => {
           this.searchResult = data;
           this.userData = data;
            this.setPhotoUrl(data.photo);
-        } else {
-          this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
-            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-          });
-        }
+        },
+        error: (error) => {
+          const msg = 'Applicant Not Found'
+          this.showToast(msg, 'Close', 5000, 'error' );
+        } 
       });
-    }else {
-      // For demo: fallback to localStorage and match by names
-      const storedData = localStorage.getItem('user_registration_data');
-      if (storedData) {
-        const userData = JSON.parse(storedData);
-        if (
-          (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
-          (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
-          (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
-        ) {
-          // this.searchResults = userData; // Add single result to array
-        } else {
-          this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
-            this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-          });
-        }
-      } else {
-        this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
-          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-        });
-      }
     }
+    // else {
+    //   // For demo: fallback to localStorage and match by names
+    //   const storedData = localStorage.getItem('user_registration_data');
+    //   if (storedData) {
+    //     const userData = JSON.parse(storedData);
+    //     if (
+    //       (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
+    //       (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
+    //       (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
+    //     ) {
+    //       // this.searchResults = userData; // Add single result to array
+    //     } else {
+    //       this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
+    //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+    //       });
+    //     }
+    //   } else {
+    //     this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
+    //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+    //     });
+    //   }
+    // }
   }
-
+  
 setPhotoUrl(photoBase64: string): void {
   if (!photoBase64) {
     this.photoUrl = null;
@@ -496,5 +499,25 @@ loadLookupswithParam(): void {
           }
         });
     }
+  }
+
+  private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
+    this.languageService.getTranslation(messageKey).subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        
+        this.snackBar.open(message, action, { 
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
   }
 }

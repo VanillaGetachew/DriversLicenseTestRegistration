@@ -42,6 +42,10 @@ licenceGrade: string,
 education: number,
 
 nationalId: string,
+
+dataApproved: string,
+
+registrationNo: string
 }
 
 export interface RegistrationRequest {

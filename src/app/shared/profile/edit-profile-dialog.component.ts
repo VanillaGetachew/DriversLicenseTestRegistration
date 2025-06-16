@@ -10,13 +10,14 @@ import { RegistrationService } from '../../core/services/registration.service';
 import { Router } from '@angular/router';
 import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../core/Validator/validator';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-edit-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective, TranslateModule],
   template: `
-    <h2 mat-dialog-title>Edit Profile Information</h2>
+    <h2 mat-dialog-title>{{'profile.title' | translate}}</h2>
     <mat-dialog-content>
       <form [formGroup]="editForm" class="edit-form">
         <!-- Photo Upload Section -->
@@ -32,11 +33,11 @@ import { minAgeValidator } from '../../core/Validator/validator';
             <input type="file" accept="image/*" (change)="onPhotoSelected($event)" id="photoUpload" hidden>
             <button mat-stroked-button color="primary" (click)="triggerPhotoUpload()">
               <mat-icon>photo_camera</mat-icon>
-              {{ photoPreview ? 'Change Photo' : 'Upload Photo' }}
+              {{ (imagePreview ? 'profile.photo.change': 'profile.photo.upload') | translate }}
             </button>
             <button *ngIf="photoPreview" mat-stroked-button color="warn" (click)="removePhoto()">
               <mat-icon>delete</mat-icon>
-              Remove
+              {{'common.remove' | translate}}
             </button>
           </div>
           <input type="hidden" formControlName="photoBase64">
@@ -45,17 +46,17 @@ import { minAgeValidator } from '../../core/Validator/validator';
         <div class="form-grid">
           <!-- Personal Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>First Name (Amharic)</mat-label>
+            <mat-label>ስም</mat-label>
             <input matInput formControlName="firstNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Father's Name (Amharic)</mat-label>
+            <mat-label>የአባት ስም</mat-label>
             <input matInput formControlName="fatherNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Grandfather's Name (Amharic)</mat-label>
+            <mat-label>የአያት ስም</mat-label>
             <input matInput formControlName="grandNameAmh" type="text" amharicOnly>
           </mat-form-field>
 
@@ -75,37 +76,37 @@ import { minAgeValidator } from '../../core/Validator/validator';
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Sex</mat-label>
+            <mat-label>{{ 'profile.personal.sex' | translate }}</mat-label>
             <mat-select formControlName="sex">
               <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Birth Date</mat-label>
+            <mat-label>{{ 'profile.personal.birthDate' | translate }}</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="birthDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
             <mat-error
               *ngIf="editForm.get('birthDate')?.hasError('minAge') && editForm.get('birthDate')?.touched"
-              >Minimum age must be 18
+              >{{'common.age' | translate}}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Birth Place</mat-label>
+            <mat-label>{{ 'profile.personal.birthPlace' | translate }}</mat-label>
             <input matInput formControlName="birthPlace">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Blood Type</mat-label>
+            <mat-label>{{ 'profile.personal.bloodType' | translate }}</mat-label>
             <mat-select formControlName="bloodType">
               <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-              <mat-label>Nationality</mat-label>
+              <mat-label>{{ 'profile.personal.nationality' | translate }}</mat-label>
               <mat-select formControlName="nationality">
                 <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
               </mat-select>
@@ -113,7 +114,7 @@ import { minAgeValidator } from '../../core/Validator/validator';
 
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Education</mat-label>
+            <mat-label>{{ 'profile.personal.education' | translate }}</mat-label>
             <mat-select formControlName="education">
               <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
@@ -121,16 +122,16 @@ import { minAgeValidator } from '../../core/Validator/validator';
 
           <!-- Contact Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
-            <mat-label>Phone Number</mat-label>
+            <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
             <input matInput formControlName="tel1" (input)="onPhoneInput($event)">
             <mat-error *ngIf="editForm.get('tel1')?.hasError('pattern')">
-              Please enter exactly 10 digits
+              {{'common.phoneDigit' | translate}}
             </mat-error>
           </mat-form-field>
             
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Region</mat-label>
+            <mat-label>{{ 'profile.contact.region' | translate }}</mat-label>
             <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
               <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
@@ -139,41 +140,41 @@ import { minAgeValidator } from '../../core/Validator/validator';
 
         
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Town</mat-label>
+            <mat-label>{{ 'profile.contact.town' | translate }}</mat-label>
             <mat-select  (selectionChange)="onTownChange($event.value)" formControlName="town">
               <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
         
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Woreda</mat-label>
+            <mat-label>{{ 'profile.contact.woreda' | translate }}</mat-label>
             <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
               <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>Kebele</mat-label>
+            <mat-label>{{ 'profile.contact.kebele' | translate }}</mat-label>
             <mat-select [disabled]="!kebele.length" formControlName="kebele">
               <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
-            <mat-label>House No.</mat-label>
+            <mat-label>{{ 'profile.contact.houseNo' | translate }}</mat-label>
             <input matInput formControlName="houseNo">
           </mat-form-field>
 
           <!-- License Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-            <mat-label>License Category</mat-label>
+            <mat-label>{{ 'profile.license.grade' | translate }}</mat-label>
             <mat-select formControlName="licenceGrade">
               <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
             </mat-select>
           </mat-form-field>
 
             <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
-              <mat-label>Language</mat-label>
+              <mat-label>{{ 'profile.license.examLanguage' | translate }}</mat-label>
               <mat-select formControlName="isTheoryExamEnglish">
                 <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
               </mat-select>
@@ -182,8 +183,8 @@ import { minAgeValidator } from '../../core/Validator/validator';
       </form>
     </mat-dialog-content>
     <mat-dialog-actions align="end">
-      <button mat-button (click)="onCancel()">Cancel</button>
-      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!editForm.valid">Save</button>
+      <button mat-button (click)="onCancel()">{{'common.cancel' | translate}}</button>
+      <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!editForm.valid">{{'common.save' | translate}}</button>
     </mat-dialog-actions>
   `,
   styles: [`

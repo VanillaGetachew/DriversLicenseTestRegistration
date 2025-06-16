@@ -61,7 +61,8 @@ export class RegistrationFormComponent implements OnInit {
     private reg: RegistrationService,
     private languageService: LanguageService,
     private snackBar: MatSnackBar,
-    private translate: TranslateService) {
+    private translate: TranslateService,
+    private router: Router) {
     this.registrationForm = this.fb.group({
       // Personal Information
 
@@ -111,72 +112,72 @@ export class RegistrationFormComponent implements OnInit {
     document.getElementById('photoUpload')?.click();
   }
 
-  onPhotoSelected(event: Event): void {
-  // const fileInput = event.target as HTMLInputElement;
-  // if (fileInput.files && fileInput.files.length > 0) {
-  //   const file = fileInput.files[0];
+  // onPhotoSelected(event: Event): void {
+  // // const fileInput = event.target as HTMLInputElement;
+  // // if (fileInput.files && fileInput.files.length > 0) {
+  // //   const file = fileInput.files[0];
 
-  //   // Validate file type
-  //   if (!['image/jpeg', 'image/png'].includes(file.type)) {
-  //     alert('Only JPG or PNG files are allowed');
-  //     return;
-    const fileInput = event.target as HTMLInputElement;
-    if (fileInput.files && fileInput.files.length > 0) {
-      const file = fileInput.files[0];
+  // //   // Validate file type
+  // //   if (!['image/jpeg', 'image/png'].includes(file.type)) {
+  // //     alert('Only JPG or PNG files are allowed');
+  // //     return;
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     const file = fileInput.files[0];
       
-      // Validate file type
-      if (!['image/jpeg', 'image/png'].includes(file.type)) {
-        forkJoin({
-          message: this.languageService.getTranslation('registration.photoUpload.invalidType'),
-          close: this.languageService.getTranslation('common.close')
-        }).subscribe(({ message, close }) => {
-          this.snackBar.open(message, close, {
-            duration: 3000,
-            panelClass: ['error-snackbar'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-        });
-        return;
-      }
+  //     // Validate file type
+  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
+  //       forkJoin({
+  //         message: this.languageService.getTranslation('registration.photoUpload.invalidType'),
+  //         close: this.languageService.getTranslation('common.close')
+  //       }).subscribe(({ message, close }) => {
+  //         this.snackBar.open(message, close, {
+  //           duration: 3000,
+  //           panelClass: ['error-snackbar'],
+  //           horizontalPosition: 'end',
+  //           verticalPosition: 'top'
+  //         });
+  //       });
+  //       return;
+  //     }
       
-      // Validate file size (5MB max)
-      if (file.size > 5 * 1024 * 1024) {
-        forkJoin({
-          message: this.languageService.getTranslation('registration.photoUpload.sizeLimit'),
-          close: this.languageService.getTranslation('common.close')
-        }).subscribe(({ message, close }) => {
-          this.snackBar.open(message, close, {
-            duration: 3000,
-            panelClass: ['error-snackbar'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-        });
-        return;
-      }
+  //     // Validate file size (5MB max)
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       forkJoin({
+  //         message: this.languageService.getTranslation('registration.photoUpload.sizeLimit'),
+  //         close: this.languageService.getTranslation('common.close')
+  //       }).subscribe(({ message, close }) => {
+  //         this.snackBar.open(message, close, {
+  //           duration: 3000,
+  //           panelClass: ['error-snackbar'],
+  //           horizontalPosition: 'end',
+  //           verticalPosition: 'top'
+  //         });
+  //       });
+  //       return;
+  //     }
       
-      const reader = new FileReader();
-      reader.onload = () => {
-        const base64 = (reader.result as string).split(',')[1];
-        this.imagePreview = reader.result;
-        this.registrationForm.patchValue({ photoBase64: base64 });
-      this.registrationForm.get('photoBase64')?.updateValueAndValidity();
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const base64 = (reader.result as string).split(',')[1];
+  //       this.imagePreview = reader.result;
+  //       this.registrationForm.patchValue({ photoBase64: base64 });
+  //     this.registrationForm.get('photoBase64')?.updateValueAndValidity();
         
-        forkJoin({
-          message: this.languageService.getTranslation('registration.photoUpload.success'),
-          close: this.languageService.getTranslation('common.close')
-        }).subscribe(({ message, close }) => {
-          this.snackBar.open(message, close, {
-            duration: 3000,
-            panelClass: ['success-snackbar'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          });
-        });
-      };
-      reader.readAsDataURL(file);
-    }
+  //       forkJoin({
+  //         message: this.languageService.getTranslation('registration.photoUpload.success'),
+  //         close: this.languageService.getTranslation('common.close')
+  //       }).subscribe(({ message, close }) => {
+  //         this.snackBar.open(message, close, {
+  //           duration: 3000,
+  //           panelClass: ['success-snackbar'],
+  //           horizontalPosition: 'end',
+  //           verticalPosition: 'top'
+  //         });
+  //       });
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
 
     // // Validate file size (5MB max)
     // if (file.size > 5 * 1024 * 1024) {
@@ -193,31 +194,95 @@ export class RegistrationFormComponent implements OnInit {
   //   };
   //   reader.readAsDataURL(file);
   // }
-}
+// }
+  // onPhotoSelected(event: Event): void {
+  //   const fileInput = event.target as HTMLInputElement;
+  //   if (fileInput.files && fileInput.files.length > 0) {
+  //     const file = fileInput.files[0];
+      
+  //     // Validate file type
+  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
+  //       alert('Only JPG or PNG files are allowed');
+  //       return;
+  //     }
+      
+  //     // Validate file size (5MB max)
+  //     if (file.size > 5 * 1024 * 1024) {
+  //       alert('File size exceeds 5MB limit');
+  //       return;
+  //     }
+      
+  //     // this.photoFile = file;
+      
 
+  //     const reader = new FileReader();
+  //     reader.onload = () => {
+  //       const base64 = (reader.result as string).split(',')[1];
+  //       this.imagePreview = reader.result;
+
+  //     this.registrationForm.patchValue({photo: base64});
+  //     this.registrationForm.get('photo')?.updateValueAndValidity();
+  //     };
+  //     reader.readAsDataURL(file);
+  //   }
+  // }
+
+  private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
+    this.languageService.getTranslation(messageKey).subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        
+        this.snackBar.open(message, action, { 
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
+  }
+
+  onPhotoSelected(event: Event): void {
+    const fileInput = event.target as HTMLInputElement;
+    if (fileInput.files && fileInput.files.length > 0) {
+      const file = fileInput.files[0];
+
+      if (!['image/jpeg', 'image/png'].includes(file.type)) {
+        this.showToast('registration.photoUpload.invalidType', 'common.close', 3000, 'error');
+        return;
+      }
+
+      if (file.size > 5 * 1024 * 1024) {
+        this.showToast('registration.photoUpload.sizeLimit', 'common.close', 3000, 'error');
+        return;
+      }
+
+      const reader = new FileReader();
+      reader.onload = () => {
+        const base64 = (reader.result as string).split(',')[1];
+        this.imagePreview = reader.result;
+        this.registrationForm.patchValue({ photoBase64: base64 });
+        this.registrationForm.get('photoBase64')?.updateValueAndValidity();
+        
+        this.showToast('registration.photoUpload.success', 'common.close', 2000, 'success');
+      };
+      reader.readAsDataURL(file);
+    }
+  }
 
   resetForm(): void {
     this.registrationForm.reset();
     this.imagePreview = null;
-    forkJoin({
-      message: this.languageService.getTranslation('registration.formReset'),
-      close: this.languageService.getTranslation('common.close')
-    }).subscribe(({ message, close }) => {
-      this.snackBar.open(message, close, {
-        duration: 3000,
-        panelClass: ['info-snackbar'],
-        horizontalPosition: 'end',
-        verticalPosition: 'top'
-      });
-    });
+    this.showToast('registration.formReset', 'common.close', 2000, 'success');
   }
+
   onSubmit(): void {
-    
     if (this.registrationForm.valid) {
-      // const formData = {
-      //   ...this.registrationForm.value
-      //   // photoFile: this.photoFile
-      // };
       const formData = {
       ...this.registrationForm.value,
       photo: this.registrationForm.get('photoBase64')?.value
@@ -225,53 +290,21 @@ export class RegistrationFormComponent implements OnInit {
 
       this.reg.createRegistration(formData).subscribe({
         next: (res) => {
-          forkJoin({
-            message: this.languageService.getTranslation('registration.success'),
-            close: this.languageService.getTranslation('common.close')
-          }).subscribe(({ message, close }) => {
-            this.snackBar.open(message, close, {
-              duration: 5000,
-              panelClass: ['success-snackbar'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
-          });
-          this.resetForm();
+          this.showToast('registration.success', 'common.close', 3000, 'success');
+          // this.router.navigate(['/profile']);
         },
         error: (error) => {
-          forkJoin({
-            message: this.languageService.getTranslation('registration.error'),
-            close: this.languageService.getTranslation('common.close')
-          }).subscribe(({ message, close }) => {
-            this.snackBar.open(message, close, {
-              duration: 5000,
-              panelClass: ['error-snackbar'],
-              horizontalPosition: 'end',
-              verticalPosition: 'top'
-            });
-          });
-          console.error('Registration error:', error);
+          const msg = error.error?.message || 'Unexpected error occurred';
+          this.showToast(msg, 'Close', 5000, 'error' );
         }
-      })
-      
-      console.log('Form submitted:', formData);
+      });
     } else {
       Object.keys(this.registrationForm.controls).forEach(field => {
         const control = this.registrationForm.get(field);
         control?.markAsTouched({ onlySelf: true });
       });
       
-      forkJoin({
-        message: this.languageService.getTranslation('registration.validationError'),
-        close: this.languageService.getTranslation('common.close')
-      }).subscribe(({ message, close }) => {
-        this.snackBar.open(message, close, {
-          duration: 5000,
-          panelClass: ['error-snackbar'],
-          horizontalPosition: 'end',
-          verticalPosition: 'top'
-        });
-      });
+      this.showToast('registration.validationError', 'common.close', 3000, 'error');
     }
   }
 
@@ -399,7 +432,7 @@ export class RegistrationFormComponent implements OnInit {
       }
     });
   }
-onPhoneInput(event: Event): void {
+  onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     

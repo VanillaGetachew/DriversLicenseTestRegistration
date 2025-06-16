@@ -13,6 +13,10 @@ $danger-color: #e74c3c;
   padding: 24px;
   max-width: 1200px;
   margin: 0 auto;
+  
+  @media (max-width: 768px) {
+    padding: 16px;
+  }
 }
 
 .profile-search-bar {
@@ -24,6 +28,12 @@ $danger-color: #e74c3c;
   align-items: center;
   margin-bottom: 32px;
   gap: 24px;
+  
+  @media (max-width: 768px) {
+    flex-direction: column;
+    text-align: center;
+    gap: 16px;
+  }
 }
 
 .profile-photo {
@@ -35,6 +45,11 @@ $danger-color: #e74c3c;
   display: flex;
   align-items: center;
   justify-content: center;
+  
+  @media (max-width: 768px) {
+    width: 100px;
+    height: 100px;
+  }
   
   img {
     width: 100%;
@@ -54,6 +69,12 @@ $danger-color: #e74c3c;
       width: 64px;
       height: 64px;
       color: #2c3e50;
+      
+      @media (max-width: 768px) {
+        font-size: 48px;
+        width: 48px;
+        height: 48px;
+      }
     }
   }
 }
@@ -63,6 +84,10 @@ $danger-color: #e74c3c;
     margin: 0;
     font-size: 24px;
     color: #2c3e50;
+    
+    @media (max-width: 768px) {
+      font-size: 20px;
+    }
   }
   
   .subtitle {
@@ -77,18 +102,33 @@ $danger-color: #e74c3c;
 }
 
 mat-card {
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 24px;
+  position: relative;
+  width: 100%;
+  box-sizing: border-box;
   
   mat-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     padding: 16px;
     border-bottom: 1px solid #eee;
+    position: relative;
     
     mat-card-title {
       margin: 0;
       font-size: 18px;
       color: #2c3e50;
+      padding-right: 48px;
     }
+  }
+  
+  .edit-button {
+    position: absolute;
+    right: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 1;
   }
   
   mat-card-content {
@@ -98,8 +138,13 @@ mat-card {
 
 .info-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 16px;
+  width: 100%;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .info-item {
@@ -115,15 +160,20 @@ mat-card {
   .value {
     font-size: 16px;
     color: #2c3e50;
+    word-break: break-word;
   }
 }
 
 .documents-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 24px;
   overflow-x: auto;
   padding-bottom: 16px;
+  
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
+  }
 }
 
 .document-item {
@@ -229,6 +279,10 @@ mat-card {
       display: flex;
       gap: 12px;
       justify-content: flex-end;
+      
+      @media (max-width: 768px) {
+        flex-direction: column;
+      }
     }
   }
   
@@ -253,25 +307,6 @@ mat-card {
 
 .card-actions {
   margin-left: auto;
-}
-
-@media (max-width: 768px) {
-  .profile-container {
-    padding: 16px;
-  }
-  
-  .profile-header {
-    flex-direction: column;
-    text-align: center;
-  }
-  
-  .info-grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .documents-grid {
-    grid-template-columns: 1fr;
-  }
 }
 
 .profile-actions {

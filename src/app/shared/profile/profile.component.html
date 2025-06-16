@@ -78,6 +78,8 @@
       </div>
       <div class="profile-name">
         <h1>{{ userData.firstName }} {{ userData.fatherName }} {{ userData.grandfatherName }}</h1>
+        <h3 class="subtitle">{{'profile.examNo' | translate}}: {{userData.registrationNo}}</h3>
+        <h4 class="subtitle">{{'profile.approval' | translate }}: {{userData.dataApproved}}</h4>
         <p class="subtitle">{{ 'profile.subtitle' | translate }}</p>
       </div>
     </div>
