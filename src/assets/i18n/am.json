@@ -2,12 +2,14 @@
   "common": {
     "save": "አስቀምጥ",
     "cancel": "ሰርዝ",
-    "edit": "አርትዕ",
+    "edit": "ርማት",
     "delete": "ሰርዝ",
     "remove": "አስወግድ",
     "upload": "ጫን",
     "change": "ቀይር",
     "required": "አስገዳጅ",
+    "age": "ዕድሜ ቢያንስ 18 መሆን ",
+    "phoneDigit": "እባክዎ 10 ቁጥሮች ያስገቡ",
     "reset": "ዳግም አስጀምር",
     "register": "ይመዝገቡ",
     "close": "ዝጋ",
@@ -19,7 +21,7 @@
     "actions": "ድርጊቶች"
   },
   "profile": {
-    "title": "የመገለጫ መረጃ አርትዕ",
+    "title": "የመገለጫ መረጃ እርማት",
     "updateSuccess": "መገለጫው በተሳካ ሁኔታ ተዘምኗል",
     "updateError": "መገለጫውን በማዘመን ላይ ስህተት ተፈጥሯል",
     "examScheduled": "ፈተናው በተሳካ ሁኔታ ቀጠሮ ተይዞለታል!",
@@ -176,6 +178,7 @@
   },
   "sidebar": {
     "logo": "ዳሽ",
+    "board": "ቦርድ",
     "registration": "ምዝገባ",
     "licenseUpgrade": "ፈቃድ ማሻሻያ",
     "reports": "ሪፖርቶች"
@@ -214,7 +217,8 @@
       "studentsByGender": "በጾታ ተማሪዎች ብዛት",
       "passFailSummary": "የማለፍ-የመውደቅ ማጠቃለያ",
       "licenseGrade": "የፍቃድ ደረጃ",
-      "count": "ብዛት"
+      "count": "ብዛት",
+      "legend": "መግለጫ"
     }
   },
   "header": {
@@ -225,14 +229,17 @@
   },
   "licenseUpgrade": {
     "search": {
-      "title": "ለማሳደግ ፈቃድ ፈልግ",
-      "licenseGrade": "የፈቃድ ደረጃ",
-      "licenseNumber": "የፈቃድ ቁጥር",
-      "enterLicenseNumber": "የፈቃድ ቁጥር ያስገቡ",
+      "title": "የመንጃ ፈቃድ መፈለግያ",
+      "name": "ስም",
+      "licenseGrade": "የመንጃ ፈቃድ ደረጃ",
+      "licenseNumber": "የመንጃ ፈቃድ ቁጥር",
+      "enterLicenseNumber": "የመንጃ ፈቃድ ቁጥር ያስገቡ",
       "all": "ሁሉም",
-      "foundResults": "{{count}} {{count === 1 ? 'ውጤት' : 'ውጤቶች'}} ተገኝተዋል",
+      "result": "ውጤት",
+      "results": "ውጤቶች",
+      "foundResults": "{{count}} {{resultWord}} ተገኝተዋል",
       "noResults": "ከፍለጋዎ ጋር የሚጣጣሙ ፈቃዶች አልተገኙም",
-      "licenseType": "የፈቃድ አይነት",
+      "licenseType": "የመንጃ ፈቃድ አይነት",
       "issueDate": "የተሰጠበት ቀን",
       "expiryDate": "የሚያልቅበት ቀን",
       "upgrade": "አሳድግ"

@@ -8,6 +8,8 @@
       "upload": "Upload",
       "change": "Change",
       "required": "Required",
+      "age": "Minimum age must be 18",
+      "phoneDigit": "Please enter exactly 10 digits",
       "reset": "Reset",
       "register": "Register",
       "close": "Close",
@@ -156,7 +158,8 @@
         "studentsByGender": "Number of Students by Gender",
         "passFailSummary": "Pass-Fail Summary",
         "licenseGrade": "License Grade",
-        "count": "Count"
+        "count": "Count",
+        "legend": "legend"
       }
     },
     "registration": {
@@ -191,6 +194,7 @@
     },
     "sidebar": {
       "logo": "Dash",
+      "board": "board",
       "registration": "Registration",
       "licenseUpgrade": "License Upgrade",
       "reports": "Reports"
@@ -226,11 +230,14 @@
     "licenseUpgrade": {
       "search": {
         "title": "Search for a License to Upgrade",
+        "name": "Name",
         "licenseGrade": "License Grade",
         "licenseNumber": "License Number",
         "enterLicenseNumber": "Enter license number",
         "all": "All",
-        "foundResults": "Found {{count}} {{count === 1 ? 'result' : 'results'}}",
+        "result": "result",
+        "results": "results",
+        "foundResults": "Found {{count}} {{resultWord}}",
         "noResults": "No licenses found matching your search criteria",
         "licenseType": "License Type",
         "issueDate": "Issue Date",

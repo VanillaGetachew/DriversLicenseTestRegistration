@@ -403,7 +403,7 @@ onPhoneInput(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = input.value.replace(/\D/g, '');
     
-    if (value.length > 9) {
+    if (value.length > 10) {
       value = value.substring(0, 9);
     }
     
