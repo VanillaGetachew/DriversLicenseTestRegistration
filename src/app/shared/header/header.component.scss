@@ -48,12 +48,12 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px; /* Space between language selector and profile icon */
+  gap: 16px;
 }
 
 /* Ensure language selector button inherits styles */
 app-language-selector {
-  display: flex; /* Make it a flex container to align its content */
+  display: flex;
   align-items: center;
   
   .language-button {
