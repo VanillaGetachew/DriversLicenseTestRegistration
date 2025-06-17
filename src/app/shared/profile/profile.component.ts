@@ -95,19 +95,31 @@ export class ProfileComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.userDataService.getUserData().subscribe(data => {
-      this.userData = data;
-      this.loadLookups();
-      this.loadLookupswithParam();
-      console.log('Profile loaded user data:', this.userData);
+     this.route.paramMap.subscribe((params) => {
+      const nationalId = String(params.get('id'));
+      // console.log('Pet ID from Params:', petId);
+
+      if (!nationalId || nationalId == null) {
+        console.warn('Invalid National ID:', nationalId);
+        return;
+      }
+
+      this.showProfile(nationalId);
     });
+    
+    // this.userDataService.getUserData().subscribe(data => {
+    //   this.userData = data;
+    //   this.loadLookups();
+    //   this.loadLookupswithParam();
+    //   console.log('Profile loaded user data:', this.userData);
+    // });
 
-    this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
+    // this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
 
-    if (!this.searchId) {
-      this.errorMessage = 'National ID is missing from the URL.';
-      return;
-    }
+    // if (!this.searchId) {
+    //   this.errorMessage = 'National ID is missing from the URL.';
+    //   return;
+    // }
 
     this.fetchDocuments();
   }
@@ -169,7 +181,28 @@ clickhandle():void{
     });
   }
 
+  showProfile(nationalId: any): void {
+    this.showProfileSection = false;
+    this.userData = null;
+    this.searchResult = null;
 
+    if (!nationalId || nationalId <= 0) {
+      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+      });
+      return;
+    }
+
+      this.reg.getRegistrationById(nationalId).subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.setPhotoUrl(data.photo);
+          this.showProfileSection = true;
+          this.loadExamSchedule();
+        }
+      },
+    );
+  }
 
   searchProfile(): void {
     this.showProfileSection = false;
@@ -263,7 +296,6 @@ setPhotoUrl(photoBase64: string): void {
     if (this.searchResult) {
       this.userData = this.searchResult;
       this.showProfileSection = true;
-      // Load exam schedule when profile is loaded
       this.loadExamSchedule();
     }
   }
@@ -454,33 +486,63 @@ loadLookupswithParam(): void {
 }
   
   getNationalityLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.nationality.find(n => n.code === code)?.amdescription || code;
   }
   getSexLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.sex.find(s => s.id === id)?.nameAmharic || id.toString();
   }
   getEducationLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.education.find(e => e.id === id)?.nameAmharic || id.toString();
   }
   getBloodType(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.bloodType.find(b => b.code === code)?.amdescription || code;
   }
   getRegionLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.region.find(e => e.code === code)?.amDescription || code;
   }
   getTownLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.town.find(e => e.code === code)?.amDescription || code;
   }
   getWoredaLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.woreda.find(e => e.code === code)?.amDescription || code;
   }
   getKebeleLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.kebele.find(e => e.code === code)?.amDescription || code;
   }
   getLanguageLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.language.find(l => l.id === id)?.nameAmharic || id.toString();
   }
   getLicenceLabel(code: number | string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
   const codeNum = typeof code === 'string' ? parseInt(code, 10) : code;
   const found = this.licenceCategory.find(l => l.code === codeNum);
   return found?.displayNameAmh || codeNum.toString();

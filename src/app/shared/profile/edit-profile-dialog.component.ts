@@ -11,11 +11,12 @@ import { Router } from '@angular/router';
 import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../core/Validator/validator';
 import { TranslateModule } from '@ngx-translate/core';
+import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
 
 @Component({
   selector: 'app-edit-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective, TranslateModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective, EnglishOnlyDirective, TranslateModule],
   template: `
     <h2 mat-dialog-title>{{'profile.title' | translate}}</h2>
     <mat-dialog-content>
@@ -62,17 +63,17 @@ import { TranslateModule } from '@ngx-translate/core';
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required>
+            <input matInput formControlName="firstName" required type="text" englishOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" required>
+            <input matInput formControlName="fatherName" required type="text" englishOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandName" required>
+            <input matInput formControlName="grandName" required type="text" englishOnly>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">

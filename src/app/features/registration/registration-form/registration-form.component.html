@@ -32,14 +32,14 @@
       
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required>
+            <input matInput formControlName="firstName" required type="text" englishOnly>
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
       
 
           <mat-form-field appearance="outline">
             <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" required>
+            <input matInput formControlName="fatherName" required required type="text" englishOnly>
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
       
@@ -47,7 +47,7 @@
         
           <mat-form-field appearance="outline">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandName" required>
+            <input matInput formControlName="grandName" required required type="text" englishOnly>
             <mat-error>{{ 'common.required' | translate }}</mat-error>
           </mat-form-field>
         

@@ -36,6 +36,10 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
       },
       {
+        path: 'profile/:id',
+        loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
+      },
+      {
         path: '',
         redirectTo: 'dashboard',
         pathMatch: 'full'

@@ -18,6 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
+import { EnglishOnlyDirective } from '../../../core/Validator/englishValidator';
 
 @Component({
   selector: 'app-registration-form',
@@ -35,6 +36,7 @@ import { forkJoin } from 'rxjs';
     MatNativeDateModule,
     MatIconModule,
     AmharicOnlyDirective,
+    EnglishOnlyDirective,
     TranslateModule,
     MatSnackBarModule
   ]
@@ -291,7 +293,7 @@ export class RegistrationFormComponent implements OnInit {
       this.reg.createRegistration(formData).subscribe({
         next: (res) => {
           this.showToast('registration.success', 'common.close', 3000, 'success');
-          // this.router.navigate(['/profile']);
+          this.router.navigate(['/profile', res?.nationalId || formData.nationalId]);
         },
         error: (error) => {
           const msg = error.error?.message || 'Unexpected error occurred';
@@ -443,4 +445,26 @@ export class RegistrationFormComponent implements OnInit {
     input.value = value;
     this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
   }
+  // allowOnlyLetters(event: KeyboardEvent) {
+  //   const inputChar = event.key;
+  //   if (!/^[a-zA-Z]$/.test(inputChar)) {
+  //     event.preventDefault();
+  //   }
+  // }
+  allowOnlyEnglishLetters(event: KeyboardEvent) {
+  const charCode = event.key.charCodeAt(0);
+
+  // Allow uppercase (A-Z) and lowercase (a-z)
+  const isEnglishLetter =
+    (charCode >= 65 && charCode <= 90) || // A–Z
+    (charCode >= 97 && charCode <= 122);  // a–z
+
+  if (!isEnglishLetter) {
+    event.preventDefault();
+  }
+}
+sanitizeInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  input.value = input.value.replace(/[^a-zA-Z]/g, '');
+}
 }
