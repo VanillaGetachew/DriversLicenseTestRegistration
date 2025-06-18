@@ -435,14 +435,13 @@ export class RegistrationFormComponent implements OnInit {
     });
   }
   onPhoneInput(event: Event): void {
-    const input = event.target as HTMLInputElement;
-    let value = input.value.replace(/\D/g, '');
-    
-    if (value.length > 10) {
-      value = value.substring(0, 10);
-    }
-    
-    input.value = value;
-    this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
-  }
+  const input = event.target as HTMLInputElement;
+  if (!input) return;
+
+  let value = input.value.replace(/\D/g, '').substring(0, 10);
+
+  // Only update the form control, let Angular bind it back to the input
+  this.registrationForm.get('tel1')?.setValue(value, { emitEvent: false });
+}
+
 }

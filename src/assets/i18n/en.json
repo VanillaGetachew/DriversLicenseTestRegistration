@@ -69,9 +69,9 @@
       "contact": {
         "phoneNumber": "Phone Number",
         "region": "Region",
-        "town": "Town",
-        "woreda": "Woreda",
-        "kebele": "Kebele",
+        "town": "Zone/ City",
+        "woreda": "Woreda/ Sub City",
+        "kebele": "Kebele/ Woreda",
         "houseNo": "House No."
       },
       "license": {

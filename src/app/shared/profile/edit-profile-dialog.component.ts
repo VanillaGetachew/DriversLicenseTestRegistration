@@ -124,7 +124,7 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
           <!-- Contact Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
             <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
-            <input matInput formControlName="tel1" (input)="onPhoneInput($event)">
+            <input matInput type="text" formControlName="tel1" (input)="onPhoneInput($event)" maxlength="10" required/>
             <mat-error *ngIf="editForm.get('tel1')?.hasError('pattern')">
               {{'common.phoneDigit' | translate}}
             </mat-error>
@@ -555,16 +555,13 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
         }
       });
     }
-    onPhoneInput(event: Event): void {
-      const input = event.target as HTMLInputElement;
-      let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-      
-      // Ensure we don't exceed max length
-      if (value.length > 10) {
-        value = value.substring(0, 10);
-      }
-      
-      input.value = value;
-      this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
-    }
+  onPhoneInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input) return;
+
+  let value = input.value.replace(/\D/g, '').substring(0, 10);
+
+  // Only update the form control, let Angular bind it back to the input
+  this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
+}
 } 
