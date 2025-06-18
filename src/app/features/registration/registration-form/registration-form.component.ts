@@ -41,6 +41,8 @@ import { forkJoin } from 'rxjs';
 })
 export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
+  isSubmitted = false;
+  isDragging = false;
   // photoFile: File | null = null;
   photoPreviewUrl: string | null = null;
   nationality:nationality[] = [];
@@ -55,6 +57,16 @@ export class RegistrationFormComponent implements OnInit {
   language: language[]=[];
   licenceCategory: licenceCategory[]=[];
   imagePreview: string | ArrayBuffer | null = null;
+  documentPreviews: {
+    idCard?: string;
+    birthCertificate?: string;
+    medicalCertificate?: string;
+    educationCertificate?: string;
+  } = {};
+  idCardFileName: string = '';
+  birthCertificateFileName: string = '';
+  medicalCertificateFileName: string = '';
+  educationCertificateFileName: string = '';
 
   constructor(private fb: FormBuilder,
     private dropdown: DropdownService,
@@ -94,7 +106,12 @@ export class RegistrationFormComponent implements OnInit {
       
       // Photo
       // photo: ['']
-      photoBase64: new FormControl('', Validators.required)
+      photoBase64: new FormControl('', Validators.required),
+      // Documents
+      idCard: new FormControl('', Validators.required),
+      birthCertificate: new FormControl('', Validators.required),
+      medicalCertificate: new FormControl('', Validators.required),
+      educationCertificate: new FormControl('', Validators.required)
     });
   }
 
@@ -111,121 +128,6 @@ export class RegistrationFormComponent implements OnInit {
   triggerPhotoUpload(): void {
     document.getElementById('photoUpload')?.click();
   }
-
-  // onPhotoSelected(event: Event): void {
-  // // const fileInput = event.target as HTMLInputElement;
-  // // if (fileInput.files && fileInput.files.length > 0) {
-  // //   const file = fileInput.files[0];
-
-  // //   // Validate file type
-  // //   if (!['image/jpeg', 'image/png'].includes(file.type)) {
-  // //     alert('Only JPG or PNG files are allowed');
-  // //     return;
-  //   const fileInput = event.target as HTMLInputElement;
-  //   if (fileInput.files && fileInput.files.length > 0) {
-  //     const file = fileInput.files[0];
-      
-  //     // Validate file type
-  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
-  //       forkJoin({
-  //         message: this.languageService.getTranslation('registration.photoUpload.invalidType'),
-  //         close: this.languageService.getTranslation('common.close')
-  //       }).subscribe(({ message, close }) => {
-  //         this.snackBar.open(message, close, {
-  //           duration: 3000,
-  //           panelClass: ['error-snackbar'],
-  //           horizontalPosition: 'end',
-  //           verticalPosition: 'top'
-  //         });
-  //       });
-  //       return;
-  //     }
-      
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5 * 1024 * 1024) {
-  //       forkJoin({
-  //         message: this.languageService.getTranslation('registration.photoUpload.sizeLimit'),
-  //         close: this.languageService.getTranslation('common.close')
-  //       }).subscribe(({ message, close }) => {
-  //         this.snackBar.open(message, close, {
-  //           duration: 3000,
-  //           panelClass: ['error-snackbar'],
-  //           horizontalPosition: 'end',
-  //           verticalPosition: 'top'
-  //         });
-  //       });
-  //       return;
-  //     }
-      
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       const base64 = (reader.result as string).split(',')[1];
-  //       this.imagePreview = reader.result;
-  //       this.registrationForm.patchValue({ photoBase64: base64 });
-  //     this.registrationForm.get('photoBase64')?.updateValueAndValidity();
-        
-  //       forkJoin({
-  //         message: this.languageService.getTranslation('registration.photoUpload.success'),
-  //         close: this.languageService.getTranslation('common.close')
-  //       }).subscribe(({ message, close }) => {
-  //         this.snackBar.open(message, close, {
-  //           duration: 3000,
-  //           panelClass: ['success-snackbar'],
-  //           horizontalPosition: 'end',
-  //           verticalPosition: 'top'
-  //         });
-  //       });
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-
-    // // Validate file size (5MB max)
-    // if (file.size > 5 * 1024 * 1024) {
-    //   alert('File size exceeds 5MB limit');
-    //   return;
-    // }
-
-  //   const reader = new FileReader();
-  //   reader.onload = () => {
-  //     const base64 = (reader.result as string).split(',')[1];
-  //     this.imagePreview = reader.result;
-  //     this.registrationForm.patchValue({ photoBase64: base64 });
-  //     this.registrationForm.get('photoBase64')?.updateValueAndValidity();
-  //   };
-  //   reader.readAsDataURL(file);
-  // }
-// }
-  // onPhotoSelected(event: Event): void {
-  //   const fileInput = event.target as HTMLInputElement;
-  //   if (fileInput.files && fileInput.files.length > 0) {
-  //     const file = fileInput.files[0];
-      
-  //     // Validate file type
-  //     if (!['image/jpeg', 'image/png'].includes(file.type)) {
-  //       alert('Only JPG or PNG files are allowed');
-  //       return;
-  //     }
-      
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5 * 1024 * 1024) {
-  //       alert('File size exceeds 5MB limit');
-  //       return;
-  //     }
-      
-  //     // this.photoFile = file;
-      
-
-  //     const reader = new FileReader();
-  //     reader.onload = () => {
-  //       const base64 = (reader.result as string).split(',')[1];
-  //       this.imagePreview = reader.result;
-
-  //     this.registrationForm.patchValue({photo: base64});
-  //     this.registrationForm.get('photo')?.updateValueAndValidity();
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
 
   private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default'): void {
     this.languageService.getTranslation(messageKey).subscribe(message => {
@@ -276,15 +178,29 @@ export class RegistrationFormComponent implements OnInit {
   }
 
   resetForm(): void {
+    this.isSubmitted = false;
     this.registrationForm.reset();
     this.imagePreview = null;
+    this.documentPreviews = {};
+    this.idCardFileName = '';
+    this.birthCertificateFileName = '';
+    this.medicalCertificateFileName = '';
+    this.educationCertificateFileName = '';
     this.showToast('registration.formReset', 'common.close', 2000, 'success');
   }
 
   onSubmit(): void {
+    this.isSubmitted = true;
+    
     if (this.registrationForm.valid) {
       const formData = {
       ...this.registrationForm.value,
+        documents: {
+          idCard: this.documentPreviews.idCard,
+          birthCertificate: this.documentPreviews.birthCertificate,
+          medicalCertificate: this.documentPreviews.medicalCertificate,
+          educationCertificate: this.documentPreviews.educationCertificate
+        },
       photo: this.registrationForm.get('photoBase64')?.value
       };
 
@@ -442,5 +358,113 @@ export class RegistrationFormComponent implements OnInit {
     
     input.value = value;
     this.registrationForm.get('phone')?.setValue(value, { emitEvent: false });
+  }
+
+  isImageURL(url: string | undefined): boolean {
+    return url?.startsWith('data:image/') ?? false;
+  }
+
+  isPdfURL(url: string | undefined): boolean {
+    return url?.startsWith('data:application/pdf') ?? false;
+  }
+
+  triggerFileInput(inputId: string): void {
+    document.getElementById(inputId)?.click();
+  }
+
+  onDragOver(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = true;
+  }
+
+  onDragLeave(event: DragEvent): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+  }
+
+  onDrop(event: DragEvent, documentType: string): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.isDragging = false;
+    
+    const files = event.dataTransfer?.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      const fileEvent = { target: { files: [file] } } as unknown as Event;
+      this.onFileSelected(fileEvent, documentType);
+    }
+  }
+
+  onFileSelected(event: Event, documentType: string) {
+    const file = (event.target as HTMLInputElement).files?.[0];
+    if (file) {
+      if (this.isValidFileType(file)) {
+        if (this.isValidFileSize(file)) {
+          this.handleFileUpload(file, documentType);
+          this.snackBar.open(
+            this.translate.instant('profile.documents.uploadSuccess'),
+            'Close',
+            { 
+              duration: 3000,
+              panelClass: ['success-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }
+          );
+        } else {
+          this.snackBar.open(
+            this.translate.instant('profile.documents.fileTooLarge'),
+            'Close',
+            { 
+              duration: 3000,
+              panelClass: ['error-snackbar'],
+              horizontalPosition: 'end',
+              verticalPosition: 'top'
+            }
+          );
+        }
+      } else {
+        this.snackBar.open(
+          this.translate.instant('profile.documents.invalidFileType'),
+          'Close',
+          { 
+            duration: 3000,
+            panelClass: ['error-snackbar'],
+            horizontalPosition: 'end',
+            verticalPosition: 'top'
+          }
+        );
+      }
+    }
+  }
+
+  private isValidFileType(file: File): boolean {
+    const validTypes = ['image/jpeg', 'image/png', 'application/pdf'];
+    return validTypes.includes(file.type);
+  }
+
+  private isValidFileSize(file: File): boolean {
+    const maxSize = 5 * 1024 * 1024; // 5MB
+    return file.size <= maxSize;
+  }
+
+  private handleFileUpload(file: File, documentType: string) {
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      const base64 = e.target.result;
+      this.documentPreviews = {
+        ...this.documentPreviews,
+        [documentType]: base64
+      };
+      
+      // Update the form control
+      const controlName = `${documentType}Base64`;
+      if (this.registrationForm.get(controlName)) {
+        this.registrationForm.get(controlName)?.setValue(base64);
+      }
+      };
+      reader.readAsDataURL(file);
   }
 }

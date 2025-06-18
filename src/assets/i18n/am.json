@@ -93,16 +93,21 @@
       "amharic": "አማርኛ"
     },
     "documents": {
-      "title": "የሚያስፈልጉ ሰነዶች",
-      "nationalIdCard": "ብሔራዊ መታወቂያ ካርድ",
+      "title": "የሚፈለጉ ሰነዶች",
+      "nationalIdCard": "የብሄራዊ መታወቂያ ካርድ",
       "pdfDocument": "PDF ሰነድ",
-      "notUploaded": "አልተጫነም",
+      "notUploaded": "ሰነድ አልተጫነም",
       "uploadReplace": "ጫን/ቀይር",
-      "birthCertificate": "የትውልድ የምስክር ወረቀት",
-      "medicalCertificate": "የህክምና የምስክር ወረቀት",
-      "educationCertificate": "የትምህርት ማስረጃ",
+      "birthCertificate": "የትውልድ ማረጋገጫ",
+      "medicalCertificate": "የሕክምና ማረጋገጫ",
+      "educationCertificate": "የትምህርት ማረጋገጫ",
       "supportingDocuments": "ደጋፊ ሰነዶች",
-      "noDocumentsUploaded": "ምንም ሰነዶች አልተጫኑም።"
+      "noDocumentsUploaded": "ምንም ሰነዶች አልተጫኑም።",
+      "dragOrClick": "ለመጫን ይጎትቱ ወይም ይጫኑ",
+      "uploadHint": "የሚደገፉ ቅርጸቶች፡ JPG, PNG, PDF (ከፍተኛ 5MB)",
+      "invalidFileType": "የተሳሳተ ፋይል አይነት። እባክዎ JPG, PNG, ወይም PDF ፋይሎችን ብቻ ያስገቡ።",
+      "fileTooLarge": "ፋይሉ በጣም ትልልቅ ነው። ከፍተኛው መጠን 5MB ነው።",
+      "uploadSuccess": "ሰነዱ በተሳካ ሁኔታ ተጫኗል"
     },
     "exam": {
       "title": "የፈተና ቀጠሮ",

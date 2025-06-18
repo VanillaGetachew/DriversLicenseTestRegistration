@@ -242,6 +242,153 @@
   <input type="hidden" formControlName="photoBase64" />
 </div>
 
+<!-- Document Upload Section -->
+<div class="form-section">
+  <h2>{{ 'profile.documents.title' | translate }}</h2>
+
+  <div class="documents-grid">
+    <!-- ID Card -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>badge</mat-icon>
+        {{ 'profile.documents.nationalIdCard' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.idCard">
+        <img *ngIf="documentPreviews.idCard && isImageURL(documentPreviews.idCard)" [src]="documentPreviews.idCard" alt="ID Card">
+        <div *ngIf="documentPreviews.idCard && isPdfURL(documentPreviews.idCard)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{idCardFileName}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.idCard"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'idCard')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'idCard')" id="idCardUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('idCardUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.idCard && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Birth Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>description</mat-icon>
+        {{ 'profile.documents.birthCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.birthCertificate">
+        <img *ngIf="documentPreviews.birthCertificate && isImageURL(documentPreviews.birthCertificate)" [src]="documentPreviews.birthCertificate" alt="Birth Certificate">
+        <div *ngIf="documentPreviews.birthCertificate && isPdfURL(documentPreviews.birthCertificate)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{birthCertificateFileName}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.birthCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'birthCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'birthCertificate')" id="birthCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('birthCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.birthCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medical Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>medical_services</mat-icon>
+        {{ 'profile.documents.medicalCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.medicalCertificate">
+        <img *ngIf="documentPreviews.medicalCertificate && isImageURL(documentPreviews.medicalCertificate)" [src]="documentPreviews.medicalCertificate" alt="Medical Certificate">
+        <div *ngIf="documentPreviews.medicalCertificate && isPdfURL(documentPreviews.medicalCertificate)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{medicalCertificateFileName}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.medicalCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'medicalCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'medicalCertificate')" id="medicalCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('medicalCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.medicalCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>school</mat-icon>
+        {{ 'profile.documents.educationCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.educationCertificate">
+        <img *ngIf="documentPreviews.educationCertificate && isImageURL(documentPreviews.educationCertificate)" [src]="documentPreviews.educationCertificate" alt="Education Certificate">
+        <div *ngIf="documentPreviews.educationCertificate && isPdfURL(documentPreviews.educationCertificate)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{educationCertificateFileName}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.educationCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'educationCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'educationCertificate')" id="educationCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('educationCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.educationCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 
     <!-- Form Actions -->
     <div class="form-actions">
