@@ -1,14 +1,29 @@
+// .header {
+//   display: flex;
+//   justify-content: space-between;
+//   align-items: center;
+//   padding: 0 16px;
+//   height: 64px; /* Standard Angular Material toolbar height */
+//   background-color: #2c3e50; /* Example: Primary color */
+//   color: white;
+//   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  
+// }
 .header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000; // Ensure it's above other content
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 0 16px;
-  height: 64px; /* Standard Angular Material toolbar height */
-  background-color: #2c3e50; /* Example: Primary color */
+  height: 64px;
+  background-color: #2c3e50;
   color: white;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
 }
-
 .header-left {
   display: flex;
   align-items: center;
@@ -33,12 +48,12 @@
 .header-right {
   display: flex;
   align-items: center;
-  gap: 16px; /* Space between language selector and profile icon */
+  gap: 16px;
 }
 
 /* Ensure language selector button inherits styles */
 app-language-selector {
-  display: flex; /* Make it a flex container to align its content */
+  display: flex;
   align-items: center;
   
   .language-button {

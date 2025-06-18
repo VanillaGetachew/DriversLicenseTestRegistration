@@ -53,4 +53,13 @@ export class DropdownService {
   getLicenceCategory(): Observable<licenceCategory[]> {
     return this.http.get<licenceCategory[]>(`${this.url}/Licence`);
   }
+  getZoneTwo(): Observable<address[]> {
+    return this.http.get<address[]>(`${this.url}/Addresses/ZoneTwo`);
+  }
+  getWoredaTwo(): Observable<address[]> {
+    return this.http.get<address[]>(`${this.url}/Addresses/WoredaTwo`);
+  }
+  getKebeleTwo(): Observable<address[]> {
+    return this.http.get<address[]>(`${this.url}/Addresses/KebeleTwo`);
+  }
 }

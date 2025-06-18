@@ -18,6 +18,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { forkJoin } from 'rxjs';
+import { EnglishOnlyDirective } from '../../../core/Validator/englishValidator';
 
 @Component({
   selector: 'app-registration-form',
@@ -35,6 +36,7 @@ import { forkJoin } from 'rxjs';
     MatNativeDateModule,
     MatIconModule,
     AmharicOnlyDirective,
+    EnglishOnlyDirective,
     TranslateModule,
     MatSnackBarModule
   ]
@@ -207,7 +209,7 @@ export class RegistrationFormComponent implements OnInit {
       this.reg.createRegistration(formData).subscribe({
         next: (res) => {
           this.showToast('registration.success', 'common.close', 3000, 'success');
-          // this.router.navigate(['/profile']);
+          this.router.navigate(['/profile', res?.nationalId || formData.nationalId]);
         },
         error: (error) => {
           const msg = error.error?.message || 'Unexpected error occurred';

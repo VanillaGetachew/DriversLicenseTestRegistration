@@ -26,6 +26,7 @@ import { TranslateModule } from '@ngx-translate/core';
   styles: [`
     .language-button {
       display: flex;
+      color:white;
       align-items: center;
       gap: 8px;
     }

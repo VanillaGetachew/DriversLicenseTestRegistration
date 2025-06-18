@@ -94,6 +94,7 @@ onSubmit(): void {
         next:(res) => {
           // alert("Success");
           this.showToast('registration.success', 'common.close', 3000, 'success');
+          this.router.navigate(['/profile', formData.nationalId]);
         },
         error: (error) => {
           const msg = error.error?.message || 'Unexpected error occurred';

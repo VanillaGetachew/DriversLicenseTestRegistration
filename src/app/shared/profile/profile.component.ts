@@ -65,6 +65,7 @@ export class ProfileComponent implements OnInit {
   documents: DocumentDTO[] = [];
   errorMessage: string = '';
   isLoading: boolean = false;
+  lookupReady = false;
 
   documentTypeMap: Record<string, number> = {
     idCard: 4,
@@ -94,28 +95,73 @@ export class ProfileComponent implements OnInit {
     private examService: ExamService
   ) { }
 
-  ngOnInit(): void {
-    this.userDataService.getUserData().subscribe(data => {
-      this.userData = data;
-      this.loadLookups();
-      this.loadLookupswithParam();
-      console.log('Profile loaded user data:', this.userData);
-    });
+//   ngOnInit(): void {
+//      this.route.paramMap.subscribe((params) => {
+//       const nationalId = String(params.get('id'));
+//       // console.log('Pet ID from Params:', petId);
 
-    this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
+//       if (!nationalId || nationalId == null) {
+//         console.warn('Invalid National ID:', nationalId);
+//         return;
+//       }
 
-    if (!this.searchId) {
-      this.errorMessage = 'National ID is missing from the URL.';
+//       this.showProfile(nationalId);
+//     });
+    
+//     this.userDataService.getUserData().subscribe(data => {
+//       this.userData = data;
+//       this.loadLookups();
+//       // this.loadLookupswithParam();
+//       console.log('Profile loaded user data:', this.userData);
+//     });
+
+//     this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
+
+//     if (!this.searchId) {
+//       this.errorMessage = 'National ID is missing from the URL.';
+//       return;
+//     }
+
+//     this.fetchDocuments();
+//   }
+
+ngOnInit(): void {
+  this.route.paramMap.subscribe((params) => {
+    const nationalId = String(params.get('id'));
+    if (!nationalId) {
+      console.warn('Invalid National ID:', nationalId);
+      this.errorMessage = 'Invalid National ID.';
       return;
     }
 
-    this.fetchDocuments();
+    this.showProfile(nationalId); // Presumably fetches profile into `userDataService`
+  });
+
+  this.userDataService.getUserData().subscribe(data => {
+    this.userData = data;
+    console.log('Profile loaded user data:', this.userData);
+
+    // Now that we have userData (with .town, etc.), load lookups
+    this.loadLookups();
+  });
+
+  this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
+  if (!this.searchId) {
+    this.errorMessage = 'National ID is missing from the URL.';
+    return;
   }
-clickhandle():void{
-  this.goToProfileSection();
+
   this.fetchDocuments();
 }
 
+clickhandle():void{
+  this.goToProfileSection();
+  this.fetchDocuments();
+
+  if (!this.lookupReady) {
+    this.loadLookups();
+  }
+}
 
   // Helper method to check if URL is an image
   isImageURL(url: string): boolean {
@@ -169,7 +215,28 @@ clickhandle():void{
     });
   }
 
+  showProfile(nationalId: any): void {
+    this.showProfileSection = false;
+    this.userData = null;
+    this.searchResult = null;
 
+    if (!nationalId || nationalId <= 0) {
+      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+      });
+      return;
+    }
+
+      this.reg.getRegistrationById(nationalId).subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.setPhotoUrl(data.photo);
+          this.showProfileSection = true;
+          this.loadExamSchedule();
+        }
+      },
+    );
+  }
 
   searchProfile(): void {
     this.showProfileSection = false;
@@ -263,7 +330,6 @@ setPhotoUrl(photoBase64: string): void {
     if (this.searchResult) {
       this.userData = this.searchResult;
       this.showProfileSection = true;
-      // Load exam schedule when profile is loaded
       this.loadExamSchedule();
     }
   }
@@ -422,65 +488,137 @@ console.log(this.userData.nationalId);
     this.dropdown.getEducation().subscribe(data => this.education = data);
     this.dropdown.getBloodType().subscribe(data => this.bloodType = data);
     this.dropdown.getRegion().subscribe(data => this.region = data);
+    this.dropdown.getZoneTwo().subscribe(data => this.town = data);
+    this.dropdown.getWoredaTwo().subscribe(data => this.woreda = data);
+    this.dropdown.getKebeleTwo().subscribe(data => this.kebele = data);
     this.dropdown.getLanguage().subscribe(data => this.language = data);
     this.dropdown.getLicenceCategory().subscribe(data => this.licenceCategory = data);
+
+    // this.loadLookupswithParam();
+    this.lookupReady = true;
   }
 
-loadLookupswithParam(): void {
-  this.dropdown.getRegion().pipe(
-    tap(regionData => this.region = regionData),
-    switchMap(regionData => {
-      const regionId = regionData[0]?.code;
-      if (!regionId) throw new Error('Region ID not found');
-      return this.dropdown.getZone(regionId);
-    }),
-    tap(zoneData => this.town = zoneData),
-    switchMap(zoneData => {
-      const zoneId = zoneData[0]?.code;
-      console.log('Zone ID being passed to getWoreda:', zoneId);
-      if (!zoneId) throw new Error('Zone ID not found');
-      return this.dropdown.getWoreda(zoneId);
-    }),
-    tap(woredaData => this.woreda = woredaData),
-    switchMap(woredaData => {
-      const woredaId = woredaData[0]?.code;
-      if (!woredaId) throw new Error('Woreda ID not found');
-      return this.dropdown.getKebele(woredaId);
-    })
-  ).subscribe({
-    next: kebeleData => this.kebele = kebeleData,
-    error: err => console.error('Error loading lookups', err)
-  });
-}
+// loadLookupswithParam(): void {
+//   this.dropdown.getRegion().pipe(
+//     tap(regionData => this.region = regionData),
+//     switchMap(regionData => {
+//       const regionId = regionData[0]?.code;
+//       if (!regionId) throw new Error('Region ID not found');
+//       return this.dropdown.getZone(regionId);
+//     }),
+//     tap(zoneData => this.town = zoneData),
+//     switchMap(zoneData => {
+//       const zoneId = zoneData[0]?.code;
+//       console.log('Zone ID being passed to getWoreda:', zoneId);
+//       if (!zoneId) throw new Error('Zone ID not found');
+//       return this.dropdown.getWoreda(zoneId);
+//     }),
+//     tap(woredaData => this.woreda = woredaData),
+//     switchMap(woredaData => {
+//       const woredaId = woredaData[0]?.code;
+//       if (!woredaId) throw new Error('Woreda ID not found');
+//       return this.dropdown.getKebele(woredaId);
+//     })
+//   ).subscribe({
+//     next: kebeleData => this.kebele = kebeleData,
+//     error: err => console.error('Error loading lookups', err)
+//   });
+// }
+// loadLookupswithParam(): void {
+//   const regionId = this.userData?.region;
+//   if (!regionId) {
+//     console.error('Region ID missing in user data');
+//     return;
+//   }
+
+//   this.dropdown.getZone(regionId).pipe(
+//     tap(zoneData => this.town = zoneData),
+//     switchMap(zoneData => {
+//       const zoneMatch = zoneData.find(z => z.code === this.userData?.town);
+//       const zoneId = zoneMatch?.code;
+//       if (!zoneId) throw new Error('Zone code not found in zone data');
+//       return this.dropdown.getWoreda(zoneId);
+//     }),
+//     tap(woredaData => this.woreda = woredaData),
+//     switchMap(woredaData => {
+//       const woredaMatch = woredaData.find(w => w.code === this.userData?.woreda);
+//       const woredaId = woredaMatch?.code;
+//       if (!woredaId) throw new Error('Woreda code not found in woreda data');
+//       return this.dropdown.getKebele(woredaId);
+//     })
+//   ).subscribe({
+//     next: kebeleData => this.kebele = kebeleData,
+//     error: err => console.error('Error loading lookups', err)
+//   });
+// }
+
   
   getNationalityLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.nationality.find(n => n.code === code)?.amdescription || code;
   }
   getSexLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.sex.find(s => s.id === id)?.nameAmharic || id.toString();
   }
   getEducationLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.education.find(e => e.id === id)?.nameAmharic || id.toString();
   }
   getBloodType(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.bloodType.find(b => b.code === code)?.amdescription || code;
   }
   getRegionLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.region.find(e => e.code === code)?.amDescription || code;
   }
+//   getRegionLabel(code: string | number): string | null {
+//     if (code == null) {
+//     return 'Unknown';
+//     }
+//   const region = this.region.find(r => r.code === code?.toString());
+//   return region ? region.amDescription : null;
+// }
+
   getTownLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.town.find(e => e.code === code)?.amDescription || code;
   }
   getWoredaLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.woreda.find(e => e.code === code)?.amDescription || code;
   }
   getKebeleLabel(code: string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
     return this.kebele.find(e => e.code === code)?.amDescription || code;
   }
   getLanguageLabel(id: number): string {
+     if (id == null) {
+    return 'Unknown';
+    }
     return this.language.find(l => l.id === id)?.nameAmharic || id.toString();
   }
   getLicenceLabel(code: number | string): string {
+     if (code == null) {
+    return 'Unknown';
+    }
   const codeNum = typeof code === 'string' ? parseInt(code, 10) : code;
   const found = this.licenceCategory.find(l => l.code === codeNum);
   return found?.displayNameAmh || codeNum.toString();
