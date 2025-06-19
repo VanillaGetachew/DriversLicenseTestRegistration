@@ -8,10 +8,11 @@ import { address, education, language, licenceCategory, nationality, sex } from 
 import { forkJoin } from 'rxjs';
 import { RegistrationService } from '../../core/services/registration.service';
 import { Router } from '@angular/router';
-import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
+import { AmharicOnlyDirective, amharicValidator } from '../../core/Validator/amharicValidator';
 import { minAgeValidator } from '../../core/Validator/minAgeValidator';
 import { TranslateModule } from '@ngx-translate/core';
-import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
+import { EnglishOnlyDirective, englishValidator } from '../../core/Validator/englishValidator';
+import { noFutureDateValidator } from '../../core/Validator/futureDateValidator';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -295,14 +296,14 @@ export class EditProfileDialogComponent implements OnInit {
   ) {
     this.editForm = this.fb.group({
       // Personal Info
-      firstNameAmh: [''],
-      fatherNameAmh: [''],
-      grandNameAmh: [''],
-      firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandName: ['', Validators.required],
+      firstNameAmh: ['', amharicValidator],
+      fatherNameAmh: ['', amharicValidator],
+      grandNameAmh: ['', amharicValidator],
+      firstName: ['', englishValidator],
+      fatherName: ['', englishValidator],
+      grandName: ['', englishValidator],
       sex: [''],
-      birthDate: ['', minAgeValidator(18)],
+      birthDate: ['', [minAgeValidator(18), noFutureDateValidator]],
       birthPlace: [''],
       bloodType: [''],
       nationality: [''],
