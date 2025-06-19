@@ -49,31 +49,49 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>ስም</mat-label>
             <input matInput formControlName="firstNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('firstNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአባት ስም</mat-label>
             <input matInput formControlName="fatherNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('fatherNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአያት ስም</mat-label>
             <input matInput formControlName="grandNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('grandNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>First Name</mat-label>
             <input matInput formControlName="firstName" required type="text">
+            <mat-error *ngIf="editForm.get('firstName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Father's Name</mat-label>
             <input matInput formControlName="fatherName" required type="text">
+            <mat-error *ngIf="editForm.get('fatherName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name</mat-label>
             <input matInput formControlName="grandName" required type="text">
+            <mat-error *ngIf="editForm.get('grandName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
@@ -88,9 +106,12 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
             <input matInput [matDatepicker]="picker" formControlName="birthDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error
-              *ngIf="editForm.get('birthDate')?.hasError('minAge') && editForm.get('birthDate')?.touched"
-              >{{'common.age' | translate}}
+            <mat-error *ngIf="birthDate?.hasError('minAge') && !birthDate?.hasError('required')">
+              {{'common.age' | translate}}
+            </mat-error>
+
+            <mat-error *ngIf="editForm.get('birthDate')?.hasError('futureDate')">
+              {{'common.future' | translate}}
             </mat-error>
           </mat-form-field>
 
@@ -563,5 +584,8 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
 
   // Only update the form control, let Angular bind it back to the input
   this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
+}
+get birthDate() {
+  return this.editForm.get('birthDate');
 }
 } 
