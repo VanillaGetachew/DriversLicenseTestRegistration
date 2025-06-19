@@ -1,4 +1,5 @@
 import { Directive, ElementRef, HostListener } from '@angular/core';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 @Directive({
   selector: '[amharicOnly]',
@@ -16,4 +17,11 @@ export class AmharicOnlyDirective {
       event.stopPropagation();
     }
   }
+}
+export function amharicValidator(control: AbstractControl): ValidationErrors | null {
+  const value = control.value;
+  const amharicRegex = /^[\u1200-\u137F\s]*$/;
+
+  if (!value) return null;
+  return amharicRegex.test(value) ? null : { amharicOnly: true };
 }

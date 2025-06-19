@@ -9,14 +9,14 @@ import { forkJoin } from 'rxjs';
 import { RegistrationService } from '../../core/services/registration.service';
 import { Router } from '@angular/router';
 import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
-import { minAgeValidator } from '../../core/Validator/validator';
+import { minAgeValidator } from '../../core/Validator/minAgeValidator';
 import { TranslateModule } from '@ngx-translate/core';
 import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
 
 @Component({
   selector: 'app-edit-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective, EnglishOnlyDirective, TranslateModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, TranslateModule],
   template: `
     <h2 mat-dialog-title>{{'profile.title' | translate}}</h2>
     <mat-dialog-content>
@@ -48,32 +48,32 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
           <!-- Personal Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>ስም</mat-label>
-            <input matInput formControlName="firstNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="firstNameAmh" type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአባት ስም</mat-label>
-            <input matInput formControlName="fatherNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="fatherNameAmh" type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአያት ስም</mat-label>
-            <input matInput formControlName="grandNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="grandNameAmh" type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required type="text" englishOnly>
+            <input matInput formControlName="firstName" required type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" required type="text" englishOnly>
+            <input matInput formControlName="fatherName" required type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandName" required type="text" englishOnly>
+            <input matInput formControlName="grandName" required type="text">
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">

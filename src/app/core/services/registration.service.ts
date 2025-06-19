@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Registration, GetRegistration} from '../models/registration.model';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Registration, GetRegistration, ApplicantwithFourDTO, ApplicantwithDocDTO} from '../models/registration.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -63,5 +63,30 @@ export class RegistrationService {
 
   deleteRegistration(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // addApplicant(applicant: ApplicantwithFourDTO): Observable<ApplicantwithDocDTO> {
+  //   const formData = new FormData();
+    
+  //   Object.entries(applicant).forEach(([key, value]) => {
+  //     if (value instanceof File) {
+  //       formData.append(key, value, value.name);
+  //     } else {
+  //       formData.append(key, value.toString());
+  //     }
+  //   });
+
+  //   return this.http.post<ApplicantwithDocDTO>(this.apiUrl, formData).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  // private handleError(error: HttpErrorResponse) {
+  //   console.error('Submission error:', error);
+  //   return throwError(() => error.error?.message || 'Server error');
+  // }
+
+  addApplicant(formData: FormData) {
+    return this.http.post(`${this.apiUrl}/CreatewithDoc`, formData);
   }
 }

@@ -10,20 +10,38 @@
         
           <mat-form-field appearance="outline">
             <mat-label>ስም</mat-label>
-            <input matInput formControlName="firstNameAmh" required type="text" amharicOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="firstNameAmh" required type="text">
+            <mat-error *ngIf="firstNameAmh?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('firstNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
            
           <mat-form-field appearance="outline">
             <mat-label>የአባት ስም</mat-label>
-            <input matInput formControlName="fatherNameAmh" required type="text" amharicOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="fatherNameAmh" required type="text">
+            <mat-error *ngIf="fatherNameAmh?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('fatherNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
         
           <mat-form-field appearance="outline">
             <mat-label>የአያት ስም</mat-label>
-            <input matInput formControlName="grandNameAmh" required type="text" amharicOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="grandNameAmh" required type="text">
+            <mat-error *ngIf="grandNameAmh?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('grandNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
         
       </div>
@@ -32,23 +50,41 @@
       
           <mat-form-field appearance="outline">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required type="text" englishOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="firstName" required type="text">
+            <mat-error *ngIf="firstName?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('firstName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
       
 
           <mat-form-field appearance="outline">
             <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" required type="text" englishOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="fatherName" required type="text">
+            <mat-error *ngIf="fatherName?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('fatherName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
       
 
         
           <mat-form-field appearance="outline">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandName" required type="text" englishOnly>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <input matInput formControlName="grandName" required type="text">
+            <mat-error *ngIf="grandName?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('grandName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
         
       </div>
@@ -60,6 +96,9 @@
             <mat-select formControlName="sex">
               <mat-option *ngFor="let st of sex" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="sexes?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
           
 
@@ -69,17 +108,26 @@
             <input matInput [matDatepicker]="picker" formControlName="birthDate" required>
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
-            <mat-error
-              *ngIf="registrationForm.get('birthDate')?.hasError('minAge') && registrationForm.get('birthDate')?.touched"
-              >{{'common.age' | translate}}
+
+            <mat-error *ngIf="birthDate?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
+
+            <mat-error *ngIf="birthDate?.hasError('minAge') && !birthDate?.hasError('required')">
+              {{'common.age' | translate}}
+            </mat-error>
+
+            <mat-error *ngIf="registrationForm.get('birthDate')?.hasError('futureDate')">
+              {{'common.future' | translate}}
             </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'profile.personal.birthPlace' | translate }}</mat-label>
             <input matInput formControlName="birthPlace" required>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="birthPlace?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
         
       </div>
@@ -91,6 +139,9 @@
             <mat-select formControlName="bloodType">
               <mat-option *ngFor="let st of bloodType" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="bloodTypes?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
        
 
@@ -100,6 +151,9 @@
             <mat-select formControlName="nationality">
               <mat-option *ngFor="let st of nationality" [value]="st.code">{{st.amdescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="nationalities?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
        
 
@@ -109,6 +163,9 @@
             <mat-select formControlName="education">
               <mat-option *ngFor="let st of education" [value]="st.id">{{st.nameAmharic}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="educations?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
         
       </div>
@@ -123,7 +180,9 @@
           <mat-form-field appearance="outline">
             <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
             <input matInput type="text" formControlName="tel1" (input)="onPhoneInput($event)" maxlength="10" required/>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="tel?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
             <mat-error *ngIf="registrationForm.get('tel1')?.hasError('pattern')">
               {{'common.phoneDigit' | translate}}
             </mat-error>
@@ -135,6 +194,9 @@
             <mat-select (selectionChange)="onRegionChange($event.value)" formControlName="region">
               <mat-option *ngFor="let st of region" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="regions?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
      
 
@@ -144,6 +206,9 @@
             <mat-select [disabled]="!town.length" (selectionChange)="onTownChange($event.value)" formControlName="town">
               <mat-option *ngFor="let st of town" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="towns?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
         
       </div>
@@ -154,6 +219,9 @@
             <mat-select [disabled]="!woreda.length" (selectionChange)="onWoredaChange($event.value)" formControlName="woreda">
               <mat-option *ngFor="let st of woreda" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="woredas?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
@@ -161,12 +229,17 @@
             <mat-select [disabled]="!kebele.length" formControlName="kebele">
               <mat-option *ngFor="let st of kebele" [value]="st.code">{{st.amDescription}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="kebeles?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline">
             <mat-label>{{ 'profile.contact.houseNo' | translate }}</mat-label>
             <input matInput formControlName="houseNo" required>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="houseNumbers?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
       </div>
     </div>
@@ -181,6 +254,9 @@
             <mat-select formControlName="licenceGrade">
               <mat-option *ngFor="let st of licenceCategory" [value]="st.code.toString()">{{st.displayNameAmh}}</mat-option>
             </mat-select>
+            <mat-error *ngIf="licenceGrades?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <!-- <div class="form-field"> -->
@@ -189,6 +265,9 @@
               <mat-select formControlName="isTheoryExamEnglish">
                 <mat-option *ngFor="let st of language" [value]="st.id">{{st.nameAmharic}}</mat-option>
               </mat-select>
+              <mat-error *ngIf="languages?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
             </mat-form-field>
           <!-- </div> -->
 
@@ -196,7 +275,9 @@
           <mat-form-field appearance="outline" class="form-field">
             <mat-label>{{ 'common.nationalId' | translate }}</mat-label>
             <input matInput formControlName="nationalId" required>
-            <mat-error>{{ 'common.required' | translate }}</mat-error>
+            <mat-error *ngIf="nationalId?.hasError('required')">
+              {{ 'common.required' | translate }}
+            </mat-error>
           </mat-form-field>
 
       <!-- </div> -->
@@ -240,6 +321,157 @@
   </div>
 
   <input type="hidden" formControlName="photoBase64" />
+</div>
+
+<!-- Document Upload Section -->
+<div class="form-section">
+  <h2>{{ 'profile.documents.title' | translate }}</h2>
+
+  <div class="documents-grid">
+    <!-- ID Card -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>badge</mat-icon>
+        {{ 'profile.documents.nationalIdCard' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.idCard">
+        <img *ngIf="documentPreviews.idCard && isImageURL(documentPreviews.idCard)" [src]="documentPreviews.idCard" alt="ID Card">
+        <div *ngIf="documentPreviews.idCard && isPdfURL(documentPreviews.idCard)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{idCardFileNamer}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.idCard"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'idCard')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'idCard')" id="idCardUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('idCardUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.idCard && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Birth Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>description</mat-icon>
+        {{ 'profile.documents.birthCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.birthCertificate">
+        <img *ngIf="documentPreviews.birthCertificate && isImageURL(documentPreviews.birthCertificate)" [src]="documentPreviews.birthCertificate" alt="Birth Certificate">
+        <div *ngIf="documentPreviews.birthCertificate && isPdfURL(documentPreviews.birthCertificate)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{birthCertificateFileNamer}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.birthCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'birthCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'birthCertificate')" id="birthCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('birthCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.birthCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Medical Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>medical_services</mat-icon>
+        {{ 'profile.documents.medicalCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.medicalCertificate">
+        <img *ngIf="documentPreviews.medicalCertificate && isImageURL(documentPreviews.medicalCertificate)" [src]="documentPreviews.medicalCertificate" alt="Medical Certificate">
+        <div *ngIf="documentPreviews.medicalCertificate && isPdfURL(documentPreviews.medicalCertificate)" class="pdf-preview">
+          <div class="pdf-preview">
+            <div class="preview-content">
+              <mat-icon>picture_as_pdf</mat-icon>
+              <p>{{ medicalCertificateFileNamer }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.medicalCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'medicalCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'medicalCertificate')" id="medicalCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('medicalCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.medicalCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Education Certificate -->
+    <div class="document-item">
+      <div class="document-label">
+        <mat-icon>school</mat-icon>
+        {{ 'profile.documents.educationCertificate' | translate }}
+      </div>
+      <div class="document-preview" *ngIf="documentPreviews?.educationCertificate">
+        <img *ngIf="documentPreviews.educationCertificate && isImageURL(documentPreviews.educationCertificate)" [src]="documentPreviews.educationCertificate" alt="Education Certificate">
+        <div *ngIf="documentPreviews.educationCertificate && isPdfURL(documentPreviews.educationCertificate)" class="pdf-preview">
+          <mat-icon>picture_as_pdf</mat-icon>
+          <p>{{educationCertificateFileNamer}}</p>
+        </div>
+      </div>
+      <div class="document-preview" 
+           *ngIf="!documentPreviews?.educationCertificate"
+           (dragover)="onDragOver($event)"
+           (dragleave)="onDragLeave($event)"
+           (drop)="onDrop($event, 'educationCertificate')"
+           [class.drag-over]="isDragging">
+        <mat-icon>upload_file</mat-icon>
+        <p>{{ 'profile.documents.dragOrClick' | translate }}</p>
+      </div>
+      <div class="upload-section">
+        <input type="file" accept="image/*,.pdf" (change)="onFileSelected($event, 'educationCertificate')" id="educationCertificateUpload" hidden>
+        <button type="button" class="upload-button" (click)="triggerFileInput('educationCertificateUpload')">
+          <mat-icon>upload</mat-icon>
+          {{ 'common.upload' | translate }}
+        </button>
+        <div class="document-status" *ngIf="!documentPreviews?.educationCertificate && isSubmitted">
+          <mat-icon color="warn">highlight_off</mat-icon>
+          <span>{{ 'profile.documents.notUploaded' | translate }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>
 
 

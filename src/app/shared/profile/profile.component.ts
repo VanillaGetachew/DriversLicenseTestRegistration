@@ -232,6 +232,7 @@ clickhandle():void{
           this.userData = data;
           this.setPhotoUrl(data.photo);
           this.showProfileSection = true;
+          this.fetchDocuments();
           this.loadExamSchedule();
         }
       },
