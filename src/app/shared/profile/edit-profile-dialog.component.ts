@@ -13,6 +13,7 @@ import { minAgeValidator } from '../../core/Validator/minAgeValidator';
 import { TranslateModule } from '@ngx-translate/core';
 import { EnglishOnlyDirective, englishValidator } from '../../core/Validator/englishValidator';
 import { noFutureDateValidator } from '../../core/Validator/futureDateValidator';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-edit-profile-dialog',
@@ -291,8 +292,9 @@ export class EditProfileDialogComponent implements OnInit {
     private dropdown: DropdownService,
     private reg: RegistrationService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     public dialogRef: MatDialogRef<EditProfileDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string }
+    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string, searchId: string }
   ) {
     this.editForm = this.fb.group({
       // Personal Info
@@ -359,6 +361,7 @@ this.loadDropdownsAndPatch();
         if (this.data.userData.photo) {
          this.photoPreview = `data:image/jpeg;base64,${this.data.userData.photo}`;
         }
+        this.cdr.detectChanges();
       }
     );
   }
@@ -424,6 +427,8 @@ onPhotoSelected(event: Event): void {
       this.photoPreview = reader.result as string; // ✅ Set for display
       this.editForm.patchValue({ photoBase64: base64 });
       this.editForm.get('photoBase64')?.updateValueAndValidity();
+
+      this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
   }
@@ -445,11 +450,13 @@ onSave(): void {
     };
 
 delete formData.photoBase64; // ✅ Prevent backend confusion
+const nationalIds = formData.nationalId || this.data.userData.nationalId || this.data.searchId;
 
-    this.reg.updateRegistration(formData.nationalId, formData).subscribe({
+
+    this.reg.updateRegistration(nationalIds, formData).subscribe({
       next: (res) => {
         this.dialogRef.close(formData);
-        this.router.navigate(['/profile']);
+        // this.router.navigate(['/profile', nationalIds]);
       },
       error: (err) => {
         console.error('Error updating registration:', err);

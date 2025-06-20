@@ -134,14 +134,14 @@ ngOnInit(): void {
       return;
     }
 
-    this.showProfile(nationalId); // Presumably fetches profile into `userDataService`
+    this.searchId = nationalId;
+    this.showProfile(nationalId);
   });
 
   this.userDataService.getUserData().subscribe(data => {
     this.userData = data;
     console.log('Profile loaded user data:', this.userData);
 
-    // Now that we have userData (with .town, etc.), load lookups
     this.loadLookups();
   });
 
@@ -151,7 +151,7 @@ ngOnInit(): void {
     return;
   }
 
-  this.fetchDocuments();
+  // this.fetchDocuments();
 }
 
 clickhandle():void{
@@ -184,13 +184,14 @@ clickhandle():void{
       width: '800px',
       data: {
         userData: this.userData,
-        section: section
+        section: section,
+        searchId: this.searchId
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        
-        this.reg.getRegistrationById(this.searchId).subscribe({
+        const nationalIds = this.userData?.nationalId || this.searchId;
+        this.reg.getRegistrationById(nationalIds).subscribe({
           next: updatedData => {
             this.userData = updatedData;
             this.setPhotoUrl(updatedData.photo);
@@ -243,17 +244,18 @@ clickhandle():void{
     this.showProfileSection = false;
     this.userData = null;
     this.searchResult = null;
+    const nationalIds = this.userData?.nationalId || this.searchId;
   //   this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
   // .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
     // if (!this.searchId && !this.searchName) {
-    if (!this.searchId && !this.phoneNumber) {
+    if (!nationalIds && !this.phoneNumber) {
       this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
       });
       return;
     }
-    if (this.searchId) {
-      this.reg.getRegistrationById(this.searchId).subscribe({
+    if (nationalIds) {
+      this.reg.getRegistrationById(nationalIds).subscribe({
         next: (data) => {
           this.searchResult = data;
           this.userData = data;
@@ -350,6 +352,7 @@ setPhotoUrl(photoBase64: string): void {
   
 
   onFileSelected(event: Event, documentKey: string): void {
+    const nationalIds = this.userData?.nationalId || this.searchId;
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
   
@@ -369,18 +372,17 @@ setPhotoUrl(photoBase64: string): void {
       }
       this.userData.documentPreviews[documentKey] = reader.result;
   
-      // Optionally persist locally, e.g. cache or save UI state
       this.userDataService.setUserData(this.userData);
   
-      // Show preview first, then upload
       this.snackBar.open(`${documentKey} preview loaded, uploading...`, 'Close', { duration: 1500 });
   
-      // Upload file to backend
       const documentTypeId = this.documentTypeMap[documentKey];
-console.log(this.userData.nationalId);
-      this.removeDocuments(this.userData.nationalId, documentTypeId);
-      this.documentService.addDocument(this.userData.nationalId, documentTypeId, file).subscribe({
+console.log("hello"+ nationalIds, documentTypeId);
+      this.removeDocuments(nationalIds, documentTypeId);
+      this.documentService.addDocument(nationalIds, documentTypeId, file).subscribe({
         next: () => {
+          console.log("hello"+ nationalIds, documentTypeId);
+
           this.fetchDocuments(); // refresh documents from backend
           this.snackBar.open(`${documentKey} uploaded successfully!`, 'Close', { duration: 2000 });
         },
@@ -397,8 +399,9 @@ console.log(this.userData.nationalId);
   
   fetchDocuments(): void {
     this.isLoading = true;
-    if (this.userData?.nationalId) {
-      this.documentService.getDocumentById(this.userData.nationalId).subscribe({
+    const nationalIds = this.userData?.nationalId || this.searchId;
+    if (nationalIds) {
+      this.documentService.getDocumentById(nationalIds).subscribe({
         next: (docs) => {
           this.mapDocuments(docs);
           this.documents = docs;
@@ -436,6 +439,7 @@ console.log(this.userData.nationalId);
     }
   
     for (const doc of docs) {
+      console.log(`Doc ${doc.documentTypeId}:`, doc.fileUrl?.slice(0, 50));
       switch (doc.documentTypeId) {
         case 4:
           this.userData.documentPreviews.idCard = doc.fileUrl;
@@ -626,8 +630,9 @@ console.log(this.userData.nationalId);
   }
 
   private loadExamSchedule(): void {
-    if (this.userData?.nationalId) {
-      this.examService.getAppointmentById(this.userData.nationalId)
+    const nationalIds = this.userData?.nationalId || this.searchId;
+    if (nationalIds) {
+      this.examService.getAppointmentById(nationalIds)
         .subscribe({
           next: (res: AppointmentPeriod[]) => {
             console.log('Received appointmentPeriod:', res);

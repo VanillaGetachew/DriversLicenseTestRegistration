@@ -214,7 +214,7 @@ onPhotoSelected(event: Event): void {
     };
     reader.readAsDataURL(file);
 
-    this.showToast('registration.photoUpload.success', 'common.close', 2000, 'success');
+    // this.showToast('registration.photoUpload.success', 'common.close', 2000, 'success');
   }
 }
 
@@ -623,16 +623,16 @@ onSubmit(): void {
       if (this.isValidFileSize(file)) {
         this.setDocumentFile(file, documentType); // Store in class variable
         this.handleFileUpload(file, documentType);
-        this.snackBar.open(
-          this.translate.instant('profile.documents.uploadSuccess'),
-          'Close',
-          {
-            duration: 3000,
-            panelClass: ['success-snackbar'],
-            horizontalPosition: 'end',
-            verticalPosition: 'top'
-          }
-        );
+        // this.snackBar.open(
+        //   this.translate.instant('profile.documents.uploadSuccess'),
+        //   'Close',
+        //   {
+        //     duration: 3000,
+        //     panelClass: ['success-snackbar'],
+        //     horizontalPosition: 'end',
+        //     verticalPosition: 'top'
+        //   }
+        // );
       } else {
         this.snackBar.open(
           this.translate.instant('profile.documents.fileTooLarge'),
