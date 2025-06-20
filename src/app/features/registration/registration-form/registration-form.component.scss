@@ -564,3 +564,40 @@ h1 {
     font-weight: 500;
   }
 }
+
+.custom-toast {
+  background: #323232;
+  color: #fff;
+  border-radius: 6px;
+  margin: 8px;
+  box-shadow: 0 3px 8px 0 rgba(0,0,0,0.10);
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  min-width: 240px;
+  max-width: 400px;
+
+  .mat-simple-snackbar-action {
+    color: #ffd740 !important;
+    font-weight: 600;
+    margin-left: 16px;
+  }
+
+  &.success-toast {
+    background: #43a047;
+    color: #fff;
+    .mat-simple-snackbar-action {
+      color: #fffde7 !important;
+    }
+  }
+
+  &.error-toast {
+    background: #e53935;
+    color: #fff;
+    .mat-simple-snackbar-action {
+      color: #fffde7 !important;
+    }
+  }
+}

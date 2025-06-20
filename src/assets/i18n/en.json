@@ -268,5 +268,9 @@
         "cancel": "Cancel",
         "submit": "Submit Upgrade Request"
       }
+    },
+    "licenseSearch": {
+      "enterCriterion": "Please enter at least one search criterion.",
+      "error": "Error searching for licenses."
     }
   }
