@@ -46,6 +46,7 @@ export class RegistrationFormComponent implements OnInit {
   registrationForm: FormGroup;
   isSubmitted = false;
   isDragging = false;
+  isLoading = false;
   // photoFile: File | null = null;
   photoPreviewUrl: string | null = null;
   nationality:nationality[] = [];
@@ -270,6 +271,7 @@ onSubmit(): void {
     this.isSubmitted = true;
     return;
   }
+  this.isLoading = true;
 
   const form = this.registrationForm.value;
   const formData = new FormData();
@@ -321,12 +323,14 @@ onSubmit(): void {
   }
   this.reg.addApplicant(formData).subscribe({
     next: (res: any) => {
+      this.isLoading = false;
       // console.log('Successfully submitted!', res);
       this.showToast('registration.success', 'common.close', 3000, 'success');
       this.router.navigate(['/profile', res?.nationalId || formData.get('NationalId')]);
     },
     error: (error) => {
       // console.error('Submission error:', err);
+      this.isLoading = false;
       const msg = error.error?.message || 'Unexpected error occurred';
       this.showToast(msg, 'Close', 5000, 'error' );
     },

@@ -478,7 +478,11 @@
     <!-- Form Actions -->
     <div class="form-actions">
       <button type="button" class="btn-reset" (click)="resetForm()">{{ 'common.reset' | translate }}</button>
-      <button type="submit" class="btn-register">{{ 'common.register' | translate }}</button>
+      <!-- <button type="submit" class="btn-register">{{ 'common.register' | translate }}</button> -->
+       <button type="submit" class="btn-register">
+          <span *ngIf="isLoading" class="spinner"></span>
+          {{ isLoading ? ('common.loading' | translate) : ('common.register' | translate) }}
+        </button>
     </div>
   </form>
 </div>
