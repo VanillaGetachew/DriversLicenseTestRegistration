@@ -35,51 +35,35 @@ import { AppointmentPeriod } from '../../core/models/appointment.model';
 })
 export class ProfileComponent implements OnInit {
   userData: any = null;
-  
-  photoUrl: string | null = null;
   searchId: string = '';
-  phoneNumber: string = '';
-  searchName: string =''
-  searchFirstName: string = '';
-  searchFatherName: string = '';
-  searchGrandfatherName: string = '';
-  searchResult: any = null;
+  photoUrl: string | null = null;
   showProfileSection: boolean = false;
-   nationality:nationality[] = [];
-    bloodType:nationality[] = [];
-    region: address[] = [];
-    town: address[] = [];
-    woreda: address[] = [];
-    kebele: address[] = [];
-    parentCode: number = -1;
-    sex: sex[]=[];
-    education: education[]=[];
-    language: language[]=[];
-    licenceCategory: licenceCategory[]=[];
-
-  
-    documentTypeId!: number;
-    file!: File | null;
-
-
+  nationality:nationality[] = [];
+  bloodType:nationality[] = [];
+  region: address[] = [];
+  town: address[] = [];
+  woreda: address[] = [];
+  kebele: address[] = [];
+  parentCode: number = -1;
+  sex: sex[]=[];
+  education: education[]=[];
+  language: language[]=[];
+  licenceCategory: licenceCategory[]=[];
+  documentTypeId!: number;
+  file!: File | null;
   documents: DocumentDTO[] = [];
   errorMessage: string = '';
   isLoading: boolean = false;
   lookupReady = false;
-
   documentTypeMap: Record<string, number> = {
     idCard: 4,
     birthCertificate: 6,
     medicalCertificate: 3,
     educationCertificate: 5
   };
-  
   selectedFiles: Record<string, File> = {};
-
   displayedColumns: string[] = ['examType', 'appointmentDate', 'startDate', 'endDate', 'period', 'result'];
-
-  // appointmentPeriod!: AppointmentPeriod;
-  appointmentPeriod: AppointmentPeriod [] = []
+  appointmentPeriod: AppointmentPeriod [] = [];
 
   constructor(
     private userDataService: UserDataService,
@@ -95,48 +79,36 @@ export class ProfileComponent implements OnInit {
     private examService: ExamService
   ) { }
 
-//   ngOnInit(): void {
-//      this.route.paramMap.subscribe((params) => {
-//       const nationalId = String(params.get('id'));
-//       // console.log('Pet ID from Params:', petId);
+  ngOnInit(): void {
+    this.route.paramMap.subscribe((params) => {
+      const nationalId = String(params.get('id'));
+      if (!nationalId) {
+        console.warn('Invalid National ID:', nationalId);
+        this.errorMessage = 'Invalid National ID.';
+        return;
+      }
+      this.searchId = nationalId;
+      this.showProfile(nationalId);
+    });
 
-//       if (!nationalId || nationalId == null) {
-//         console.warn('Invalid National ID:', nationalId);
-//         return;
-//       }
+    this.userDataService.getUserData().subscribe(data => {
+      this.userData = data;
+      this.loadLookups();
+    });
 
-//       this.showProfile(nationalId);
-//     });
-    
-//     this.userDataService.getUserData().subscribe(data => {
-//       this.userData = data;
-//       this.loadLookups();
-//       // this.loadLookupswithParam();
-//       console.log('Profile loaded user data:', this.userData);
-//     });
+    this.fetchDocuments();
+  }
 
-//     this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
+  clickhandle():void{
+    this.fetchDocuments();
 
-//     if (!this.searchId) {
-//       this.errorMessage = 'National ID is missing from the URL.';
-//       return;
-//     }
-
-//     this.fetchDocuments();
-//   }
-
-ngOnInit(): void {
-  this.route.paramMap.subscribe((params) => {
-    const nationalId = String(params.get('id'));
-    if (!nationalId) {
-      console.warn('Invalid National ID:', nationalId);
-      this.errorMessage = 'Invalid National ID.';
-      return;
+    if (!this.lookupReady) {
+      this.loadLookups();
     }
 
-    this.searchId = nationalId;
-    this.showProfile(nationalId);
-  });
+    // this.searchId = nationalId;
+    // this.showProfile(nationalId);
+  
 
   this.userDataService.getUserData().subscribe(data => {
     this.userData = data;
@@ -152,16 +124,17 @@ ngOnInit(): void {
   }
 
   // this.fetchDocuments();
-}
+};
 
-clickhandle():void{
-  this.goToProfileSection();
-  this.fetchDocuments();
 
-  if (!this.lookupReady) {
-    this.loadLookups();
-  }
-}
+// clickhandle():void{
+//   this.goToProfileSection();
+//   this.fetchDocuments();
+
+//   if (!this.lookupReady) {
+//     this.loadLookups();
+//   }
+// }
 
   // Helper method to check if URL is an image
   isImageURL(url: string): boolean {
@@ -219,7 +192,6 @@ clickhandle():void{
   showProfile(nationalId: any): void {
     this.showProfileSection = false;
     this.userData = null;
-    this.searchResult = null;
 
     if (!nationalId || nationalId <= 0) {
       this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
@@ -240,84 +212,84 @@ clickhandle():void{
     );
   }
 
-  searchProfile(): void {
-    this.showProfileSection = false;
-    this.userData = null;
-    this.searchResult = null;
-    const nationalIds = this.userData?.nationalId || this.searchId;
-  //   this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
-  // .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
-    // if (!this.searchId && !this.searchName) {
-    if (!nationalIds && !this.phoneNumber) {
-      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
-        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-      });
-      return;
-    }
-    if (nationalIds) {
-      this.reg.getRegistrationById(nationalIds).subscribe({
-        next: (data) => {
-          this.searchResult = data;
-          this.userData = data;
-           this.setPhotoUrl(data.photo);
-        },
-        error: (error) => {
-          const msg = 'Applicant Not Found'
-          this.showToast(msg, 'Close', 5000, 'error' );
-        }
-      },
-    );
-    } 
+  // searchProfile(): void {
+  //   this.showProfileSection = false;
+  //   this.userData = null;
+  //   this.searchResult = null;
+  //   const nationalIds = this.userData?.nationalId || this.searchId;
+  // //   this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
+  // // .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
+  //   // if (!this.searchId && !this.searchName) {
+  //   if (!nationalIds && !this.phoneNumber) {
+  //     this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+  //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+  //     });
+  //     return;
+  //   }
+  //   if (nationalIds) {
+  //     this.reg.getRegistrationById(nationalIds).subscribe({
+  //       next: (data) => {
+  //         this.searchResult = data;
+  //         this.userData = data;
+  //          this.setPhotoUrl(data.photo);
+  //       },
+  //       error: (error) => {
+  //         const msg = 'Applicant Not Found'
+  //         this.showToast(msg, 'Close', 5000, 'error' );
+  //       }
+  //     },
+  //   );
+  //   } 
     
-    // if (this.searchName) {
-    //   this.reg.getRegistrationByName(this.searchName).subscribe(data => {
-    //     if (data) {
-    //       this.searchResult = data;
-    //       this.userData = data;
-    //        this.setPhotoUrl(data.photo);
-    //     } else {
-    //       this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
-    //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-    //       });
-    //     }
-    //   });
-    // }
-    if (this.phoneNumber) {
-      this.reg.getRegistrationByPhone(this.phoneNumber).subscribe({
-        next: (data) => {
-          this.searchResult = data;
-          this.userData = data;
-           this.setPhotoUrl(data.photo);
-        },
-        error: (error) => {
-          const msg = 'Applicant Not Found'
-          this.showToast(msg, 'Close', 5000, 'error' );
-        } 
-      });
-    }
-    // else {
-    //   // For demo: fallback to localStorage and match by names
-    //   const storedData = localStorage.getItem('user_registration_data');
-    //   if (storedData) {
-    //     const userData = JSON.parse(storedData);
-    //     if (
-    //       (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
-    //       (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
-    //       (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
-    //     ) {
-    //       // this.searchResults = userData; // Add single result to array
-    //     } else {
-    //       this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
-    //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-    //       });
-    //     }
-    //   } else {
-    //     this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
-    //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-    //     });
-    //   }
-    // }
-  }
+  //   // if (this.searchName) {
+  //   //   this.reg.getRegistrationByName(this.searchName).subscribe(data => {
+  //   //     if (data) {
+  //   //       this.searchResult = data;
+  //   //       this.userData = data;
+  //   //        this.setPhotoUrl(data.photo);
+  //   //     } else {
+  //   //       this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
+  //   //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+  //   //       });
+  //   //     }
+  //   //   });
+  //   // }
+  //   if (this.phoneNumber) {
+  //     this.reg.getRegistrationByPhone(this.phoneNumber).subscribe({
+  //       next: (data) => {
+  //         this.searchResult = data;
+  //         this.userData = data;
+  //          this.setPhotoUrl(data.photo);
+  //       },
+  //       error: (error) => {
+  //         const msg = 'Applicant Not Found'
+  //         this.showToast(msg, 'Close', 5000, 'error' );
+  //       } 
+  //     });
+  //   }
+  //   // else {
+  //   //   // For demo: fallback to localStorage and match by names
+  //   //   const storedData = localStorage.getItem('user_registration_data');
+  //   //   if (storedData) {
+  //   //     const userData = JSON.parse(storedData);
+  //   //     if (
+  //   //       (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
+  //   //       (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
+  //   //       (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
+  //   //     ) {
+  //   //       // this.searchResults = userData; // Add single result to array
+  //   //     } else {
+  //   //       this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
+  //   //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+  //   //       });
+  //   //     }
+  //   //   } else {
+  //   //     this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
+  //   //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+  //   //     });
+  //   //   }
+  //   // }
+  // }
   
 setPhotoUrl(photoBase64: string): void {
   if (!photoBase64) {
@@ -325,16 +297,8 @@ setPhotoUrl(photoBase64: string): void {
     return;
   }
 
-  this.photoUrl = `data:image/jpeg;base64,${photoBase64}`;
-  // If your backend sends PNG instead, change to image/png
-}
-
-  goToProfileSection(): void {
-    if (this.searchResult) {
-      this.userData = this.searchResult;
-      this.showProfileSection = true;
-      this.loadExamSchedule();
-    }
+    this.photoUrl = `data:image/jpeg;base64,${photoBase64}`;
+    // If your backend sends PNG instead, change to image/png
   }
 
   backToSearch(): void {

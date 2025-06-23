@@ -1,1 +1,61 @@
-<p>reports-view works!</p>
+<div class="search-table-container">
+  <h2 class="table-title">{{ 'search.title' | translate }}</h2>
+   <mat-form-field appearance="outline" class="search-field">
+    <mat-label>{{ 'search.placeholder' | translate }}</mat-label>
+    <input matInput (input)="onSearchChange($event)" [placeholder]="'search.placeholder' | translate" />
+  </mat-form-field>
+  <mat-form-field appearance="outline" class="search-field">
+    <mat-label>{{ 'search.placeholder' | translate }}</mat-label>
+    <input matInput (input)="onSearchChange($event)" [placeholder]="'search.placeholder' | translate" />
+  </mat-form-field>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+    <!-- Name Column -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef>{{ 'search.name' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        <a [routerLink]="['/profile', row.nationalId]" class="profile-link">
+          {{ row.firstName }} {{ row.fatherName }} {{ row.grandName }}
+        </a>
+      </td>
+    </ng-container>
+
+    <!-- National ID Column -->
+    <ng-container matColumnDef="nationalId">
+      <th mat-header-cell *matHeaderCellDef>{{ 'search.nationalId' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.nationalId }}</td>
+    </ng-container>
+
+    <!-- License Grade Column -->
+    <ng-container matColumnDef="licenceGrade">
+      <th mat-header-cell *matHeaderCellDef>{{ 'search.licenseGrade' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.licenceGrade }}</td>
+    </ng-container>
+
+    <!-- Actions Column -->
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef>{{ 'search.actions' | translate }}</th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-icon-button color="primary" (click)="onAction(row, 'view')">
+          <mat-icon>visibility</mat-icon>
+        </button>
+        <button mat-icon-button color="accent" (click)="onAction(row, 'edit')">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="onAction(row, 'delete')">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <mat-paginator [length]="totalCount"
+                 [pageSize]="pageSize"
+                 [pageIndex]="pageIndex"
+                 [pageSizeOptions]="[5, 10, 20, 50]"
+                 (page)="onPageChange($event)">
+  </mat-paginator>
+</div>

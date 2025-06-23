@@ -12,13 +12,7 @@ export class RegistrationService {
 
   constructor(private http: HttpClient) { }
 
-  getRegistrations(
-    page = 0, 
-    pageSize = 10, 
-    sortField = 'createdAt', 
-    sortDirection = 'desc',
-    searchTerm = ''
-  ): Observable<{ items: Registration[], totalCount: number }> {
+  getRegistrations(page = 0, pageSize = 10, sortField = 'createdAt', sortDirection = 'desc', searchTerm = ''): Observable<{ items: Registration[], totalCount: number }> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
@@ -33,6 +27,22 @@ export class RegistrationService {
       this.apiUrl,
       { params }
     );
+  }
+    getApplicantsByName(
+    name: string,
+    sortBy: string,
+    sortOrder: string,
+    pageNumber: number,
+    pageSize: number
+  ): Observable<GetRegistration[]> {
+    const params = new HttpParams()
+      .set('name', name)
+      .set('sortBy', sortBy)
+      .set('sortOrder', sortOrder)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<GetRegistration[]>(`${this.apiUrl}/Names`, { params });
   }
 
   getRegistrationById(id: string): Observable<GetRegistration> {

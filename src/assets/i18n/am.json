@@ -191,7 +191,8 @@
     "board": "ቦርድ",
     "registration": "ምዝገባ",
     "licenseUpgrade": "ፈቃድ ማሻሻያ",
-    "reports": "ሪፖርቶች"
+    "reports": "ሪፖርቶች",
+    "search": "ፍለጋ"
   },
   "dashboard": {
     "title": "ዳሽቦርድ አጠቃላይ እይታ",
@@ -268,5 +269,17 @@
         "cancel": "ሰርዝ",
         "submit": "የማሳድጊያ ማምልከቻ አስገባ"
       }
+  },
+  "licenseSearch": {
+    "enterCriterion": "እባክዎ ቢያንስ አንድ የፍለጋ መስፈርት ያስገቡ።",
+    "error": "ፈቃድ ፍለጋ ላይ ስህተት ተፈጥሯል።"
+  },
+  "search": {
+    "title": "የተመዘገቡ አሽከርካሪዎችን ፈልግ",
+    "placeholder": "በስም፣ መታወቂያ ቁጥር ወይም ሌሎች ፈልግ",
+    "name": "ስም",
+    "nationalId": "የመንግስት መታወቂያ ቁጥር",
+    "licenseGrade": "የፈቃድ ደረጃ",
+    "actions": "ተግባራት"
   }
 } 

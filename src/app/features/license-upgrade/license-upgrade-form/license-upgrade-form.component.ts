@@ -33,7 +33,6 @@ export class LicenseUpgradeFormComponent implements OnInit {
   isSubmitting = false;
   licenseId!: any;
   isLoading2 = false;
-
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
