@@ -18,7 +18,8 @@
     "nationalId": "ብሔራዊ መታወቂያ",
     "clear": "አጽዳ",
     "search": "ፈልግ",
-    "actions": "ድርጊቶች"
+    "actions": "ድርጊቶች",
+    "searching": "በፍለጋ ላይ..."
   },
   "profile": {
     "title": "የመገለጫ መረጃ እርማት",
@@ -280,6 +281,8 @@
     "fatherName": "የአባት ስም",
     "grandName": "የአያት ስም",
     "licenseGrade": "የፈቃድ ደረጃ",
-    "actions": "ተግባራት"
+    "actions": "ተግባራት",
+    "foundDrivers": "{{count}} አሽከርካሪ(ዎች) ተገኝቷል።",
+    "noDrivers": "ምንም አሽከርካሪ አልተገኘም።"
   }
 } 

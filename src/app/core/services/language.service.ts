@@ -42,7 +42,7 @@ export class LanguageService {
     this.loadTranslations();
   }
 
-  getTranslation(key: string): Observable<string> {
-    return this.translate.get(key);
+  getTranslation(key: string, params?: any): Observable<string> {
+    return this.translate.get(key, params);
   }
 } 

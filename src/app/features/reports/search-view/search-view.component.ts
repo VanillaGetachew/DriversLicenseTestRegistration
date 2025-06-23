@@ -11,6 +11,8 @@ import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
 import { FormsModule } from '@angular/forms';
+import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { LanguageService } from '../../../core/services/language.service';
 
 @Component({
   selector: 'app-search-view',
@@ -24,7 +26,8 @@ import { FormsModule } from '@angular/forms';
     MatButtonModule,
     RouterModule,
     TranslateModule,
-    FormsModule
+    FormsModule,
+    MatSnackBarModule
   ],
   templateUrl: './search-view.component.html',
   styleUrls: ['./search-view.component.scss']
@@ -46,7 +49,12 @@ export class SearchViewComponent implements OnInit {
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
-  constructor(private registrationService: RegistrationService, private dialog: MatDialog) {}
+  constructor(
+    private registrationService: RegistrationService,
+    private dialog: MatDialog,
+    private snackBar: MatSnackBar,
+    private languageService: LanguageService
+  ) {}
 
   ngOnInit(): void {
     this.loadRegistrations();
@@ -68,6 +76,11 @@ export class SearchViewComponent implements OnInit {
         this.dataSource.data = res.items;
         this.totalCount = res.totalCount;
         this.isLoading = false;
+        if (res.items && res.items.length > 0) {
+          this.showToast('search.foundDrivers', 'common.close', 2000, 'success', res.items.length);
+        } else {
+          this.showToast('search.noDrivers', 'common.close', 2000, 'error');
+        }
       },
       error: () => {
         this.isLoading = false;
@@ -78,6 +91,34 @@ export class SearchViewComponent implements OnInit {
   onSearchChange(): void {
     this.pageIndex = 0;
     this.loadRegistrations();
+  }
+
+  private showToast(messageKey: string, actionKey: string, duration: number, type: 'success' | 'error' | 'default' = 'default', count?: number): void {
+    let messageObs = this.languageService.getTranslation(messageKey);
+    if (count !== undefined) {
+      messageObs = this.languageService.getTranslation(messageKey, { count });
+    }
+    messageObs.subscribe(message => {
+      this.languageService.getTranslation(actionKey).subscribe(action => {
+        const panelClass = ['custom-toast'];
+        if (type === 'success') {
+          panelClass.push('success-toast');
+        } else if (type === 'error') {
+          panelClass.push('error-toast');
+        }
+        this.snackBar.open(message, action, {
+          duration,
+          horizontalPosition: 'end',
+          verticalPosition: 'top',
+          panelClass
+        });
+      });
+    });
+  }
+
+  onSearchClick(): void {
+    this.showToast('searching', 'common.close', 1500, 'default');
+    this.onSearchChange();
   }
 
   onPageChange(event: PageEvent): void {

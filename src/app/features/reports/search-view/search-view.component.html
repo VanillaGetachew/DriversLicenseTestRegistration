@@ -17,6 +17,10 @@
       <mat-label>{{ 'search.grandName' | translate }}</mat-label>
       <input matInput [(ngModel)]="search.grandName" (input)="onSearchChange()" />
     </mat-form-field>
+    <button mat-raised-button color="primary" class="search-btn" (click)="onSearchClick()">
+      <mat-icon>search</mat-icon>
+      {{ 'common.search' | translate }}
+    </button>
   </div>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
