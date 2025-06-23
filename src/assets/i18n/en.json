@@ -279,6 +279,9 @@
       "placeholder": "Search by name, ID, etc.",
       "name": "Name",
       "nationalId": "National ID",
+      "firstName": "First Name",
+      "fatherName": "Father Name",
+      "grandName": "Grand Name",
       "licenseGrade": "License Grade",
       "actions": "Actions"
     }

@@ -10,6 +10,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { RouterModule } from '@angular/router';
 import { TranslateModule } from '@ngx-translate/core';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search-view',
@@ -22,10 +23,11 @@ import { TranslateModule } from '@ngx-translate/core';
     MatIconModule,
     MatButtonModule,
     RouterModule,
-    TranslateModule
+    TranslateModule,
+    FormsModule
   ],
-  templateUrl: './reports-view.component.html',
-  styleUrls: ['./reports-view.component.scss']
+  templateUrl: './search-view.component.html',
+  styleUrls: ['./search-view.component.scss']
 })
 export class SearchViewComponent implements OnInit {
   displayedColumns: string[] = ['name', 'nationalId', 'licenceGrade', 'actions'];
@@ -33,8 +35,14 @@ export class SearchViewComponent implements OnInit {
   totalCount = 0;
   pageSize = 10;
   pageIndex = 0;
-  searchTerm = '';
   isLoading = false;
+
+  search = {
+    nationalId: '',
+    firstName: '',
+    fatherName: '',
+    grandName: ''
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -46,23 +54,29 @@ export class SearchViewComponent implements OnInit {
 
   loadRegistrations(): void {
     this.isLoading = true;
-    this.registrationService.getRegistrations(this.pageIndex, this.pageSize, 'createdAt', 'desc', this.searchTerm)
-      .subscribe({
-        next: (res) => {
-          this.dataSource.data = res.items;
-          this.totalCount = res.totalCount;
-          this.isLoading = false;
-        },
-        error: () => {
-          this.isLoading = false;
-        }
-      });
+    this.registrationService.getRegistrations(
+      this.pageIndex,
+      this.pageSize,
+      'createdAt',
+      'desc',
+      this.search.nationalId,
+      this.search.firstName,
+      this.search.fatherName,
+      this.search.grandName
+    ).subscribe({
+      next: (res) => {
+        this.dataSource.data = res.items;
+        this.totalCount = res.totalCount;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
 
-  onSearchChange(event: Event): void {
-    const value = (event.target as HTMLInputElement)?.value || '';
+  onSearchChange(): void {
     this.pageIndex = 0;
-    this.searchTerm = value;
     this.loadRegistrations();
   }
 

@@ -15,9 +15,18 @@
   text-align: center;
 }
 
-.search-field {
-  width: 100%;
+.search-fields-row {
+  display: flex;
+  gap: 16px;
   margin-bottom: 24px;
+  flex-wrap: wrap;
+}
+
+.search-fields-row .mat-form-field {
+  flex: 1 1 180px;
+  min-width: 120px;
+  max-width: 100%;
+  margin-right: 0;
 }
 
 .custom-table {
@@ -58,5 +67,12 @@
   }
   .table-title {
     font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 800px) {
+  .search-fields-row {
+    flex-direction: column;
+    gap: 8px;
   }
 }
