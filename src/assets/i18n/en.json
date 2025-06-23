@@ -207,7 +207,8 @@
       "board": "board",
       "registration": "Registration",
       "licenseUpgrade": "License Upgrade",
-      "reports": "Reports"
+      "reports": "Reports",
+      "search": "Search"
     },
     "header": {
       "appTitle": "Driver's License Test Registration",
@@ -272,5 +273,13 @@
     "licenseSearch": {
       "enterCriterion": "Please enter at least one search criterion.",
       "error": "Error searching for licenses."
+    },
+    "search": {
+      "title": "Search Registered Drivers",
+      "placeholder": "Search by name, ID, etc.",
+      "name": "Name",
+      "nationalId": "National ID",
+      "licenseGrade": "License Grade",
+      "actions": "Actions"
     }
   }

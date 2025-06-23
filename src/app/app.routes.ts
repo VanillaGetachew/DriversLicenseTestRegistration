@@ -28,8 +28,8 @@ export const routes: Routes = [
         loadChildren: () => import('./features/license-upgrade/license-upgrade.module').then(m => m.LicenseUpgradeModule)
       },
       {
-        path: 'reports',
-        loadChildren: () => import('./features/reports/reports.module').then(m => m.ReportsModule)
+        path: 'search',
+        loadChildren: () => import('./features/reports/reports.module').then(m => m.SearchModule)
       },
       {
         path: 'profile',
