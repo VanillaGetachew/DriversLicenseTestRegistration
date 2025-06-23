@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { SearchViewComponent } from './search-view.component';
 
-import { ReportsViewComponent } from './reports-view.component';
-
-describe('ReportsViewComponent', () => {
-  let component: ReportsViewComponent;
-  let fixture: ComponentFixture<ReportsViewComponent>;
+describe('SearchViewComponent', () => {
+  let component: SearchViewComponent;
+  let fixture: ComponentFixture<SearchViewComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ReportsViewComponent]
+      imports: [SearchViewComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(ReportsViewComponent);
+    fixture = TestBed.createComponent(SearchViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

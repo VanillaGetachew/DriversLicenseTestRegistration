@@ -278,7 +278,10 @@
     "title": "የተመዘገቡ አሽከርካሪዎችን ፈልግ",
     "placeholder": "በስም፣ መታወቂያ ቁጥር ወይም ሌሎች ፈልግ",
     "name": "ስም",
-    "nationalId": "የመንግስት መታወቂያ ቁጥር",
+    "nationalId": "ፋይዳ ቁጥር",
+    "firstName": "የመጀመሪያ ስም",
+    "fatherName": "የአባት ስም",
+    "grandName": "የአያት ስም",
     "licenseGrade": "የፈቃድ ደረጃ",
     "actions": "ተግባራት"
   }

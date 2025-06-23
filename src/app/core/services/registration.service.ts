@@ -18,11 +18,12 @@ export class RegistrationService {
       .set('pageSize', pageSize.toString())
       .set('sortField', sortField)
       .set('sortDirection', sortDirection);
-    
-    if (searchTerm) {
-      params = params.set('searchTerm', searchTerm);
-    }
-    
+
+    // if (nationalId) params = params.set('nationalId', nationalId);
+    // if (firstName) params = params.set('firstName', firstName);
+    // if (fatherName) params = params.set('fatherName', fatherName);
+    // if (grandName) params = params.set('grandName', grandName);
+
     return this.http.get<{ items: Registration[], totalCount: number }>(
       this.apiUrl,
       { params }

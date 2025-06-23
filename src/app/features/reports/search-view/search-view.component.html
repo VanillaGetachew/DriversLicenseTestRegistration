@@ -1,13 +1,23 @@
 <div class="search-table-container">
   <h2 class="table-title">{{ 'search.title' | translate }}</h2>
-   <mat-form-field appearance="outline" class="search-field">
-    <mat-label>{{ 'search.placeholder' | translate }}</mat-label>
-    <input matInput (input)="onSearchChange($event)" [placeholder]="'search.placeholder' | translate" />
-  </mat-form-field>
-  <mat-form-field appearance="outline" class="search-field">
-    <mat-label>{{ 'search.placeholder' | translate }}</mat-label>
-    <input matInput (input)="onSearchChange($event)" [placeholder]="'search.placeholder' | translate" />
-  </mat-form-field>
+  <div class="search-fields-row">
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'search.nationalId' | translate }}</mat-label>
+      <input matInput [(ngModel)]="search.nationalId" (input)="searchProfile()" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'search.firstName' | translate }}</mat-label>
+      <input matInput [(ngModel)]="search.firstName" (input)="searchProfile()" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'search.fatherName' | translate }}</mat-label>
+      <input matInput [(ngModel)]="search.fatherName" (input)="searchProfile()" />
+    </mat-form-field>
+    <mat-form-field appearance="outline" class="search-field">
+      <mat-label>{{ 'search.grandName' | translate }}</mat-label>
+      <input matInput [(ngModel)]="search.grandName" (input)="searchProfile()" />
+    </mat-form-field>
+  </div>
 
   <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
     <!-- Name Column -->

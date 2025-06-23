@@ -12,6 +12,7 @@ import { RouterModule } from '@angular/router';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { LanguageService } from '../../../core/services/language.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-search-view',
@@ -25,10 +26,11 @@ import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
     MatButtonModule,
     RouterModule,
     TranslateModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    FormsModule
   ],
-  templateUrl: './reports-view.component.html',
-  styleUrls: ['./reports-view.component.scss']
+  templateUrl: './search-view.component.html',
+  styleUrls: ['./search-view.component.scss']
 })
 export class SearchViewComponent implements OnInit {
   displayedColumns: string[] = ['name', 'nationalId', 'licenceGrade', 'actions'];
@@ -36,7 +38,6 @@ export class SearchViewComponent implements OnInit {
   totalCount = 0;
   pageSize = 10;
   pageIndex = 0;
-  searchTerm = '';
   isLoading = false;
   searchName: string = '';
   searchFirstName: string = '';
@@ -49,6 +50,13 @@ export class SearchViewComponent implements OnInit {
   searchResult: any;
   // pageSize: number = 10;
 
+
+  search = {
+    nationalId: '',
+    firstName: '',
+    fatherName: '',
+    grandName: ''
+  };
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
 
@@ -128,7 +136,7 @@ searchProfile(): void {
   onSearchChange(event: Event): void {
     const value = (event.target as HTMLInputElement)?.value || '';
     this.pageIndex = 0;
-    this.searchTerm = value;
+    // this.searchTerm = value;
     // this.loadRegistrations();
   }
 
