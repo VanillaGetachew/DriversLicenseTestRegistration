@@ -273,16 +273,22 @@
     "error": "ፈቃድ ፍለጋ ላይ ስህተት ተፈጥሯል።"
   },
   "search": {
-    "title": "የተመዘገቡ አሽከርካሪዎችን ፈልግ",
-    "placeholder": "በስም፣ መታወቂያ ቁጥር ወይም ሌሎች ፈልግ",
-    "name": "ስም",
-    "nationalId": "ፋይዳ ቁጥር",
-    "firstName": "የመጀመሪያ ስም",
+    "title": "መፈተኛ ፈላጊዎችን ፈልግ",
+    "byId": "በመታወቂያ ቁጥር",
+    "byName": "በስም",
+    "nationalId": "መታወቂያ ቁጥር",
+    "nationalIdPlaceholder": "መታወቂያ ቁጥር ያስገቡ",
+    "firstName": "ስም",
+    "firstNamePlaceholder": "ስም ያስገቡ",
     "fatherName": "የአባት ስም",
+    "fatherNamePlaceholder": "የአባት ስም ያስገቡ",
     "grandName": "የአያት ስም",
+    "grandNamePlaceholder": "የአያት ስም ያስገቡ",
     "licenseGrade": "የፈቃድ ደረጃ",
     "actions": "ተግባራት",
     "foundDrivers": "{{count}} አሽከርካሪ(ዎች) ተገኝቷል።",
-    "noDrivers": "ምንም አሽከርካሪ አልተገኘም።"
+    "noDrivers": "ምንም አሽከርካሪ አልተገኘም።",
+    "applicantId": "የአመልካች መለያ",
+    "name": "ስም"
   }
 } 

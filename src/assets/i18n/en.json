@@ -278,14 +278,20 @@
       "error": "Error searching for licenses."
     },
     "search": {
-      "title": "Search Registered Drivers",
+      "title": "Search Applicants",
+      "byId": "By National ID",
+      "byName": "By Name",
+      "nationalId": "National ID",
+      "nationalIdPlaceholder": "Enter National ID",
+      "firstName": "First Name",
+      "firstNamePlaceholder": "Enter First Name",
+      "fatherName": "Father's Name",
+      "fatherNamePlaceholder": "Enter Father's Name",
+      "grandName": "Grandfather's Name",
+      "grandNamePlaceholder": "Enter Grandfather's Name",
       "placeholder": "Search by name, ID, etc.",
       "name": "Name",
-      "nationalId": "National ID",
-      "firstName": "First Name",
-      "fatherName": "Father Name",
-      "grandName": "Grand Name",
-      "licenseGrade": "License Grade",
-      "actions": "Actions"
+      "actions": "Actions",
+      "applicantId": "Applicant ID"
     }
   }
