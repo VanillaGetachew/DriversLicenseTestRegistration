@@ -36,7 +36,11 @@ export const routes: Routes = [
         loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
       },
       {
-        path: 'profile/:id',
+        path: 'profile/nid/:id',
+        loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
+      },
+      {
+        path: 'profile/aid/:applicantId',
         loadComponent: () => import('./shared/profile/profile.component').then(c => c.ProfileComponent)
       },
       {

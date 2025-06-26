@@ -7,7 +7,10 @@
     "remove": "አስወግድ",
     "upload": "ጫን",
     "change": "ቀይር",
-    "required": "አስገዳጅ",
+    "required": "ይህ ማስረጃ ያስፈልጋል",
+    "amharicOnly": "እባክዎ በአማርኛ ብቻ ይጻፉ",
+    "englishOnly": "እባክዎ በእንግሊዘኛ ብቻ ይጻፉ",
+    "future": "የወደፊት ቀነ ማስገባት አይቻልመም",
     "age": "ዕድሜ ቢያንስ 18 መሆን ",
     "phoneDigit": "እባክዎ 10 ቁጥሮች ያስገቡ",
     "reset": "ዳግም አስጀምር",
@@ -67,9 +70,9 @@
     "contact": {
       "phoneNumber": "ስልክ ቁጥር",
       "region": "ክልል",
-      "town": "ከተማ",
-      "woreda": "ወረዳ",
-      "kebele": "ቀበሌ",
+      "town": "ዞን/ ከተማ",
+      "woreda": "ወረዳ/ ክፍለ ከተማ",
+      "kebele": "ቀበሌ/ ወረዳ",
       "houseNo": "የቤት ቁጥር"
     },
     "license": {

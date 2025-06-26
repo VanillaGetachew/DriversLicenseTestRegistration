@@ -32,7 +32,7 @@ export class LicenseUpgradeFormComponent implements OnInit {
   isLoading = false;
   isSubmitting = false;
   licenseId!: any;
-
+  isLoading2 = false;
   constructor(
     private fb: FormBuilder,
     private route: ActivatedRoute,
@@ -86,6 +86,7 @@ export class LicenseUpgradeFormComponent implements OnInit {
     });
   }
 onSubmit(): void {
+  this.isSubmitting = true;
     if (this.upgradeForm.valid) {
       const formData = {
         ...this.upgradeForm.value
@@ -93,10 +94,12 @@ onSubmit(): void {
       this.upgrade.upgradeDriver(this.licenceGrade, this.licenseId, this.upgradeForm.value.nationalId, formData).subscribe({
         next:(res) => {
           // alert("Success");
+          this.isSubmitting = false;
           this.showToast('registration.success', 'common.close', 3000, 'success');
-          this.router.navigate(['/profile', formData.nationalId]);
+          this.router.navigate(['/profile/nid', formData.nationalId]);
         },
         error: (error) => {
+          this.isSubmitting=false;
           const msg = error.error?.message || 'Unexpected error occurred';
           this.showToast(msg, 'Close', 5000, 'error' );
         }

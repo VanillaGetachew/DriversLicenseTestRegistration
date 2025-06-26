@@ -264,21 +264,37 @@ h1 {
       transform: scale(1.02);
       box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     }
+    .pdf-preview {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  height: 100%; // full height for vertical centering
+  text-align: center;
+
+  .preview-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+  }
     
     mat-icon {
-      font-size: 32px;
-      width: 32px;
-      height: 32px;
-      color: #666;
+      font-size: 40px;
+      width: 40px;
+      height: 40px;
+      color: #667;
       margin-bottom: 8px;
     }
     
     p {
-      color: #666;
+      color: #667;
       font-size: 14px;
-      text-align: center;
+      // text-align: center;
       margin: 0;
+      word-break: break-word;
     }
+  }
   }
   
   .document-status {
@@ -381,6 +397,10 @@ h1 {
     &.btn-register {
       background-color: $primary-color;
       color: white;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-width: 100px;
       
       &:hover {
         background-color: $primary-color-dark;
@@ -563,6 +583,20 @@ h1 {
     font-size: 14px;
     font-weight: 500;
   }
+}
+.spinner {
+  width: 18px;
+  height: 18px;
+  border: 2px solid #ccc;         /* Light gray background */
+  border-top: 2px solid #3498db;  /* Blue foreground */
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+  display: inline-block;
+  vertical-align: middle;
+}
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 .custom-toast {

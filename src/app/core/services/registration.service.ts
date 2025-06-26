@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from 'rxjs';
-import { Registration, GetRegistration} from '../models/registration.model';
+import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
+import { catchError, Observable, throwError } from 'rxjs';
+import { Registration, GetRegistration, ApplicantwithFourDTO, ApplicantwithDocDTO, GetRegistrationPreview} from '../models/registration.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -12,35 +12,52 @@ export class RegistrationService {
 
   constructor(private http: HttpClient) { }
 
-  getRegistrations(
-    page = 0,
-    pageSize = 10,
-    sortField = 'createdAt',
-    sortDirection = 'desc',
-    nationalId = '',
-    firstName = '',
-    fatherName = '',
-    grandName = ''
-  ): Observable<{ items: Registration[], totalCount: number }> {
+  getRegistrations(page = 0, pageSize = 10, sortField = 'createdAt', sortDirection = 'desc', searchTerm = ''): Observable<{ items: Registration[], totalCount: number }> {
     let params = new HttpParams()
       .set('page', page.toString())
       .set('pageSize', pageSize.toString())
       .set('sortField', sortField)
       .set('sortDirection', sortDirection);
 
-    if (nationalId) params = params.set('nationalId', nationalId);
-    if (firstName) params = params.set('firstName', firstName);
-    if (fatherName) params = params.set('fatherName', fatherName);
-    if (grandName) params = params.set('grandName', grandName);
+    // if (nationalId) params = params.set('nationalId', nationalId);
+    // if (firstName) params = params.set('firstName', firstName);
+    // if (fatherName) params = params.set('fatherName', fatherName);
+    // if (grandName) params = params.set('grandName', grandName);
 
     return this.http.get<{ items: Registration[], totalCount: number }>(
       this.apiUrl,
       { params }
     );
   }
+    getApplicantsByName(
+    name: string,
+    sortBy: string,
+    sortOrder: string,
+    pageNumber: number,
+    pageSize: number
+  ): Observable<{items: GetRegistrationPreview[], totalCount: number}> {
+    const params = new HttpParams()
+      .set('name', name)
+      .set('sortBy', sortBy)
+      .set('sortOrder', sortOrder)
+      .set('pageNumber', pageNumber.toString())
+      .set('pageSize', pageSize.toString());
+
+    return this.http.get<{items: GetRegistrationPreview[], totalCount: number}>(`${this.apiUrl}/Names`, { params });
+  }
 
   getRegistrationById(id: string): Observable<GetRegistration> {
     return this.http.get<GetRegistration>(`${this.apiUrl}/NationalID`, {
+      params: { nationalId: id.toString() }
+    });
+  }
+  getRegistrationByApplicantId(id: string): Observable<GetRegistration> {
+    return this.http.get<GetRegistration>(`${this.apiUrl}/Id`, {
+      params: { id: id.toString() }
+    });
+  }
+  getRegistrationBynationalId(id: string): Observable<GetRegistrationPreview[]> {
+    return this.http.get<GetRegistrationPreview[]>(`${this.apiUrl}/NationalID`, {
       params: { nationalId: id.toString() }
     });
   }
@@ -64,8 +81,38 @@ export class RegistrationService {
       params: { nationalId: id }
     });
   }
+  updateRegistrationbyApplicantId(id: string, data: Registration): Observable<Registration> {
+    return this.http.patch<Registration>(`${this.apiUrl}/Update/IdNumber`, data, {
+      params: { id: id }
+    });
+  }
 
   deleteRegistration(id: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/${id}`);
+  }
+
+  // addApplicant(applicant: ApplicantwithFourDTO): Observable<ApplicantwithDocDTO> {
+  //   const formData = new FormData();
+    
+  //   Object.entries(applicant).forEach(([key, value]) => {
+  //     if (value instanceof File) {
+  //       formData.append(key, value, value.name);
+  //     } else {
+  //       formData.append(key, value.toString());
+  //     }
+  //   });
+
+  //   return this.http.post<ApplicantwithDocDTO>(this.apiUrl, formData).pipe(
+  //     catchError(this.handleError)
+  //   );
+  // }
+
+  // private handleError(error: HttpErrorResponse) {
+  //   console.error('Submission error:', error);
+  //   return throwError(() => error.error?.message || 'Server error');
+  // }
+
+  addApplicant(formData: FormData) {
+    return this.http.post(`${this.apiUrl}/CreatewithDoc`, formData);
   }
 }

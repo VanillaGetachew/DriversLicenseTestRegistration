@@ -65,8 +65,11 @@
     <ng-container matColumnDef="name">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="name">{{ 'search.name' | translate }}</th>
 
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name">{{ 'search.name' | translate }}</th>
+
       <td mat-cell *matCellDef="let row">
         <a [routerLink]="['/profile', row.nationalId]" class="profile-link">
+          {{ row.firstNameAmh }} {{ row.fatherNameAmh }} {{ row.grandNameAmh }}
           {{ row.firstNameAmh }} {{ row.fatherNameAmh }} {{ row.grandNameAmh }}
         </a>
       </td>
@@ -75,11 +78,13 @@
     <!-- National ID Column -->
     <ng-container matColumnDef="nationalId">
       <th mat-header-cell *matHeaderCellDef mat-sort-header="nationalId">{{ 'search.nationalId' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="nationalId">{{ 'search.nationalId' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.nationalId }}</td>
     </ng-container>
 
     <!-- License Grade Column -->
     <ng-container matColumnDef="licenceGrade">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="licenceGrade">{{ 'search.licenseGrade' | translate }}</th>
       <th mat-header-cell *matHeaderCellDef mat-sort-header="licenceGrade">{{ 'search.licenseGrade' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.licenceGrade }}</td>
     </ng-container>
@@ -92,10 +97,14 @@
           <mat-icon>visibility</mat-icon>
         </button>
         <!-- <button mat-icon-button color="accent" (click)="onAction(row, 'edit')">
+        <!-- <button mat-icon-button color="accent" (click)="onAction(row, 'edit')">
           <mat-icon>edit</mat-icon>
         </button> -->
         <!-- <button mat-icon-button color="warn" (click)="onAction(row, 'delete')">
+        </button> -->
+        <!-- <button mat-icon-button color="warn" (click)="onAction(row, 'delete')">
           <mat-icon>delete</mat-icon>
+        </button> -->
         </button> -->
       </td>
     </ng-container>

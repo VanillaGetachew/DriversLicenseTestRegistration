@@ -8,6 +8,9 @@
       "upload": "Upload",
       "change": "Change",
       "required": "Required",
+      "amharicOnly": "Please type in amharic",
+      "englishOnly": "Please type in english",
+      "future": "Future dates are not allowed",
       "age": "Minimum age must be 18",
       "phoneDigit": "Please enter exactly 10 digits",
       "reset": "Reset",
@@ -72,9 +75,9 @@
       "contact": {
         "phoneNumber": "Phone Number",
         "region": "Region",
-        "town": "Town",
-        "woreda": "Woreda",
-        "kebele": "Kebele",
+        "town": "Zone/ City",
+        "woreda": "Woreda/ Sub City",
+        "kebele": "Kebele/ Woreda",
         "houseNo": "House No."
       },
       "license": {

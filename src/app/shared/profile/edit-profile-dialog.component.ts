@@ -8,15 +8,17 @@ import { address, education, language, licenceCategory, nationality, sex } from 
 import { forkJoin } from 'rxjs';
 import { RegistrationService } from '../../core/services/registration.service';
 import { Router } from '@angular/router';
-import { AmharicOnlyDirective } from '../../core/Validator/amharicValidator';
-import { minAgeValidator } from '../../core/Validator/validator';
+import { AmharicOnlyDirective, amharicValidator } from '../../core/Validator/amharicValidator';
+import { minAgeValidator } from '../../core/Validator/minAgeValidator';
 import { TranslateModule } from '@ngx-translate/core';
-import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
+import { EnglishOnlyDirective, englishValidator } from '../../core/Validator/englishValidator';
+import { noFutureDateValidator } from '../../core/Validator/futureDateValidator';
+import { ChangeDetectorRef } from '@angular/core';
 
 @Component({
   selector: 'app-edit-profile-dialog',
   standalone: true,
-  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, AmharicOnlyDirective, EnglishOnlyDirective, TranslateModule],
+  imports: [CommonModule, MaterialModule, ReactiveFormsModule, MatDialogModule, TranslateModule],
   template: `
     <h2 mat-dialog-title>{{'profile.title' | translate}}</h2>
     <mat-dialog-content>
@@ -48,32 +50,50 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
           <!-- Personal Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>ስም</mat-label>
-            <input matInput formControlName="firstNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="firstNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('firstNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአባት ስም</mat-label>
-            <input matInput formControlName="fatherNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="fatherNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('fatherNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>የአያት ስም</mat-label>
-            <input matInput formControlName="grandNameAmh" type="text" amharicOnly>
+            <input matInput formControlName="grandNameAmh" type="text">
+            <mat-error *ngIf="editForm.get('grandNameAmh')?.hasError('amharicOnly')">
+              {{ 'common.amharicOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>First Name</mat-label>
-            <input matInput formControlName="firstName" required type="text" englishOnly>
+            <input matInput formControlName="firstName" required type="text">
+            <mat-error *ngIf="editForm.get('firstName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Father's Name</mat-label>
-            <input matInput formControlName="fatherName" required type="text" englishOnly>
+            <input matInput formControlName="fatherName" required type="text">
+            <mat-error *ngIf="editForm.get('fatherName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
             <mat-label>Grandfather's Name</mat-label>
-            <input matInput formControlName="grandName" required type="text" englishOnly>
+            <input matInput formControlName="grandName" required type="text">
+            <mat-error *ngIf="editForm.get('grandName')?.hasError('englishOnly')">
+              {{ 'common.englishOnly' | translate }}
+            </mat-error>
           </mat-form-field>
 
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'personal'">
@@ -88,9 +108,12 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
             <input matInput [matDatepicker]="picker" formControlName="birthDate">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
             <mat-datepicker #picker></mat-datepicker>
-            <mat-error
-              *ngIf="editForm.get('birthDate')?.hasError('minAge') && editForm.get('birthDate')?.touched"
-              >{{'common.age' | translate}}
+            <mat-error *ngIf="birthDate?.hasError('minAge') && !birthDate?.hasError('required')">
+              {{'common.age' | translate}}
+            </mat-error>
+
+            <mat-error *ngIf="editForm.get('birthDate')?.hasError('futureDate')">
+              {{'common.future' | translate}}
             </mat-error>
           </mat-form-field>
 
@@ -124,7 +147,7 @@ import { EnglishOnlyDirective } from '../../core/Validator/englishValidator';
           <!-- Contact Info -->
           <mat-form-field appearance="outline" *ngIf="data.section === 'all' || data.section === 'contact'">
             <mat-label>{{ 'profile.contact.phoneNumber' | translate }}</mat-label>
-            <input matInput formControlName="tel1" (input)="onPhoneInput($event)">
+            <input matInput type="text" formControlName="tel1" (input)="onPhoneInput($event)" maxlength="10" required/>
             <mat-error *ngIf="editForm.get('tel1')?.hasError('pattern')">
               {{'common.phoneDigit' | translate}}
             </mat-error>
@@ -269,19 +292,20 @@ export class EditProfileDialogComponent implements OnInit {
     private dropdown: DropdownService,
     private reg: RegistrationService,
     private router: Router,
+    private cdr: ChangeDetectorRef,
     public dialogRef: MatDialogRef<EditProfileDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string }
+    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string, searchNationalIds: string, searchApplicantIds: string}
   ) {
     this.editForm = this.fb.group({
       // Personal Info
-      firstNameAmh: [''],
-      fatherNameAmh: [''],
-      grandNameAmh: [''],
-      firstName: ['', Validators.required],
-      fatherName: ['', Validators.required],
-      grandName: ['', Validators.required],
+      firstNameAmh: ['', amharicValidator],
+      fatherNameAmh: ['', amharicValidator],
+      grandNameAmh: ['', amharicValidator],
+      firstName: ['', englishValidator],
+      fatherName: ['', englishValidator],
+      grandName: ['', englishValidator],
       sex: [''],
-      birthDate: ['', minAgeValidator(18)],
+      birthDate: ['', [minAgeValidator(18), noFutureDateValidator]],
       birthPlace: [''],
       bloodType: [''],
       nationality: [''],
@@ -337,6 +361,7 @@ this.loadDropdownsAndPatch();
         if (this.data.userData.photo) {
          this.photoPreview = `data:image/jpeg;base64,${this.data.userData.photo}`;
         }
+        this.cdr.detectChanges();
       }
     );
   }
@@ -402,6 +427,8 @@ onPhotoSelected(event: Event): void {
       this.photoPreview = reader.result as string; // ✅ Set for display
       this.editForm.patchValue({ photoBase64: base64 });
       this.editForm.get('photoBase64')?.updateValueAndValidity();
+
+      this.cdr.detectChanges();
     };
     reader.readAsDataURL(file);
   }
@@ -414,6 +441,12 @@ onPhotoSelected(event: Event): void {
     this.editForm.patchValue({ photoBase64: '' });
   }
   
+  private getIdentifiers() {
+  return {
+    nationalId: this.editForm.value.nationalId || this.data.userData?.nationalId || this.data.searchNationalIds,
+    applicantId: this.data.searchApplicantIds
+  };
+}
 onSave(): void {
   if (this.editForm.valid) {
 
@@ -423,17 +456,45 @@ onSave(): void {
     };
 
 delete formData.photoBase64; // ✅ Prevent backend confusion
+// const nationalIds = formData.nationalId || this.data.userData.nationalId || this.data.searchNationalIds;
+// const applicantIds = this.data.searchApplicantIds
 
-    this.reg.updateRegistration(formData.nationalId, formData).subscribe({
-      next: (res) => {
-        this.dialogRef.close(formData);
-        this.router.navigate(['/profile']);
-      },
-      error: (err) => {
-        console.error('Error updating registration:', err);
-        alert("Update failed");
-      }
-    });
+// if(nationalIds){
+//     this.reg.updateRegistration(nationalIds, formData).subscribe({
+//       next: (res) => {
+//         this.dialogRef.close(formData);
+//         // this.router.navigate(['/profile', nationalIds]);
+//       },
+//       error: (err) => {
+//         console.error('Error updating registration:', err);
+//         alert("Update failed");
+//       }
+//     });
+//   }
+//   else
+//     this.reg.updateRegistrationbyApplicantId(applicantIds, formData).subscribe({
+//       next: (res) => {
+//         this.dialogRef.close(formData);
+//       },
+//       error:(err) =>{
+//         console.error('Error updating registration:', err);
+//         alert("Update failed");
+//       }
+//     });
+const { nationalId, applicantId } = this.getIdentifiers();
+
+const update$ = nationalId 
+  ? this.reg.updateRegistration(nationalId, formData)
+  : this.reg.updateRegistrationbyApplicantId(applicantId, formData);
+
+update$.subscribe({
+  next: () => this.dialogRef.close(formData),
+  error: (err) => {
+    console.error('Error updating registration:', err);
+    alert("Update failed");
+  }
+});
+
   } else {
     Object.keys(this.editForm.controls).forEach(field => {
       const control = this.editForm.get(field);
@@ -555,16 +616,16 @@ delete formData.photoBase64; // ✅ Prevent backend confusion
         }
       });
     }
-    onPhoneInput(event: Event): void {
-      const input = event.target as HTMLInputElement;
-      let value = input.value.replace(/\D/g, ''); // Remove non-digit characters
-      
-      // Ensure we don't exceed max length
-      if (value.length > 10) {
-        value = value.substring(0, 10);
-      }
-      
-      input.value = value;
-      this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
-    }
+  onPhoneInput(event: Event): void {
+  const input = event.target as HTMLInputElement;
+  if (!input) return;
+
+  let value = input.value.replace(/\D/g, '').substring(0, 10);
+
+  // Only update the form control, let Angular bind it back to the input
+  this.editForm.get('tel1')?.setValue(value, { emitEvent: false });
+}
+get birthDate() {
+  return this.editForm.get('birthDate');
+}
 } 
