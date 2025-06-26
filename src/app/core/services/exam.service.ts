@@ -8,13 +8,19 @@ import { AppointmentPeriod } from '../models/appointment.model';
   providedIn: 'root'
 })
 export class ExamService {
-  private apiUrl = `${environment.apiUrl}/appointment/Appointment`;
+  private apiUrl = `${environment.apiUrl}/appointment`;
 
   constructor(private http: HttpClient) { }
 
   getAppointmentById(id: number): Observable<AppointmentPeriod[]> {
-    return this.http.get<AppointmentPeriod[]>(`${this.apiUrl}`, {
+    return this.http.get<AppointmentPeriod[]>(`${this.apiUrl}/Appointment`, {
       params: { nationalId: id.toString() }
+    });
+  }
+
+  getAppointmentByApplicantId(id: number): Observable<AppointmentPeriod[]> {
+    return this.http.get<AppointmentPeriod[]>(`${this.apiUrl}/AppointmentwithId`, {
+      params: { applicantId: id.toString() }
     });
   }
 } 

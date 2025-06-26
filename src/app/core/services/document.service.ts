@@ -18,11 +18,6 @@ export class DocumentService {
     });
   }
 
-  // addDocument(id: string, documentId: number, document: FormData): Observable<DocumentDTO[]> {
-  //   return this.http.post<DocumentDTO[]>(`${this.apiUrl}/upload`, document, {
-  //     params: { nationalId: id.toString(), documentId: documentId.toString() }
-  //   });
-  // }
   addDocument(id: string, documentId: number, file: File): Observable<DocumentDTO[]> {
     console.log(id, documentId);
     const formData = new FormData();
@@ -37,6 +32,32 @@ export class DocumentService {
   deleteRegistration(id: string, documentId: number): Observable<void> {
     return this.http.delete<void>(`${this.apiUrl}/Documents`, {
       params: { nationalId: id.toString(), documentTypeId: documentId.toString() }
+    });
+  }
+
+
+
+
+  getDocumentByApplicantId(id: string): Observable<DocumentDTO[]> {
+    return this.http.get<DocumentDTO[]>(`${this.apiUrl}/Documents`, {
+      params: { applicantId: id.toString() }
+    });
+  }
+  
+  addDocumentByApplicantId(id: string, documentId: number, file: File): Observable<DocumentDTO[]> {
+    console.log(id, documentId);
+    const formData = new FormData();
+    formData.append('applicantId', id);
+    formData.append('documentTypeId', documentId.toString());
+    formData.append('file', file);
+    
+  
+    return this.http.post<DocumentDTO[]>(`${this.apiUrl}/uploadwithId`, formData);
+  }
+
+  deleteRegistrationByApplicantId(id: string, documentId: number): Observable<void> {
+    return this.http.delete<void>(`${this.apiUrl}/DocumentswithId`, {
+      params: { applicantId: id.toString(), documentTypeId: documentId.toString() }
     });
   }
 }

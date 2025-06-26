@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpParams } from '@angular/common/http';
 import { catchError, Observable, throwError } from 'rxjs';
-import { Registration, GetRegistration, ApplicantwithFourDTO, ApplicantwithDocDTO} from '../models/registration.model';
+import { Registration, GetRegistration, ApplicantwithFourDTO, ApplicantwithDocDTO, GetRegistrationPreview} from '../models/registration.model';
 import { environment } from '../../../environments/environment';
 
 @Injectable({
@@ -35,7 +35,7 @@ export class RegistrationService {
     sortOrder: string,
     pageNumber: number,
     pageSize: number
-  ): Observable<GetRegistration[]> {
+  ): Observable<{items: GetRegistrationPreview[], totalCount: number}> {
     const params = new HttpParams()
       .set('name', name)
       .set('sortBy', sortBy)
@@ -43,11 +43,21 @@ export class RegistrationService {
       .set('pageNumber', pageNumber.toString())
       .set('pageSize', pageSize.toString());
 
-    return this.http.get<GetRegistration[]>(`${this.apiUrl}/Names`, { params });
+    return this.http.get<{items: GetRegistrationPreview[], totalCount: number}>(`${this.apiUrl}/Names`, { params });
   }
 
   getRegistrationById(id: string): Observable<GetRegistration> {
     return this.http.get<GetRegistration>(`${this.apiUrl}/NationalID`, {
+      params: { nationalId: id.toString() }
+    });
+  }
+  getRegistrationByApplicantId(id: string): Observable<GetRegistration> {
+    return this.http.get<GetRegistration>(`${this.apiUrl}/Id`, {
+      params: { id: id.toString() }
+    });
+  }
+  getRegistrationBynationalId(id: string): Observable<GetRegistrationPreview[]> {
+    return this.http.get<GetRegistrationPreview[]>(`${this.apiUrl}/NationalID`, {
       params: { nationalId: id.toString() }
     });
   }
@@ -69,6 +79,11 @@ export class RegistrationService {
   updateRegistration(id: string, data: Registration): Observable<Registration> {
     return this.http.patch<Registration>(`${this.apiUrl}/Update/NationalId`, data, {
       params: { nationalId: id }
+    });
+  }
+  updateRegistrationbyApplicantId(id: string, data: Registration): Observable<Registration> {
+    return this.http.patch<Registration>(`${this.apiUrl}/Update/IdNumber`, data, {
+      params: { id: id }
     });
   }
 

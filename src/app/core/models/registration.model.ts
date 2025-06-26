@@ -155,3 +155,11 @@ export interface ApplicantwithDocDTO {
   nationalId?: string;
   documents: DocumentDTO[];
 }
+export interface GetRegistrationPreview {
+  id: number;
+  firstNameAmh: string;
+  fatherNameAmh: string;
+  grandNameAmh: string;
+  nationalId: string;
+  licenceGrade: string;
+}

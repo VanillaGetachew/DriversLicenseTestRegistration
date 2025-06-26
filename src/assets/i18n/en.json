@@ -21,7 +21,10 @@
       "nationalId": "National ID",
       "clear": "Clear",
       "search": "Search",
-      "actions": "Actions"
+      "actions": "Actions",
+      "searching": "Searching...",
+      "foundDrivers": "Found {{count}} driver(s).",
+      "noDrivers": "No drivers found."
     },
     "profile": {
       "title": "Edit Profile Information",

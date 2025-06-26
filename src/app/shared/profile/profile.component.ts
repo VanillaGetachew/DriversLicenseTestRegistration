@@ -35,7 +35,8 @@ import { AppointmentPeriod } from '../../core/models/appointment.model';
 })
 export class ProfileComponent implements OnInit {
   userData: any = null;
-  searchId: string = '';
+  searchNationalId: string = '';
+  searchApplicantId: string = '';
   photoUrl: string | null = null;
   showProfileSection: boolean = false;
   nationality:nationality[] = [];
@@ -81,16 +82,22 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.paramMap.subscribe((params) => {
-      const nationalId = String(params.get('id'));
-      if (!nationalId) {
-        console.warn('Invalid National ID:', nationalId);
-        this.errorMessage = 'Invalid National ID.';
-        return;
-      }
-      this.searchId = nationalId;
-      this.showProfile(nationalId);
-    });
 
+       const applicantId = params.get('applicantId');
+      const nationalId = params.get('id');
+
+    if (applicantId) {
+      this.searchApplicantId = applicantId;
+      this.showProfilewithApplicantId(applicantId);
+    } else if (nationalId) {
+      this.searchNationalId = nationalId;
+      this.showProfile(nationalId);
+    }
+      else {
+      console.warn('No valid ID provided in route');
+      this.errorMessage = 'Invalid or missing ID.';
+    }
+    });
     this.userDataService.getUserData().subscribe(data => {
       this.userData = data;
       this.loadLookups();
@@ -105,9 +112,6 @@ export class ProfileComponent implements OnInit {
     if (!this.lookupReady) {
       this.loadLookups();
     }
-
-    // this.searchId = nationalId;
-    // this.showProfile(nationalId);
   
 
   this.userDataService.getUserData().subscribe(data => {
@@ -117,9 +121,14 @@ export class ProfileComponent implements OnInit {
     this.loadLookups();
   });
 
-  this.searchId = this.route.snapshot.paramMap.get('nationalId') || '';
-  if (!this.searchId) {
+  this.searchNationalId = this.route.snapshot.paramMap.get('nationalId') || '';
+  this.searchApplicantId = this.route.snapshot.paramMap.get('id') || '';
+  if (!this.searchNationalId) {
     this.errorMessage = 'National ID is missing from the URL.';
+    return;
+  }
+  if (!this.searchApplicantId) {
+    this.errorMessage = 'Applicant ID is missing from the URL.';
     return;
   }
 
@@ -158,12 +167,15 @@ export class ProfileComponent implements OnInit {
       data: {
         userData: this.userData,
         section: section,
-        searchId: this.searchId
+        searchNationalIds: this.searchNationalId,
+        searchApplicantIds: this.searchApplicantId
       }
     });
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        const nationalIds = this.userData?.nationalId || this.searchId;
+        const nationalIds = this.userData?.nationalId || this.searchNationalId;
+        const applicantIds = this.searchApplicantId;
+        if(nationalIds){
         this.reg.getRegistrationById(nationalIds).subscribe({
           next: updatedData => {
             this.userData = updatedData;
@@ -185,6 +197,30 @@ export class ProfileComponent implements OnInit {
             });
           }
         });
+      }
+      else{
+        this.reg.getRegistrationByApplicantId(applicantIds).subscribe({
+          next: updatedData => {
+            this.userData = updatedData;
+            this.setPhotoUrl(updatedData.photo);
+            this.fetchDocuments();
+            
+            this.languageService.getTranslation('profile.updateSuccess').subscribe(translatedText => {
+              this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+                duration: 3000
+              });
+            });
+          },
+          error: (err) => {
+            console.error('Error reloading profile:', err);
+            this.languageService.getTranslation('profile.updateError').subscribe(translatedText => {
+              this.snackBar.open(translatedText, this.translate.instant('common.close'), {
+                duration: 3000
+              });
+            });
+          }
+        });
+      }
       }
     });
   }
@@ -211,85 +247,28 @@ export class ProfileComponent implements OnInit {
       },
     );
   }
+  showProfilewithApplicantId(applicantId: any): void {
+    this.showProfileSection = false;
+    this.userData = null;
 
-  // searchProfile(): void {
-  //   this.showProfileSection = false;
-  //   this.userData = null;
-  //   this.searchResult = null;
-  //   const nationalIds = this.userData?.nationalId || this.searchId;
-  // //   this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
-  // // .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
-  //   // if (!this.searchId && !this.searchName) {
-  //   if (!nationalIds && !this.phoneNumber) {
-  //     this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
-  //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-  //     });
-  //     return;
-  //   }
-  //   if (nationalIds) {
-  //     this.reg.getRegistrationById(nationalIds).subscribe({
-  //       next: (data) => {
-  //         this.searchResult = data;
-  //         this.userData = data;
-  //          this.setPhotoUrl(data.photo);
-  //       },
-  //       error: (error) => {
-  //         const msg = 'Applicant Not Found'
-  //         this.showToast(msg, 'Close', 5000, 'error' );
-  //       }
-  //     },
-  //   );
-  //   } 
-    
-  //   // if (this.searchName) {
-  //   //   this.reg.getRegistrationByName(this.searchName).subscribe(data => {
-  //   //     if (data) {
-  //   //       this.searchResult = data;
-  //   //       this.userData = data;
-  //   //        this.setPhotoUrl(data.photo);
-  //   //     } else {
-  //   //       this.languageService.getTranslation('profile.noProfileFoundId').subscribe(translatedText => {
-  //   //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-  //   //       });
-  //   //     }
-  //   //   });
-  //   // }
-  //   if (this.phoneNumber) {
-  //     this.reg.getRegistrationByPhone(this.phoneNumber).subscribe({
-  //       next: (data) => {
-  //         this.searchResult = data;
-  //         this.userData = data;
-  //          this.setPhotoUrl(data.photo);
-  //       },
-  //       error: (error) => {
-  //         const msg = 'Applicant Not Found'
-  //         this.showToast(msg, 'Close', 5000, 'error' );
-  //       } 
-  //     });
-  //   }
-  //   // else {
-  //   //   // For demo: fallback to localStorage and match by names
-  //   //   const storedData = localStorage.getItem('user_registration_data');
-  //   //   if (storedData) {
-  //   //     const userData = JSON.parse(storedData);
-  //   //     if (
-  //   //       (!this.searchFirstName || userData.firstName?.toLowerCase() === this.searchFirstName.toLowerCase()) &&
-  //   //       (!this.searchFatherName || userData.fatherName?.toLowerCase() === this.searchFatherName.toLowerCase()) &&
-  //   //       (!this.searchGrandfatherName || userData.grandfatherName?.toLowerCase() === this.searchGrandfatherName.toLowerCase())
-  //   //     ) {
-  //   //       // this.searchResults = userData; // Add single result to array
-  //   //     } else {
-  //   //       this.languageService.getTranslation('profile.noProfileFoundNames').subscribe(translatedText => {
-  //   //         this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-  //   //       });
-  //   //     }
-  //   //   } else {
-  //   //     this.languageService.getTranslation('profile.noProfileFound').subscribe(translatedText => {
-  //   //       this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-  //   //     });
-  //   //   }
-  //   // }
-  // }
+    if (!applicantId || applicantId <= 0) {
+      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+      });
+      return;
+    }
+
+      this.reg.getRegistrationByApplicantId(applicantId).subscribe({
+        next: (data) => {
+          this.userData = data;
+          this.setPhotoUrl(data.photo);
+          this.showProfileSection = true;
+          this.fetchDocuments();
+          this.loadExamSchedule();
+        }
+      },
+    );
+  }
   
 setPhotoUrl(photoBase64: string): void {
   if (!photoBase64) {
@@ -316,7 +295,8 @@ setPhotoUrl(photoBase64: string): void {
   
 
   onFileSelected(event: Event, documentKey: string): void {
-    const nationalIds = this.userData?.nationalId || this.searchId;
+    const nationalIds = this.userData?.nationalId || this.searchNationalId;
+    const applicantIds = this.searchApplicantId
     const input = event.target as HTMLInputElement;
     if (!input.files || input.files.length === 0) return;
   
@@ -342,6 +322,9 @@ setPhotoUrl(photoBase64: string): void {
   
       const documentTypeId = this.documentTypeMap[documentKey];
 console.log("hello"+ nationalIds, documentTypeId);
+
+
+if(nationalIds){
       this.removeDocuments(nationalIds, documentTypeId);
       this.documentService.addDocument(nationalIds, documentTypeId, file).subscribe({
         next: () => {
@@ -355,6 +338,21 @@ console.log("hello"+ nationalIds, documentTypeId);
           this.snackBar.open(`Error uploading ${documentKey}: ${this.errorMessage}`, 'Close', { duration: 3000 });
         }
       });
+    }else{
+      this.removeDocumentswithApplicantId(applicantIds, documentTypeId);
+      this.documentService.addDocumentByApplicantId(applicantIds, documentTypeId, file).subscribe({
+        next: () => {
+          console.log("hello"+ applicantIds, documentTypeId);
+
+          this.fetchDocuments(); // refresh documents from backend
+          this.snackBar.open(`${documentKey} uploaded successfully!`, 'Close', { duration: 2000 });
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Upload failed';
+          this.snackBar.open(`Error uploading ${documentKey}: ${this.errorMessage}`, 'Close', { duration: 3000 });
+        }
+      });
+    }
     };
   
     reader.readAsDataURL(file);
@@ -363,9 +361,23 @@ console.log("hello"+ nationalIds, documentTypeId);
   
   fetchDocuments(): void {
     this.isLoading = true;
-    const nationalIds = this.userData?.nationalId || this.searchId;
+    const nationalIds = this.userData?.nationalId || this.searchNationalId;
+    const applicantIds = this.searchApplicantId;
     if (nationalIds) {
       this.documentService.getDocumentById(nationalIds).subscribe({
+        next: (docs) => {
+          this.mapDocuments(docs);
+          this.documents = docs;
+          this.isLoading = false;
+        },
+        error: (err) => {
+          this.errorMessage = err.message || 'Failed to fetch documents.';
+          this.isLoading = false;
+        }
+      });
+    }
+    else{
+      this.documentService.getDocumentByApplicantId(applicantIds).subscribe({
         next: (docs) => {
           this.mapDocuments(docs);
           this.documents = docs;
@@ -387,6 +399,23 @@ console.log("hello"+ nationalIds, documentTypeId);
     this.isLoading = true;
 
     this.documentService.deleteRegistration(searchId, documentTypeId).subscribe({
+      next: () => {
+        this.isLoading = false;
+      },
+      error: (err) => {
+        this.errorMessage = err.message || 'Failed to delete documents.';
+        this.isLoading = false;
+      }
+    });
+  }
+  removeDocumentswithApplicantId(applicantIds: string, documentTypeId: number): void {
+    // event.preventDefault();
+  
+    // const documentTypeId = this.documentTypeMap[documentKey];
+
+    this.isLoading = true;
+
+    this.documentService.deleteRegistrationByApplicantId(applicantIds, documentTypeId).subscribe({
       next: () => {
         this.isLoading = false;
       },
@@ -467,60 +496,6 @@ console.log("hello"+ nationalIds, documentTypeId);
     this.lookupReady = true;
   }
 
-// loadLookupswithParam(): void {
-//   this.dropdown.getRegion().pipe(
-//     tap(regionData => this.region = regionData),
-//     switchMap(regionData => {
-//       const regionId = regionData[0]?.code;
-//       if (!regionId) throw new Error('Region ID not found');
-//       return this.dropdown.getZone(regionId);
-//     }),
-//     tap(zoneData => this.town = zoneData),
-//     switchMap(zoneData => {
-//       const zoneId = zoneData[0]?.code;
-//       console.log('Zone ID being passed to getWoreda:', zoneId);
-//       if (!zoneId) throw new Error('Zone ID not found');
-//       return this.dropdown.getWoreda(zoneId);
-//     }),
-//     tap(woredaData => this.woreda = woredaData),
-//     switchMap(woredaData => {
-//       const woredaId = woredaData[0]?.code;
-//       if (!woredaId) throw new Error('Woreda ID not found');
-//       return this.dropdown.getKebele(woredaId);
-//     })
-//   ).subscribe({
-//     next: kebeleData => this.kebele = kebeleData,
-//     error: err => console.error('Error loading lookups', err)
-//   });
-// }
-// loadLookupswithParam(): void {
-//   const regionId = this.userData?.region;
-//   if (!regionId) {
-//     console.error('Region ID missing in user data');
-//     return;
-//   }
-
-//   this.dropdown.getZone(regionId).pipe(
-//     tap(zoneData => this.town = zoneData),
-//     switchMap(zoneData => {
-//       const zoneMatch = zoneData.find(z => z.code === this.userData?.town);
-//       const zoneId = zoneMatch?.code;
-//       if (!zoneId) throw new Error('Zone code not found in zone data');
-//       return this.dropdown.getWoreda(zoneId);
-//     }),
-//     tap(woredaData => this.woreda = woredaData),
-//     switchMap(woredaData => {
-//       const woredaMatch = woredaData.find(w => w.code === this.userData?.woreda);
-//       const woredaId = woredaMatch?.code;
-//       if (!woredaId) throw new Error('Woreda code not found in woreda data');
-//       return this.dropdown.getKebele(woredaId);
-//     })
-//   ).subscribe({
-//     next: kebeleData => this.kebele = kebeleData,
-//     error: err => console.error('Error loading lookups', err)
-//   });
-// }
-
   
   getNationalityLabel(code: string): string {
      if (code == null) {
@@ -552,14 +527,6 @@ console.log("hello"+ nationalIds, documentTypeId);
     }
     return this.region.find(e => e.code === code)?.amDescription || code;
   }
-//   getRegionLabel(code: string | number): string | null {
-//     if (code == null) {
-//     return 'Unknown';
-//     }
-//   const region = this.region.find(r => r.code === code?.toString());
-//   return region ? region.amDescription : null;
-// }
-
   getTownLabel(code: string): string {
      if (code == null) {
     return 'Unknown';
@@ -594,9 +561,21 @@ console.log("hello"+ nationalIds, documentTypeId);
   }
 
   private loadExamSchedule(): void {
-    const nationalIds = this.userData?.nationalId || this.searchId;
+    const nationalIds = this.userData?.nationalId || this.searchNationalId;
+    const applicantIds = Number(this.searchApplicantId)
     if (nationalIds) {
       this.examService.getAppointmentById(nationalIds)
+        .subscribe({
+          next: (res: AppointmentPeriod[]) => {
+            console.log('Received appointmentPeriod:', res);
+            this.appointmentPeriod= res;
+          },
+          error: (error) => {
+            console.error('Error loading exam schedule:', error);
+          }
+        });
+    }else{
+      this.examService.getAppointmentByApplicantId(applicantIds)
         .subscribe({
           next: (res: AppointmentPeriod[]) => {
             console.log('Received appointmentPeriod:', res);

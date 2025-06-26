@@ -31,7 +31,7 @@ export class LanguageService {
     localStorage.setItem('lang', lang);
   }
 
-  getTranslation(key: string): Observable<string> {
-    return this.translate.get(key);
+  getTranslation(key: string, params?: any): Observable<string> {
+    return this.translate.get(key, params);
   }
 } 

@@ -3,42 +3,54 @@
   <div class="search-fields-row">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.nationalId' | translate }}</mat-label>
-      <input matInput [(ngModel)]="search.nationalId" (input)="searchProfile()" />
+      <input matInput [(ngModel)]="searchId" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.firstName' | translate }}</mat-label>
-      <input matInput [(ngModel)]="search.firstName" (input)="searchProfile()" />
+      <input matInput [(ngModel)]="searchFirstName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.fatherName' | translate }}</mat-label>
-      <input matInput [(ngModel)]="search.fatherName" (input)="searchProfile()" />
+      <input matInput [(ngModel)]="searchFatherName" />
     </mat-form-field>
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.grandName' | translate }}</mat-label>
-      <input matInput [(ngModel)]="search.grandName" (input)="searchProfile()" />
+      <input matInput [(ngModel)]="searchGrandfatherName" />
     </mat-form-field>
+    <button mat-raised-button color="primary" class="search-btn" (click)="searchProfile()">
+      <mat-icon>search</mat-icon>
+      {{ 'common.search' | translate }}
+    </button>
   </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8 custom-table">
+  <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="mat-elevation-z8 custom-table">
+    
+    
+     <ng-container matColumnDef="applicantId">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="Id">{{ 'search.applicantId' | translate }}</th>
+      <td mat-cell *matCellDef="let row">{{ row.id }}</td>
+    </ng-container>
+
     <!-- Name Column -->
     <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef>{{ 'search.name' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="name">{{ 'search.name' | translate }}</th>
+
       <td mat-cell *matCellDef="let row">
         <a [routerLink]="['/profile', row.nationalId]" class="profile-link">
-          {{ row.firstName }} {{ row.fatherName }} {{ row.grandName }}
+          {{ row.firstNameAmh }} {{ row.fatherNameAmh }} {{ row.grandNameAmh }}
         </a>
       </td>
     </ng-container>
 
     <!-- National ID Column -->
     <ng-container matColumnDef="nationalId">
-      <th mat-header-cell *matHeaderCellDef>{{ 'search.nationalId' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="nationalId">{{ 'search.nationalId' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.nationalId }}</td>
     </ng-container>
 
     <!-- License Grade Column -->
     <ng-container matColumnDef="licenceGrade">
-      <th mat-header-cell *matHeaderCellDef>{{ 'search.licenseGrade' | translate }}</th>
+      <th mat-header-cell *matHeaderCellDef mat-sort-header="licenceGrade">{{ 'search.licenseGrade' | translate }}</th>
       <td mat-cell *matCellDef="let row">{{ row.licenceGrade }}</td>
     </ng-container>
 
@@ -49,12 +61,12 @@
         <button mat-icon-button color="primary" (click)="onAction(row, 'view')">
           <mat-icon>visibility</mat-icon>
         </button>
-        <button mat-icon-button color="accent" (click)="onAction(row, 'edit')">
+        <!-- <button mat-icon-button color="accent" (click)="onAction(row, 'edit')">
           <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="onAction(row, 'delete')">
+        </button> -->
+        <!-- <button mat-icon-button color="warn" (click)="onAction(row, 'delete')">
           <mat-icon>delete</mat-icon>
-        </button>
+        </button> -->
       </td>
     </ng-container>
 

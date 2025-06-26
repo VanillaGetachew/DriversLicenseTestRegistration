@@ -96,7 +96,7 @@ onSubmit(): void {
           // alert("Success");
           this.isSubmitting = false;
           this.showToast('registration.success', 'common.close', 3000, 'success');
-          this.router.navigate(['/profile', formData.nationalId]);
+          this.router.navigate(['/profile/nid', formData.nationalId]);
         },
         error: (error) => {
           this.isSubmitting=false;

@@ -294,7 +294,7 @@ export class EditProfileDialogComponent implements OnInit {
     private router: Router,
     private cdr: ChangeDetectorRef,
     public dialogRef: MatDialogRef<EditProfileDialogComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string, searchId: string }
+    @Inject(MAT_DIALOG_DATA) public data: { userData: any, section: string, searchNationalIds: string, searchApplicantIds: string}
   ) {
     this.editForm = this.fb.group({
       // Personal Info
@@ -441,6 +441,12 @@ onPhotoSelected(event: Event): void {
     this.editForm.patchValue({ photoBase64: '' });
   }
   
+  private getIdentifiers() {
+  return {
+    nationalId: this.editForm.value.nationalId || this.data.userData?.nationalId || this.data.searchNationalIds,
+    applicantId: this.data.searchApplicantIds
+  };
+}
 onSave(): void {
   if (this.editForm.valid) {
 
@@ -450,19 +456,45 @@ onSave(): void {
     };
 
 delete formData.photoBase64; // ✅ Prevent backend confusion
-const nationalIds = formData.nationalId || this.data.userData.nationalId || this.data.searchId;
+// const nationalIds = formData.nationalId || this.data.userData.nationalId || this.data.searchNationalIds;
+// const applicantIds = this.data.searchApplicantIds
 
+// if(nationalIds){
+//     this.reg.updateRegistration(nationalIds, formData).subscribe({
+//       next: (res) => {
+//         this.dialogRef.close(formData);
+//         // this.router.navigate(['/profile', nationalIds]);
+//       },
+//       error: (err) => {
+//         console.error('Error updating registration:', err);
+//         alert("Update failed");
+//       }
+//     });
+//   }
+//   else
+//     this.reg.updateRegistrationbyApplicantId(applicantIds, formData).subscribe({
+//       next: (res) => {
+//         this.dialogRef.close(formData);
+//       },
+//       error:(err) =>{
+//         console.error('Error updating registration:', err);
+//         alert("Update failed");
+//       }
+//     });
+const { nationalId, applicantId } = this.getIdentifiers();
 
-    this.reg.updateRegistration(nationalIds, formData).subscribe({
-      next: (res) => {
-        this.dialogRef.close(formData);
-        // this.router.navigate(['/profile', nationalIds]);
-      },
-      error: (err) => {
-        console.error('Error updating registration:', err);
-        alert("Update failed");
-      }
-    });
+const update$ = nationalId 
+  ? this.reg.updateRegistration(nationalId, formData)
+  : this.reg.updateRegistrationbyApplicantId(applicantId, formData);
+
+update$.subscribe({
+  next: () => this.dialogRef.close(formData),
+  error: (err) => {
+    console.error('Error updating registration:', err);
+    alert("Update failed");
+  }
+});
+
   } else {
     Object.keys(this.editForm.controls).forEach(field => {
       const control = this.editForm.get(field);

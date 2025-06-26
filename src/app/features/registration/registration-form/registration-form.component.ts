@@ -326,7 +326,7 @@ onSubmit(): void {
       this.isLoading = false;
       // console.log('Successfully submitted!', res);
       this.showToast('registration.success', 'common.close', 3000, 'success');
-      this.router.navigate(['/profile', res?.nationalId || formData.get('NationalId')]);
+      this.router.navigate(['/profile/nid', res?.nationalId || formData.get('NationalId')]);
     },
     error: (error) => {
       // console.error('Submission error:', err);
