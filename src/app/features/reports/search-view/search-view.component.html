@@ -1,10 +1,20 @@
 <div class="search-table-container">
   <h2 class="table-title">{{ 'search.title' | translate }}</h2>
-  <div class="search-fields-row">
+
+<mat-radio-group [(ngModel)]="searchMode" class="search-mode-toggle" aria-label="Select search mode">
+  <mat-radio-button value="id">{{ 'search.byId' | translate }}</mat-radio-button>
+  <mat-radio-button value="name">{{ 'search.byName' | translate }}</mat-radio-button>
+</mat-radio-group>
+
+
+  <div class="search-fields-row" *ngIf="searchMode === 'id'">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.nationalId' | translate }}</mat-label>
       <input matInput [(ngModel)]="searchId" />
     </mat-form-field>
+  </div>
+
+  <div class="search-fields-row" *ngIf="searchMode === 'name'">
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.firstName' | translate }}</mat-label>
       <input matInput [(ngModel)]="searchFirstName" />
@@ -16,12 +26,14 @@
     <mat-form-field appearance="outline" class="search-field">
       <mat-label>{{ 'search.grandName' | translate }}</mat-label>
       <input matInput [(ngModel)]="searchGrandfatherName" />
-    </mat-form-field>
+    </mat-form-field> 
+  </div>
+   <div class="search-fields-row">
     <button mat-raised-button color="primary" class="search-btn" (click)="searchProfile()">
       <mat-icon>search</mat-icon>
       {{ 'common.search' | translate }}
     </button>
-  </div>
+   </div>
 
   <table mat-table [dataSource]="dataSource" matSort (matSortChange)="onSortChange($event)" class="mat-elevation-z8 custom-table">
     

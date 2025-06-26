@@ -14,6 +14,8 @@ import { LanguageService } from '../../../core/services/language.service';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormBuilder, FormGroup, FormsModule } from '@angular/forms';
 import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
+import { MatRadioModule } from '@angular/material/radio';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-search-view',
@@ -29,7 +31,9 @@ import { MatSort, Sort, MatSortModule } from '@angular/material/sort';
     TranslateModule,
     MatSnackBarModule,
     FormsModule,
-    MatSortModule
+    MatSortModule,
+    MatRadioModule,
+    CommonModule
   ],
   templateUrl: './search-view.component.html',
   styleUrls: ['./search-view.component.scss']
@@ -51,6 +55,7 @@ export class SearchViewComponent implements OnInit {
   sortParam: string = 'Id';
   sortValue: 'asc' | 'desc' = 'asc';
   searchResult: any;
+  searchMode: 'id' | 'name' = 'id';
 
 
   search = {
@@ -82,18 +87,21 @@ export class SearchViewComponent implements OnInit {
 
 searchProfile(): void {
     this.searchResult = null;
-
-     this.pageNumber = this.pageIndex + 1;
+    this.pageNumber = this.pageIndex + 1;
 
     this.searchName = [this.searchFirstName, this.searchFatherName, this.searchGrandfatherName]
-  .map(s => s.trim()).filter(s => s.length > 0).join(' ');  
-    if (!this.searchId && !this.searchName) {
-      this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
-        this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
-      });
-      return;
-    }
-    if (this.searchId) {
+    .map(s => s.trim()).filter(s => s.length > 0).join(' ');
+
+    
+    if (this.searchMode ==='id') {
+
+      if (!this.searchId) {
+        this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+        });
+        return;
+      }
+
       this.registrationService.getRegistrationBynationalId(this.searchId).subscribe({
         next: (data) => {
           const mappedResults: GetRegistrationPreview[] = [data].map((d: any) => ({
@@ -114,9 +122,16 @@ searchProfile(): void {
         }
       },
     );
-    } 
-    
-    if (this.searchName) {
+    } else if (this.searchMode === 'name') {
+
+      if (!this.searchName) {
+        this.languageService.getTranslation('profile.searchError').subscribe(translatedText => {
+          this.snackBar.open(translatedText, this.translate.instant('common.close'), { duration: 3000 });
+        });
+        return;
+      }
+
+
       this.registrationService.getApplicantsByName(this.searchName, this.sortParam, this.sortValue, this.pageNumber, this.pageSize).subscribe(data => {
         if (data) {
         const mappedResults: GetRegistrationPreview[] = data.items.map((d: any) => ({
